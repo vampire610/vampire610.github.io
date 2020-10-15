@@ -490,7 +490,13 @@
 <h2 id="linux环境搭建"><a href="#linux环境搭建" class="headerlink" title="linux环境搭建"></a>linux环境搭建</h2><p>linux下python环境通过命令行安装较为简单，不再赘述，主要说明Windows下配合VScode的环境搭建</p>
 <h2 id="Windows环境搭建"><a href="#Windows环境搭建" class="headerlink" title="Windows环境搭建"></a>Windows环境搭建</h2><h3 id="python安装"><a href="#python安装" class="headerlink" title="python安装"></a>python安装</h3><p>直接通过<a target="_blank" rel="noopener" href="https://www.python.org/downloads/windows/">Python官网</a>下载<br>本人学习版本为3.x版本，本文所说python也均为3.x版本<br>安装时请注意勾选 <strong>Add Python 3.8 to PATH</strong><br><img src="https://cdn.jsdelivr.net/gh/vampire610/cdn@1.6/img/python/addPATH.png" class="lazyload" data-srcset="https://cdn.jsdelivr.net/gh/vampire610/cdn@1.6/img/python/addPATH.png" srcset="data:image/png;base64,666" alt="添加环境变量"> </p>
 <p>安装完成后打开cmd，直接输入python后回车，如果出现以下信息，就说明安装成功了</p>
-<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Microsoft Windows [版本 <span class="number">10</span>.<span class="number">0</span>.<span class="number">18363</span>.<span class="number">657</span>]</span><br><span class="line">(c) <span class="number">2019</span> Microsoft Corporation。保留所有权利。</span><br><span class="line"></span><br><span class="line"><span class="function">C:\<span class="title">Users</span>\<span class="title">vampi</span>&gt;<span class="title">python</span></span></span><br><span class="line"><span class="function"><span class="title">Python</span> 3.8.2 (<span class="title">tags</span>/<span class="title">v3</span>.8.2:7<span class="title">b3ab59</span>, <span class="title">Feb</span> 25 2020, 23:03:10) [<span class="title">MSC</span> <span class="title">v</span>.1916 64 <span class="title">bit</span> (<span class="title">AMD64</span>)] <span class="title">on</span> <span class="title">win32</span></span></span><br><span class="line"><span class="function"><span class="title">Type</span> &quot;<span class="title">help</span>&quot;, &quot;<span class="title">copyright</span>&quot;, &quot;<span class="title">credits</span>&quot; <span class="title">or</span> &quot;<span class="title">license</span>&quot; <span class="title">for</span> <span class="title">more</span> <span class="title">information</span>.</span></span><br><span class="line"><span class="function">&gt;&gt;&gt;</span></span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-cmd" data-language="cmd"><code class="language-cmd">Microsoft Windows [版本 10.0.18363.657]
+(c) 2019 Microsoft Corporation。保留所有权利。
+
+C:\Users\vampi&gt;python
+Python 3.8.2 (tags&#x2F;v3.8.2:7b3ab59, Feb 25 2020, 23:03:10) [MSC v.1916 64 bit (AMD64)] on win32
+Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.
+&gt;&gt;&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <h3 id="VScode运行python配置"><a href="#VScode运行python配置" class="headerlink" title="VScode运行python配置"></a>VScode运行python配置</h3><ul>
 <li>安装和美化VScode本文不再赘述，只描述python相关的配置、操作</li>
@@ -503,7 +509,7 @@
 <li>配置VScode终端为git bash<ul>
 <li>首先要确保已经安装git，能够正常使用bash</li>
 <li>打开settings.json</li>
-<li>在配置中加入如下行，记得将bash路径改为自己的gitbash路径<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&quot;terminal.integrated.shell.windows&quot;: &quot;E:\\Git\\bin\\bash.exe&quot;,</span><br></pre></td></tr></table></figure></li>
+<li>在配置中加入如下行，记得将bash路径改为自己的gitbash路径<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token property">"terminal.integrated.shell.windows"</span><span class="token operator">:</span> <span class="token string">"E:\\Git\\bin\\bash.exe"</span><span class="token punctuation">,</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
 <li>保存，重新打开VScode终端，就能在VScode使用gitbash，相比原本的windows的cmd命令，gitbash的linux终端命令应该对大多数人更加友好</li>
 </ul>
 </li>
@@ -603,7 +609,10 @@
         <a class='next' href='/2020/02/21/git_commands/'>
           <p class='title'>git常用命令<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
           <p class='content'>仅记录本人容易忘记的各条命令及部分解释  
-测试本地与服务器的连接12345678$ ssh -T git@(服务器/网站名)  例如：  github:  $ ssh -T git@githu...</p>
+测试本地与服务器的连接$ ssh -T git@(服务器/网站名)  
+例如：  
+github:  
+$ ssh -T git@github.com...</p>
         </a>
       
     </div>

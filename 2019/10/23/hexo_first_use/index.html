@@ -495,36 +495,45 @@
 <p>安装时自行修改安装路径，<strong>注意路径不要出现中文</strong>，其他全默认选项</p>
 </blockquote>
 <hr>
-<h3 id="安装hexo框架"><a href="#安装hexo框架" class="headerlink" title="安装hexo框架"></a>安装hexo框架</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install -g hexo-cli  </span><br></pre></td></tr></table></figure>
+<h3 id="安装hexo框架"><a href="#安装hexo框架" class="headerlink" title="安装hexo框架"></a>安装hexo框架</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ <span class="token function">npm</span> <span class="token function">install</span> -g hexo-cli  <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <p>安装时可以先行创建一个文件夹用来存放hexo，在文件夹内右键，选择Git Bush Here在弹出的命令窗内再输入运行命令即可  </p>
 <hr>
 <h3 id="初始化博客"><a href="#初始化博客" class="headerlink" title="初始化博客"></a>初始化博客</h3><p>建立一个文件夹用来寻访博客相关文件<br>在文件夹内打开Git Bush<br>输入命令  </p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo init  </span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ hexo init  <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <hr>
 <h3 id="本地查看生成博客"><a href="#本地查看生成博客" class="headerlink" title="本地查看生成博客"></a>本地查看生成博客</h3><p>以下命令均在博客文件夹内打开Git Bush进行操作<br>命令<br>生成博客  </p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo g  </span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ hexo g  <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 
 <p>本地运行博客  </p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo s  </span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ hexo s  <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>在浏览器输入 <a target="_blank" rel="noopener" href="http://localhost:4000/">http://localhost:4000</a> 查看博客页面</p>
 <hr>
 <h3 id="上传博客到github"><a href="#上传博客到github" class="headerlink" title="上传博客到github"></a>上传博客到github</h3><p>首先安装一个插件<br>命令  </p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install --save hexo-deployer-git</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ <span class="token function">npm</span> <span class="token function">install</span> --save hexo-deployer-git<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>登陆自己的GitHub<br>新建仓库<br>命名为自己的GitHub 用户名.github.io<br>记录克隆地址<br>打开博客根目录的_config.yml文件<br>将此处修改为如下格式  </p>
-<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Deployment</span></span><br><span class="line"><span class="comment">## Docs: http://hexo.io/docs/deployment.html</span></span><br><span class="line"><span class="attr">deploy:</span></span><br><span class="line"><span class="bullet">-</span> <span class="attr">type:</span> <span class="string">git</span></span><br><span class="line">  <span class="comment">#在这里输入你的github仓库地址</span></span><br><span class="line">  <span class="attr">repo:</span> <span class="string">git@github.com:用户名/仓库名.github.io.git</span></span><br><span class="line">  <span class="attr">branch:</span> <span class="string">master</span></span><br><span class="line">  <span class="attr">message:</span> <span class="string">update</span></span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-yml" data-language="yml"><code class="language-yml"># Deployment
+## Docs: http:&#x2F;&#x2F;hexo.io&#x2F;docs&#x2F;deployment.html
+deploy:
+- type: git
+  #在这里输入你的github仓库地址
+  repo: git@github.com:用户名&#x2F;仓库名.github.io.git
+  branch: master
+  message: update<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>修改完成后保存<br>运行命令  </p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo d  </span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ hexo d  <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>稍等片刻即可打开你的个人博客<br>地址为 仓库名.github.io<br>例如：vampire610.github.io</p>
 <hr>
 <p><font color=orange > 注意，每次修改过代码之后，都要重新运行</font></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ hexo clean  </span><br><span class="line">$ hexo g  </span><br><span class="line">$ hexo d  </span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ hexo clean  
+$ hexo g  
+$ hexo d  <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 <p>改动才会更新到网站</p>
 <hr>
-<h3 id="新建博客"><a href="#新建博客" class="headerlink" title="新建博客"></a>新建博客</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo n <span class="string">&quot;文件名&quot;</span>  </span><br></pre></td></tr></table></figure>
+<h3 id="新建博客"><a href="#新建博客" class="headerlink" title="新建博客"></a>新建博客</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ hexo n <span class="token string">"文件名"</span>  <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>新建文件路径</p>
 <blockquote>
 <p>博客根目录/source/_posts</p>
