@@ -307,20 +307,6 @@
   </url>
   
   <url>
-    <loc>https://vampire610.cn/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/PyQt5/</loc>
-    <lastmod>2020-10-16</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://vampire610.cn/categories/%E7%AC%94%E8%AE%B0/git/</loc>
-    <lastmod>2020-10-16</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://vampire610.cn/categories/%E9%9A%8F%E7%AC%94/</loc>
     <lastmod>2020-10-16</lastmod>
     <changefreq>daily</changefreq>
@@ -328,7 +314,21 @@
   </url>
   
   <url>
+    <loc>https://vampire610.cn/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/PyQt5/</loc>
+    <lastmod>2020-10-16</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://vampire610.cn/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/python/</loc>
+    <lastmod>2020-10-16</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://vampire610.cn/categories/%E7%AC%94%E8%AE%B0/git/</loc>
     <lastmod>2020-10-16</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
