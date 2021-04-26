@@ -113,7 +113,7 @@ deploy:
     coding: git@e.coding.net:vampire/vampire610/vampire610.git
   branch: master
   message: update
-#- type: baidu_url_submitter
+- type: baidu_url_submitter
 
 
 # >> 主题配置 ---------------------------------------------------------------------
