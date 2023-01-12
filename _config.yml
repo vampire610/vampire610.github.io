@@ -128,5 +128,4 @@ archive_generator:
 backup:
     type: git
     repository:
-      repository: git@github.com:vampire610/vampire610.github.io.git
-      branch: backup
+      repository: git@github.com:vampire610/vampire610.github.io.git,backup
