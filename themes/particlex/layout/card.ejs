@@ -1,0 +1,35 @@
+<div id="card-div">
+    <div class="card-style" style="width: 300px">
+        <div class="avatar">
+            <img src="<%- theme.avatar %>" alt="avatar">
+        </div>
+        <div class="name">
+            <%= config.author %>
+        </div>
+        <div class="descriptions">
+            <% theme.card.description.forEach(desc => { %>
+            <div class="description">
+                <%- markdown(desc) %>
+            </div>
+            <% }); %>
+        </div>
+        <div class="icon-links">
+            <% Object.keys(theme.card.iconLinks).forEach(key => { %>
+            <span class="icon-link">
+                <a href="<%- theme.card.iconLinks[key].link %>">
+                    <i class="fa-<%- theme.card.iconLinks[key].theme %> fa-<%- theme.card.iconLinks[key].name %> fa-fw"></i>
+                </a>
+            </span>
+            <% }); %>
+        </div>
+        <div class="friend-links">
+            <% Object.keys(theme.card.friendLinks).forEach(key => { %>
+            <div class="friend-link">
+                <a href="<%- theme.card.friendLinks[key] %>">
+                    <%= key %>
+                </a>
+            </div>
+            <% }); %>
+        </div>
+    </div>
+</div>
