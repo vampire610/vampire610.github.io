@@ -5,7 +5,7 @@ date: 2023-01-12 15:16:06
 ---
 {% raw %}<div class="style-example example">{% endraw %}
 
-<ul class="pure circle center about"><li><img  src="https://cdn.jsdelivr.net/gh/vampire610/cdn@latest/img/custom/me.jpg"></li></ul>
+<ul class="pure circle center about"><li><img  src="https://cdn.jsdelivr.net/gh/vampire610/cdn@latest/img/me.jpg"></li></ul>
 
 ### 这就是我的博客啦
 
