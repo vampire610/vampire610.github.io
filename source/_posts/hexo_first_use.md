@@ -49,7 +49,7 @@ $ hexo g
 ``` bash
 $ hexo s  
 ```
-在浏览器输入 http://localhost:4000 查看博客页面
+在浏览器输入 `http://localhost:4000` 查看博客页面
 
 ---
 
@@ -73,7 +73,7 @@ deploy:
 - type: git
   #在这里输入你的github仓库地址
   repo: git@github.com:用户名/仓库名.github.io.git
-  branch: master
+  branch: main
   message: update
 ```
 
@@ -104,10 +104,75 @@ $ hexo n "文件名"
 >博客根目录/source/_posts
 
 ---
-本次教程比较简洁，希望大家喜欢
+### 博客备份
 
+- 安装插件 `hexo-git-backup`
 
+``` bash
+$ npm install hexo-git-backup --save
+```
 
+- 在GitHub中新建仓库或新建分支
 
+- 在Hexo配置中添加
 
+  ``` yaml
+  backup:
+      type: git
+      repository:
+         backup: git@github.com:githubusername/Hexo-Backup.git,backup(分支名,新库为main,备份分支可用backup)
+  ```
+
+- 备份使用
+
+  ``` bash
+  $ hexo b
+  ```
+
+  
+
+### 博客恢复
+
+- 有条件时拷贝整个文件夹转移
+- 必备文件
+  - `config.yml`（站点配置）
+  - `theme`（主题文件夹）
+  - `source`（博客内容文件）
+- 次要文件
+  - `scaffolds`（文章的模板）
+  - `package.json`（使用包的说明文件）
+  - `.gitignore`
+  - 三个次要文件为自动生成，`hexo init` 时会自动生成
+- 需要删除的文件
+  - `.git`
+  - `node_modules`（进行`npm install`会自动生成
+  - `public`（执行`hexo g`时会生成）
+  - `.deploy_git`文件夹（执行hexo d时会重新生成）
+  - `db.json`文件
+  - 其实上面这些可删除的文件即为`.gitignore`文件里面记载的可以忽略的内容
+
+### 恢复博客
+
+- 环境搭建（同上）
+
+- 拷贝文件
+
+  - 若使用`hexo-git-backup`插件备份，只需从github拉入本地
+
+	  ``` bash
+    $ git clone https://github.com/username/备份仓库名.git
+    ```
+
+  
+  - 若是拷贝文件，必要文件或目录
+  
+    ``` 
+    _config.yml
+     package.json
+     scaffolds/
+     source/
+     themes/
+    ```
+  
+    
 
