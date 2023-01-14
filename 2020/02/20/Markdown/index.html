@@ -17,6 +17,10 @@
         <script src="https://polyfill.io/v3/polyfill.min.js?features="></script>
         
         
+        <script src="https://cdn.staticfile.org/KaTeX/0.16.4/katex.min.js"></script>
+        <script src="https://cdn.staticfile.org/KaTeX/0.16.4/contrib/auto-render.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.staticfile.org/KaTeX/0.16.4/katex.min.css">
+        
         <link rel="stylesheet" href="/css/fonts.min.css">
         <link rel="stylesheet" href="/css/particlex.css">
     <meta name="generator" content="Hexo 6.3.0"></head>
@@ -161,7 +165,7 @@
             
             <span class="tag">
                 
-                <a href="/tags/Markdown/" style="color: #00a596">
+                <a href="/tags/Markdown/" style="color: #ff7d73">
                     Markdown
                 </a>
             </span>
@@ -181,6 +185,11 @@
     
     
     
+    
+    <link rel="stylesheet" href="https://cdn.staticfile.org/waline/2.9.1/waline.min.css" />
+    <div id="comment">
+        <div id="waline-container"></div>
+    </div>
     
     
 </div>
@@ -212,6 +221,24 @@
 
     
     
+    
+    <script src="https://cdn.staticfile.org/waline/2.9.1/waline.min.js"></script>
+    <script>
+        Waline.init({
+            el: "#waline-container",
+            serverURL: "https://comment.vampire610.cn",
+            commentCount: true,
+            pageview: false,
+            emoji: "https://unpkg.com/@waline/emojis@1.0.1/weibo,https://unpkg.com/@waline/emojis@1.0.1/alus,https://unpkg.com/@waline/emojis@1.0.1/bilibili,https://unpkg.com/@waline/emojis@1.0.1/qq,https://unpkg.com/@waline/emojis@1.0.1/tieba,https://unpkg.com/@waline/emojis@1.0.1/tw-emoji".split(","),
+            meta: "nick,mail,link".split(","),
+            requiredMeta: "nick".split(","),
+            lang: "zh-CN",
+            wordLimit: 0,
+            pageSize: "10",
+            login: "enable",
+            locale: {}
+        });
+    </script>
     
     
 
