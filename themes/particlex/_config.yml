@@ -78,7 +78,7 @@ polyfill:
 
 # Rendering math with KaTeX
 math:
-    enable: false
+    enable: true
 
 # Article encryption
 crypto:
@@ -126,8 +126,9 @@ giscus:
 # Waline
 # https://github.com/walinejs/waline
 waline:
-    enable: false
-    serverURL: # Waline server address url, you should set this to your own link
+    enable: true
+    serverURL: https://comment.vampire610.cn
+    # Waline server address url, you should set this to your own link
     locale: # Locale: https://waline.js.org/guide/client/i18n.html#locale-option
         {}
         # e.g.:
