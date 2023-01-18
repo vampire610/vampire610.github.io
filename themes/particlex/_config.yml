@@ -48,10 +48,23 @@ menu:
 card:
     enable: true
     description:
-        - "Avada Kedavra!"
+        - "Avada Kedavra!!"
 #        - "什么也没有"
     iconLinks:
-        {}
+        github:
+            name: github
+            theme: brands
+            link: https://github.com/vampire610
+        QQ:
+            name: qq
+            theme: brands
+            link: http://wpa.qq.com/msgrd?v=3&uin=630730054&site=qq&menu=yes
+        Mail:
+            name: envelope
+            theme: solid
+            link: mailto:vampire610@proton.me
+        
+
         # <name>:
         #    name: <icon-name>
         #    theme: <icon-theme>
@@ -130,9 +143,8 @@ waline:
     serverURL: https://comment.vampire610.cn
     # Waline server address url, you should set this to your own link
     locale: # Locale: https://waline.js.org/guide/client/i18n.html#locale-option
-        {}
         # e.g.:
-        # placeholder: Leave a comment
+        placeholder: 欢迎评论（填写邮箱可在评论被回复时收到邮件提醒）
     commentCount: true # If false, comment count will only be displayed in post page, not in home page
     pageview: false # Pageviews count, Note: You should not enable both `waline.pageview` and `leancloud_visitors`
     emoji: # Custom emoji
