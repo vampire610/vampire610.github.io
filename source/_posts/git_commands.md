@@ -31,4 +31,28 @@ $ git update-git-for-windows
 ``` bash
 $ git remote -v
 ```
+
+### gcc编译命令别名
+``` .zshrc
+#在.zsh添加
+alias cc="g++ -Wall"
+```
+### 代理设置添加
+
+``` .zshrc
+#在.zshrc添加
+function proxy_on() {
+    export http_proxy=http://代理地址
+    export https_proxy=https://代理地址
+    echo -e "终端代理已开启。"
+}
+
+function proxy_off(){
+    unset http_proxy https_proxy
+    echo -e "终端代理已关闭。"
+}
+```
+
+
+
 ### 完善中，未完待续……
