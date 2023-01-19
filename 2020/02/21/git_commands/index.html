@@ -165,7 +165,7 @@
             
             <span class="tag">
                 
-                <a href="/tags/git/" style="color: #ff7d73">
+                <a href="/tags/git/" style="color: #00bcd4">
                     git
                 </a>
             </span>
@@ -188,6 +188,21 @@ $ ssh -T git@e.coding.net
 <h3 id="Windows直接在gitbush升级git"><a href="#Windows直接在gitbush升级git" class="headerlink" title="Windows直接在gitbush升级git"></a>Windows直接在gitbush升级git</h3><pre><code class="bash">$ git update-git-for-windows
 </code></pre>
 <h3 id="git查看远程仓库地址"><a href="#git查看远程仓库地址" class="headerlink" title="git查看远程仓库地址"></a>git查看远程仓库地址</h3><pre><code class="bash">$ git remote -v
+</code></pre>
+<h3 id="gcc编译命令别名"><a href="#gcc编译命令别名" class="headerlink" title="gcc编译命令别名"></a>gcc编译命令别名</h3><pre><code class=".zshrc">#在.zsh添加
+alias cc=&quot;g++ -Wall&quot;
+</code></pre>
+<h3 id="代理设置添加"><a href="#代理设置添加" class="headerlink" title="代理设置添加"></a>代理设置添加</h3><pre><code class=".zshrc">#在.zshrc添加
+function proxy_on() &#123;
+    export http_proxy=http://代理地址
+    export https_proxy=https://代理地址
+    echo -e &quot;终端代理已开启。&quot;
+&#125;
+
+function proxy_off()&#123;
+    unset http_proxy https_proxy
+    echo -e &quot;终端代理已关闭。&quot;
+&#125;
 </code></pre>
 <h3 id="完善中，未完待续……"><a href="#完善中，未完待续……" class="headerlink" title="完善中，未完待续……"></a>完善中，未完待续……</h3>
     </div>
