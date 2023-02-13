@@ -53,6 +53,16 @@ function proxy_off(){
 }
 ```
 
+### windows下git bash设置默认启动zsh
+
+``` .bashrc
+#在Git安装目录下修改  ./etc/bash.bashrc
+# Launch Zsh
+if [ -t 1 ]; then
+exec zsh
+fi
+```
+
 
 
 ### 完善中，未完待续……
