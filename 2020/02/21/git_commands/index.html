@@ -165,7 +165,7 @@
             
             <span class="tag">
                 
-                <a href="/tags/git/" style="color: #00bcd4">
+                <a href="/tags/git/" style="color: #03a9f4">
                     git
                 </a>
             </span>
@@ -203,6 +203,12 @@ function proxy_off()&#123;
     unset http_proxy https_proxy
     echo -e &quot;终端代理已关闭。&quot;
 &#125;
+</code></pre>
+<h3 id="windows下git-bash设置默认启动zsh"><a href="#windows下git-bash设置默认启动zsh" class="headerlink" title="windows下git bash设置默认启动zsh"></a>windows下git bash设置默认启动zsh</h3><pre><code class=".bashrc">#在Git安装目录下修改  ./etc/bash.bashrc
+# Launch Zsh
+if [ -t 1 ]; then
+exec zsh
+fi
 </code></pre>
 <h3 id="完善中，未完待续……"><a href="#完善中，未完待续……" class="headerlink" title="完善中，未完待续……"></a>完善中，未完待续……</h3>
     </div>

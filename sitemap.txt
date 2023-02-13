@@ -21,9 +21,9 @@ https://vampire610.cn/tags/keil/
 https://vampire610.cn/tags/%E5%8D%95%E7%89%87%E6%9C%BA/
 https://vampire610.cn/categories/%E7%AC%94%E8%AE%B0/
 https://vampire610.cn/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/
-https://vampire610.cn/categories/%E7%AC%94%E8%AE%B0/git/
+https://vampire610.cn/categories/%E6%95%99%E7%A8%8B/
 https://vampire610.cn/categories/%E7%AC%94%E8%AE%B0/Markdown/
 https://vampire610.cn/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/PyQt5/
-https://vampire610.cn/categories/%E6%95%99%E7%A8%8B/
+https://vampire610.cn/categories/%E7%AC%94%E8%AE%B0/git/
 https://vampire610.cn/categories/%E6%95%99%E7%A8%8B/AD/
 https://vampire610.cn/categories/%E6%95%99%E7%A8%8B/hexo/
