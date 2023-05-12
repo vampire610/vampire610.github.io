@@ -50,3 +50,11 @@ categories:
   - 之后即可在下方打开文件愉快的用vscode写keil代码了，自动补全等功能都正常
 
     ![image-20230114205641535](https://fastly.jsdelivr.net/gh/vampire610/PicGo/Blog-PIC/20230114205646.png)
+
+
+
+
+
+### 一些注意事项
+
+- 如果点击编译、下载后出现终端界面，但没有其他反应，可将VScode默认终端换成powershell等windows自带终端。
