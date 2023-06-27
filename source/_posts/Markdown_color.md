@@ -7,6 +7,16 @@ categories:
   - 笔记
   - Markdown
 ---
+
+``` markdown
+设置格式
+<font face=雅黑 color=87CEFA size=3 >字体、颜色相关设置</font>
+```
+
+效果：<font face=雅黑 color=87CEFA size=3 >字体、颜色相关设置</font>
+
+注意：部分markdown编辑器可能不支持该语法，无法正常显示
+
 <div>
 <div class="table-box"><table width="100%">
 <tbody>
