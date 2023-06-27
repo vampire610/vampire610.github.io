@@ -1,3 +1,4 @@
+https://vampire610.cn/2023/06/27/python-threading/
 https://vampire610.cn/2023/06/17/pyserial/
 https://vampire610.cn/2023/03/15/stm32dh11/
 https://vampire610.cn/2023/01/14/vscode-keil/
@@ -30,6 +31,8 @@ https://vampire610.cn/tags/windows/
 https://vampire610.cn/tags/update/
 https://vampire610.cn/tags/STM32/
 https://vampire610.cn/tags/PySide2/
+https://vampire610.cn/tags/python/
+https://vampire610.cn/tags/%E7%BA%BF%E7%A8%8B/
 https://vampire610.cn/categories/%E7%AC%94%E8%AE%B0/
 https://vampire610.cn/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/
 https://vampire610.cn/categories/%E6%95%99%E7%A8%8B/
@@ -40,3 +43,5 @@ https://vampire610.cn/categories/%E6%95%99%E7%A8%8B/AD/
 https://vampire610.cn/categories/%E6%95%99%E7%A8%8B/hexo/
 https://vampire610.cn/categories/%E8%AE%B0%E5%BD%95/
 https://vampire610.cn/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/PyQt5/PySide2/
+https://vampire610.cn/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/threading/
+https://vampire610.cn/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/threading/python/

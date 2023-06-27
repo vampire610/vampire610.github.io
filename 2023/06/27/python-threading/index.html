@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0">
-        <title>Git常用命令 | Vampire&#39;Blog</title>
+        <title>Python线程学习记录 | Vampire&#39;Blog</title>
         <meta name="author" content="小P孩儿">
         <meta name="description" content="">
         <meta name="keywords" content="">
@@ -138,22 +138,22 @@
                     <div id="main">
                         <div class="article">
     <div>
-        <h1>Git常用命令 </h1>
+        <h1>Python线程学习记录 </h1>
     </div>
     <div class="info">
         <span class="date">
             <span class="icon">
                 <i class="fa-solid fa-calendar fa-fw"></i>
             </span>
-            2020/2/21
+            2023/6/27
         </span>
         
         <span class="category">
-            <a href="/categories/%E7%AC%94%E8%AE%B0/">
+            <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
                 <span class="icon">
                     <i class="fa-solid fa-bookmark fa-fw"></i>
                 </span>
-                笔记
+                学习笔记
             </a>
         </span>
         
@@ -165,8 +165,15 @@
             
             <span class="tag">
                 
-                <a href="/tags/git/" style="color: #ff7d73">
-                    git
+                <a href="/tags/python/" style="color: #00bcd4">
+                    python
+                </a>
+            </span>
+            
+            <span class="tag">
+                
+                <a href="/tags/%E7%BA%BF%E7%A8%8B/" style="color: #00bcd4">
+                    线程
                 </a>
             </span>
             
@@ -175,42 +182,54 @@
     </div>
     
     <div class="content" v-pre>
-        <p><font color=gray size=2 >仅记录本人容易忘记的各条命令及部分解释</font>  </p>
-<h3 id="测试本地与服务器的连接"><a href="#测试本地与服务器的连接" class="headerlink" title="测试本地与服务器的连接"></a>测试本地与服务器的连接</h3><pre><code class="bash">$ ssh -T git@(服务器/网站名)  
-例如：  
-github:  
-$ ssh -T git@github.com  
-gitee:   
-$ ssh -T git@gitee.com  
-coding:  
-$ ssh -T git@e.coding.net
+        <h1 id="python-threading的一些使用记录"><a href="#python-threading的一些使用记录" class="headerlink" title="python threading的一些使用记录"></a>python threading的一些使用记录</h1><p>开发python串口上位机的时候需要保证串口一直接收数据的同时主ui界面可以运行操作，学习python线程操作，学习过程中有一些疑问，在此记录。</p>
+<h2 id="疑问1：线程运行后关闭主界面线程仍在运行"><a href="#疑问1：线程运行后关闭主界面线程仍在运行" class="headerlink" title="疑问1：线程运行后关闭主界面线程仍在运行"></a>疑问1：线程运行后关闭主界面线程仍在运行</h2><p>由于使用创建线程来让串口持续接收，在线程函数内写为死循环，但发现该方法在程序线程启动后关闭主程序线程会残留在后台不会停止。</p>
+<p>解决办法：设置为守护线程，当主进程停止的时候，会强制关闭守护线程</p>
+<pre><code class="python"># 在启动线程之前，将线程设置为守护线程
+my_thread.daemon = True
+my_thread.start()
 </code></pre>
-<h3 id="Windows直接在gitbush升级git"><a href="#Windows直接在gitbush升级git" class="headerlink" title="Windows直接在gitbush升级git"></a>Windows直接在gitbush升级git</h3><pre><code class="bash">$ git update-git-for-windows
-</code></pre>
-<h3 id="git查看远程仓库地址"><a href="#git查看远程仓库地址" class="headerlink" title="git查看远程仓库地址"></a>git查看远程仓库地址</h3><pre><code class="bash">$ git remote -v
-</code></pre>
-<h3 id="gcc编译命令别名"><a href="#gcc编译命令别名" class="headerlink" title="gcc编译命令别名"></a>gcc编译命令别名</h3><pre><code class=".zshrc">#在.zsh添加
-alias cc=&quot;g++ -Wall&quot;
-</code></pre>
-<h3 id="代理设置添加"><a href="#代理设置添加" class="headerlink" title="代理设置添加"></a>代理设置添加</h3><pre><code class=".zshrc">#在.zshrc添加
-function proxy_on() &#123;
-    export http_proxy=http://代理地址
-    export https_proxy=https://代理地址
-    echo -e &quot;终端代理已开启。&quot;
-&#125;
+<h2 id="疑问2：线程结束"><a href="#疑问2：线程结束" class="headerlink" title="疑问2：线程结束"></a>疑问2：线程结束</h2><p>编写线程代码时，需要在运行时主动停止线程，目前在网上看到两个方法</p>
+<ol>
+<li><p>使用线程的事件<code>Event()</code></p>
+<p>实例化<code>Thread.Event()</code>实质上是定义一个全局变量Flag，程序执行<code>event.wait()</code>方法时会阻塞，当Flag值为<code>True</code>时，程序执行。</p>
+<p>在编程时可以创建一个event实例，在主进程内改变event内flag状态，在线程内使用<code>event.is_set()</code>获取当前状态，来决定是否退出线程内死循环，让线程自然结束后退出。</p>
+<blockquote>
+<p>event方法：</p>
+<p>wait(): 是否阻塞是看event对象内部的Flag值</p>
+<p>set(): 将Flag值改成True</p>
+<p>clear(): 将Flag值改成False</p>
+<p>is_set(): 判断当前的Flag值</p>
+</blockquote>
+</li>
+<li><p>可能能用普通变量实现？或者信号量？</p>
+</li>
+</ol>
+<h2 id="疑问3：是否-join-？"><a href="#疑问3：是否-join-？" class="headerlink" title="疑问3：是否.join()？"></a>疑问3：是否.join()？</h2><p>在用<code>.start()</code>启动线程后，是否使用<code>.join([timeout])</code>？</p>
+<p><code>timeout</code>参数可选，功能是指定线程最多可以霸占CPU资源时间（秒为单位），若省略，则默认直到线程执行结束（进入死亡状态）才释放CPU资源。</p>
+<h2 id="疑问3：threading-Thread还是重写run"><a href="#疑问3：threading-Thread还是重写run" class="headerlink" title="疑问3：threading.Thread还是重写run()"></a>疑问3：<code>threading.Thread</code>还是重写<code>run()</code></h2><p>在网上看到有两种方法来实现线程，一种是写一个线程函数，使用<code>my_thread = threading.Thread(target=function, args=(i,x))</code>来创建线程实例，target指定线程函数，args指定传入参数。</p>
+<p>另一种方式是用threading模块实现一个新的线程，需要下面3步：</p>
+<ul>
+<li>继承于Thread 类</li>
+<li>重写<code>__init__</code>方法，可以添加额外的参数</li>
+<li>最后，需要重写run()方法实现线程功能</li>
+</ul>
+<p>run()方法默认就是创建线程threading时，传递的target function。start方法会自动调用run()。</p>
+<p>示例：</p>
+<pre><code class="python">class myThread(threading.Thread):
+    def __init__(self, threadID, name, counter):
+        threading.Thread.__init__(self)
+        self.threadID = threadID
+        self.name = name
+        self.counter = counter
+        # 以上参数可自定义
 
-function proxy_off()&#123;
-    unset http_proxy https_proxy
-    echo -e &quot;终端代理已关闭。&quot;
-&#125;
+    def run(self):
+        print(&quot;Starting &quot; + self.name)
+        print_time(self.name, self.counter, 2)
+        print(&quot;Exiting &quot; + self.name)
 </code></pre>
-<h3 id="windows下git-bash设置默认启动zsh"><a href="#windows下git-bash设置默认启动zsh" class="headerlink" title="windows下git bash设置默认启动zsh"></a>windows下git bash设置默认启动zsh</h3><pre><code class=".bashrc">#在Git安装目录下修改  ./etc/bash.bashrc
-# Launch Zsh
-if [ -t 1 ]; then
-exec zsh
-fi
-</code></pre>
-<h3 id="完善中，未完待续……"><a href="#完善中，未完待续……" class="headerlink" title="完善中，未完待续……"></a>完善中，未完待续……</h3>
+
     </div>
     
     
