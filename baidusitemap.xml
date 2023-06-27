@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://vampire610.cn/2020/02/19/Markdown_color/</loc>
+    <lastmod>2023-06-27</lastmod>
+  </url>
+  <url>
     <loc>https://vampire610.cn/2023/06/27/python-threading/</loc>
     <lastmod>2023-06-27</lastmod>
   </url>
@@ -43,10 +47,6 @@
   <url>
     <loc>https://vampire610.cn/2019/11/02/AD/</loc>
     <lastmod>2023-01-13</lastmod>
-  </url>
-  <url>
-    <loc>https://vampire610.cn/2020/02/19/Markdown_color/</loc>
-    <lastmod>2022-09-18</lastmod>
   </url>
   <url>
     <loc>https://vampire610.cn/2020/02/20/Markdown/</loc>
