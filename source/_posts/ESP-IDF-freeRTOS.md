@@ -10,7 +10,7 @@ categories:
 
 # ESP-IDF与freeRTOS
 
-ESP-IDF是乐鑫官方推出的ESP32开发环境，个人不太喜欢arduino，所以选择学习使用IDF编程，上手发现很多地方十分陌生，在B站发现宝藏up[**Michael_ee**]([Michael_ee的个人空间_哔哩哔哩_bilibili](https://space.bilibili.com/1338335828))讲的很详细，于是跟着学习并简单记录。
+ESP-IDF是乐鑫官方推出的ESP32开发环境，个人不太喜欢arduino，所以选择学习使用IDF编程，上手发现很多地方十分陌生，在B站发现宝藏up [Michael_ee(点击跳转up主页)](https://space.bilibili.com/1338335828)讲的很详细，于是跟着学习并简单记录。
 
 ## 预备工作，安装vscode和IDF插件，并配置
 
