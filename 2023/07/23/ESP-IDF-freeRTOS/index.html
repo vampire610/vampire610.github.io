@@ -165,14 +165,14 @@
             
             <span class="tag">
                 
-                <a href="/tags/ESP-IDF/" style="color: #03a9f4">
+                <a href="/tags/ESP-IDF/" style="color: #00a596">
                     ESP-IDF
                 </a>
             </span>
             
             <span class="tag">
                 
-                <a href="/tags/freeRTOS/" style="color: #00a596">
+                <a href="/tags/freeRTOS/" style="color: #00bcd4">
                     freeRTOS
                 </a>
             </span>
@@ -182,7 +182,7 @@
     </div>
     
     <div class="content" v-pre>
-        <h1 id="ESP-IDF与freeRTOS"><a href="#ESP-IDF与freeRTOS" class="headerlink" title="ESP-IDF与freeRTOS"></a>ESP-IDF与freeRTOS</h1><p>ESP-IDF是乐鑫官方推出的ESP32开发环境，个人不太喜欢arduino，所以选择学习使用IDF编程，上手发现很多地方十分陌生，在B站发现宝藏up<a href="%5BMichael_ee%E7%9A%84%E4%B8%AA%E4%BA%BA%E7%A9%BA%E9%97%B4_%E5%93%94%E5%93%A9%E5%93%94%E5%93%A9_bilibili%5D(https://space.bilibili.com/1338335828)"><strong>Michael_ee</strong></a>讲的很详细，于是跟着学习并简单记录。</p>
+        <h1 id="ESP-IDF与freeRTOS"><a href="#ESP-IDF与freeRTOS" class="headerlink" title="ESP-IDF与freeRTOS"></a>ESP-IDF与freeRTOS</h1><p>ESP-IDF是乐鑫官方推出的ESP32开发环境，个人不太喜欢arduino，所以选择学习使用IDF编程，上手发现很多地方十分陌生，在B站发现宝藏up <a target="_blank" rel="noopener" href="https://space.bilibili.com/1338335828">Michael_ee(点击跳转up主页)</a>讲的很详细，于是跟着学习并简单记录。</p>
 <h2 id="预备工作，安装vscode和IDF插件，并配置"><a href="#预备工作，安装vscode和IDF插件，并配置" class="headerlink" title="预备工作，安装vscode和IDF插件，并配置"></a>预备工作，安装vscode和IDF插件，并配置</h2><p>安装过程很多教程，也不复杂，就不再写了。</p>
 <p>安装之后需要选择开发板，随后在界面左下点击齿轮图标进入menucofig设置，在其中设置芯片flash大小，算法，主频，flash结束是否自动运行等内容。</p>
 <h2 id="Task创建与删除"><a href="#Task创建与删除" class="headerlink" title="Task创建与删除"></a>Task创建与删除</h2><p>首先需要写一个任务（就是一个函数）,任务如果需要持续执行，需要在任务中设置无尽循环，否则顺序执行完任务就直接退出了。</p>
