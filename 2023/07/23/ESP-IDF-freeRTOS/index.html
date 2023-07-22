@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0">
-        <title>Typora中picgo-Core配置记录 | Vampire&#39;Blog</title>
+        <title>ESP-IDF与freeRTOS | Vampire&#39;Blog</title>
         <meta name="author" content="小P孩儿">
         <meta name="description" content="">
         <meta name="keywords" content="">
@@ -138,22 +138,22 @@
                     <div id="main">
                         <div class="article">
     <div>
-        <h1>Typora中picgo-Core配置记录 </h1>
+        <h1>ESP-IDF与freeRTOS </h1>
     </div>
     <div class="info">
         <span class="date">
             <span class="icon">
                 <i class="fa-solid fa-calendar fa-fw"></i>
             </span>
-            2023/2/15
+            2023/7/23
         </span>
         
         <span class="category">
-            <a href="/categories/%E8%AE%B0%E5%BD%95/">
+            <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
                 <span class="icon">
                     <i class="fa-solid fa-bookmark fa-fw"></i>
                 </span>
-                记录
+                学习笔记
             </a>
         </span>
         
@@ -165,15 +165,15 @@
             
             <span class="tag">
                 
-                <a href="/tags/picgo/" style="color: #ffa2c4">
-                    picgo
+                <a href="/tags/ESP-IDF/" style="color: #03a9f4">
+                    ESP-IDF
                 </a>
             </span>
             
             <span class="tag">
                 
-                <a href="/tags/typora/" style="color: #00a596">
-                    typora
+                <a href="/tags/freeRTOS/" style="color: #00a596">
+                    freeRTOS
                 </a>
             </span>
             
@@ -182,40 +182,72 @@
     </div>
     
     <div class="content" v-pre>
-        <h3 id="记录一下Typora中picgo-core的配置"><a href="#记录一下Typora中picgo-core的配置" class="headerlink" title="记录一下Typora中picgo-core的配置"></a>记录一下Typora中picgo-core的配置</h3><h4 id="typora相关设置"><a href="#typora相关设置" class="headerlink" title="typora相关设置"></a>typora相关设置</h4><p><img src="https://fastly.jsdelivr.net/gh/vampire610/PicGo/Blog-PIC/20230215223213.png" alt="image-20230215223209933"></p>
-<h4 id="下载picgo-core"><a href="#下载picgo-core" class="headerlink" title="下载picgo-core"></a>下载picgo-core</h4><p>以上设置完毕后在Typora内下载PicGo-Core</p>
-<h4 id="安装插件"><a href="#安装插件" class="headerlink" title="安装插件"></a>安装插件</h4><p>下载完picgo-core直接点击验证图片上传，此时会显示失败，记下picgo.exe的路径，如我的路径为<code>&quot;C:\\Users\\zyk15\\AppData\\Roaming\\Typora\\picgo\\win64\\picgo.exe&quot;</code></p>
-<p><img src="https://fastly.jsdelivr.net/gh/vampire610/PicGo/Blog-PIC/20230215223702.png" alt="image-20230215223659873"></p>
-<p>在该路径下打开命令行，运行以下代码安装插件</p>
-<blockquote>
-<p>github-plus替代原有上传服务</p>
-<p>super-prefix 自动重命名图片</p>
-</blockquote>
-<pre><code class="zsh">$ ./picgo.exe install github-plus
-$ ./picgo.exe install super-prefix
-</code></pre>
-<h4 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h4><p>Typora内打开picgo配置文件，内容如下</p>
-<pre><code class="json">&#123;
-  &quot;picBed&quot;: &#123;
-    &quot;current&quot;: &quot;githubPlus&quot;,
-    &quot;githubPlus&quot;: &#123;
-      &quot;repo&quot;: &quot;用户名/仓库名&quot;,
-      &quot;token&quot;: &quot;xxxxxxxx&quot;,
-      &quot;path&quot;: &quot;仓库内文件夹名/&quot;,
-      &quot;customUrl&quot;: &quot;https://fastly.jsdelivr.net/gh/用户名/仓库名/&quot;,
-      &quot;branch&quot;: &quot;master&quot;
+        <h1 id="ESP-IDF与freeRTOS"><a href="#ESP-IDF与freeRTOS" class="headerlink" title="ESP-IDF与freeRTOS"></a>ESP-IDF与freeRTOS</h1><p>ESP-IDF是乐鑫官方推出的ESP32开发环境，个人不太喜欢arduino，所以选择学习使用IDF编程，上手发现很多地方十分陌生，在B站发现宝藏up<a href="%5BMichael_ee%E7%9A%84%E4%B8%AA%E4%BA%BA%E7%A9%BA%E9%97%B4_%E5%93%94%E5%93%A9%E5%93%94%E5%93%A9_bilibili%5D(https://space.bilibili.com/1338335828)"><strong>Michael_ee</strong></a>讲的很详细，于是跟着学习并简单记录。</p>
+<h2 id="预备工作，安装vscode和IDF插件，并配置"><a href="#预备工作，安装vscode和IDF插件，并配置" class="headerlink" title="预备工作，安装vscode和IDF插件，并配置"></a>预备工作，安装vscode和IDF插件，并配置</h2><p>安装过程很多教程，也不复杂，就不再写了。</p>
+<p>安装之后需要选择开发板，随后在界面左下点击齿轮图标进入menucofig设置，在其中设置芯片flash大小，算法，主频，flash结束是否自动运行等内容。</p>
+<h2 id="Task创建与删除"><a href="#Task创建与删除" class="headerlink" title="Task创建与删除"></a>Task创建与删除</h2><p>首先需要写一个任务（就是一个函数）,任务如果需要持续执行，需要在任务中设置无尽循环，否则顺序执行完任务就直接退出了。</p>
+<p>例如：</p>
+<pre><code class="c">// 输入参数定义为void类型指针，可强转其他任何类型参数传入，在函数内再转换回去
+void myTask(void* pvParam)
+&#123;
+    while (1)
+    &#123;
+        printf(&quot;Hello world! In the task!\n&quot;);
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
     &#125;
-  &#125;,
-  &quot;picgoPlugins&quot;: &#123;
-    &quot;picgo-plugin-super-prefix&quot;: true,
-    &quot;picgo-plugin-github-plus&quot;: true
-  &#125;,
-  &quot;picgo-plugin-super-prefix&quot;: &#123;
-    &quot;fileFormat&quot;: &quot;YYYYMMDDHHmmss&quot;
-  &#125;,
 &#125;
 </code></pre>
-<p>仅记录以便自己查阅。</p>
+<h3 id="任务创建"><a href="#任务创建" class="headerlink" title="任务创建"></a>任务创建</h3><p>建立好任务函数之后，可以使用<code>xTaskCreate()</code>来在OS中创建任务。</p>
+<pre><code class="c">xTaskCreate(myTask, &quot;myTask1&quot;, 1024, NULL, 1, NULL);
+</code></pre>
+<p>函数参数具体描述可自己建立工程跳转查看，这里只做简介。</p>
+<ol>
+<li><p><em>pvTaskCode</em>：这里填入<em>myTask</em>，就是任务函数指针。</p>
+</li>
+<li><p><em>pcName</em>：这里填入<em>”myTask1“</em>，代表在RTOS中的任务名称，调试等时候用。</p>
+</li>
+<li><p><em>usStackDepth</em>：这里填入<em>1024</em>，任务栈大小，暂定1024，多任务时需要计算分配。</p>
+</li>
+<li><p><em>pvParameters</em>：传入任务的参数，这里填入内容将会传递给<em>myTask</em>函数的参数部分，此处没有参数，填写<em>NULL</em>即可。</p>
+</li>
+<li><p><em>uxPriority</em>：任务优先级，idle任务为0，最低，最高255。</p>
+</li>
+<li><p><em>pxCreatedTask</em>：任务句柄，一个结构体，可配置任务相关信息，此处不使用，填<em>NULL</em>。</p>
+</li>
+</ol>
+<p>这样一个任务<em>mytask1</em>就创建好了，运行代码即可看到效果。</p>
+<p>也可通过任务句柄来设置一些任务属性:</p>
+<pre><code class="c">TaskHandle_t myHandle = NULL;
+xTaskCreate(myTask, &quot;myTask1&quot;, 1024, NULL, 1, &amp;myHandle);
+</code></pre>
+<p>这样创建的任务就会使用句柄中定义的任务属性。</p>
+<p>此处<code>myHandle</code>定义时为NULL，则创建任务时会将参数放入。</p>
+<h3 id="任务删除"><a href="#任务删除" class="headerlink" title="任务删除"></a>任务删除</h3><p>如果使用了任务句柄，使用<code>*vTaskDelete(myHandle);*</code> 即可删除与<code>myHandle</code>相关的任务。</p>
+<pre><code class="c">//定义句柄
+TaskHandle_t myHandle = NULL;
+//创建任务
+xTaskCreate(myTask, &quot;myTask1&quot;, 1024, NULL, 1, NULL);
+//延时一段时间后删除任务
+vTaskDelay(5000 / portTICK_PERIOD_MS);
+//判断句柄是否为空，不为空则删除任务
+if (myHandle != NULL)
+&#123;
+    vTaskDelete(myHandle);
+&#125;
+</code></pre>
+<p>也可以不使用句柄，在任务函数中删除任务。</p>
+<pre><code class="c">void myTask(void* pvParam)
+&#123;   
+    printf(&quot;Hello world! In the task!\n&quot;);
+    vTaskDelay(1000 / portTICK_PERIOD_MS);
+    printf(&quot;Hello world! In the task!\n&quot;);
+    vTaskDelay(1000 / portTICK_PERIOD_MS);
+    printf(&quot;Hello world! In the task!\n&quot;);
+    vTaskDelay(1000 / portTICK_PERIOD_MS);
+    // vTaskDelete函数参数为空时删除当前任务
+    vTaskDelete(NULL);
+&#125;
+</code></pre>
 
     </div>
     

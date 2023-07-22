@@ -1,3 +1,4 @@
+https://vampire610.cn/2023/07/23/ESP-IDF-freeRTOS/
 https://vampire610.cn/2023/07/10/stackoverflow/
 https://vampire610.cn/2023/07/06/platformio/
 https://vampire610.cn/2020/02/19/Markdown_color/
@@ -37,6 +38,8 @@ https://vampire610.cn/tags/python/
 https://vampire610.cn/tags/%E7%BA%BF%E7%A8%8B/
 https://vampire610.cn/tags/platformio/
 https://vampire610.cn/tags/%E6%A0%88%E6%BA%A2%E5%87%BA/
+https://vampire610.cn/tags/ESP-IDF/
+https://vampire610.cn/tags/freeRTOS/
 https://vampire610.cn/categories/%E7%AC%94%E8%AE%B0/
 https://vampire610.cn/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/
 https://vampire610.cn/categories/%E6%95%99%E7%A8%8B/
