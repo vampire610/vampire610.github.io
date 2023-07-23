@@ -101,3 +101,344 @@ void myTask(void* pvParam)
 }
 ```
 
+## Task四种参数传入
+
+整体不难，基本c知识，简单记录
+
+### 1.变量
+
+``` c
+// 输入参数定义为void类型指针，可强转其他任何类型参数传入，在函数内再转换回去
+void myTask(void *pvParam)
+{
+    //创建int指针，指向参数，同时将参数转为int型
+    int *pInt;
+    pInt = (int *)pvParam;
+
+    printf("I got Num = %d\n", *pInt);
+
+
+    vTaskDelay(1000 / portTICK_PERIOD_MS);
+
+    // delet函数为空时删除当前任务
+    vTaskDelete(NULL);
+}
+
+//定义全局变量
+int testNum = 5;
+void app_main(void)
+{   
+    //传入时需取参数地址，并转成void指针
+    xTaskCreate(myTask, "myTask1", 2048, (void *)&testNum, 1, NULL);
+}
+```
+
+### 2.数组
+
+``` c
+void myTask(void *pvParam)
+{
+    // 创建int指针，指向参数，同时将参数转为int型
+    int *pArrayAddr;
+    pArrayAddr = (int *)pvParam;
+
+    printf("I got Num1 = %d\n", *pArrayAddr);
+    printf("I got Num2 = %d\n", *pArrayAddr + 1);
+    printf("I got Num3 = %d\n", *pArrayAddr + 2);
+
+    vTaskDelay(1000 / portTICK_PERIOD_MS);
+
+    // delet函数为空时删除当前任务
+    vTaskDelete(NULL);
+}
+
+// 定义全局变量
+int testNum = {5, 6, 7};
+void app_main(void)
+{
+    // 传入时需取参数地址，并转成void指针,数组名本身为地址，无需取地址
+    xTaskCreate(myTask, "myTask1", 2048, (void *)testNum, 1, NULL);
+}
+```
+
+### 3.结构体
+
+``` c
+typedef struct A_STRUCT
+{
+    int iMem1;
+    int iMem2;
+} xStruct;
+
+xStruct xStrTest = {6, 9};
+
+// 输入参数定义为void类型指针，可强转其他任何类型参数传入，在函数内再转换回去
+void myTask(void *pvParam)
+{
+    // 定义结构体指针,转换类型
+    xStruct *pStrTest;
+    pStrTest = (xStruct *)pvParam;
+
+    printf("I got iMem1 = %d\n", pStrTest->iMem1);
+    printf("I got iMem2 = %d\n", pStrTest->iMem2);
+
+    vTaskDelay(1000 / portTICK_PERIOD_MS);
+
+    // delet函数为空时删除当前任务
+    vTaskDelete(NULL);
+}
+
+// 定义全局变量
+int testNum = {5, 6, 7};
+void app_main(void)
+{
+    // 传入时需取参数地址，并转成void指针,数组名本身为地址，无需取地址
+    xTaskCreate(myTask, "myTask1", 2048, (void *)&xStrTest, 1, NULL);
+}
+```
+
+### 4.字符串
+
+``` c
+void myTask(void *pvParam)
+{
+    char *pcTxtInTask;
+    pcTxtInTask = pvParam;
+
+    printf("I got message = %s\n", pcTxtInTask);
+
+
+    vTaskDelay(1000 / portTICK_PERIOD_MS);
+
+    // delet函数为空时删除当前任务
+    vTaskDelete(NULL);
+}
+
+// 定义全局变量
+int testNum = {5, 6, 7};
+//字符串
+static const char *pcTxt = "I am 字符串";
+void app_main(void)
+{
+    // 传入时需取参数地址，并转成void指针,数组名本身为地址，无需取地址
+    xTaskCreate(myTask, "myTask1", 2048, (void *)pcTxt, 1, NULL);
+}
+
+```
+
+## 优先级
+
+优先级定义在`FreeRTOSConfig.h`
+
+``` c
+#define configMAX_PRIORITIES                            ( 25 )  //This has impact on speed of search for highest priority
+```
+
+可以看到当前最大优先级为25，可设置范围为0-24。
+
+如果设置优先级超过最大值，自动更改为24。
+
+`uxTaskPriorityGet()`:取得Handle对应优先级。
+
+同优先级时，先创建先运行，不同时，先运行优先级高的任务。
+
+``` c
+void app_main(void)
+{
+
+    TaskHandle_t pxTask1 = NULL;
+    TaskHandle_t pxTask2 = NULL;
+
+    // 传入时需取参数地址，并转成void指针,数组名本身为地址，无需取地址
+    //此处使用xTaskCreatePinnedToCore0()函数，应为我用的ESP32为双核芯片
+    //不指定内核可能会分配到不同内核，导致设置优先级效果不明显
+    xTaskCreatePinnedToCore(myTask1, "myTask1", 2048, (void *)pcTxt, 1, &pxTask1,0);
+    xTaskCreatePinnedToCore(myTask2, "myTask2", 2048, (void *)pcTxt, 2, &pxTask2,0);
+    
+    //获取优先级并输出
+    iPriority = uxTaskPriorityGet(pxTask1);
+    printf("iPriority = %d\n", iPriority);
+
+    //设置优先级
+    vTaskPrioritySet(pxTask1,3);
+}
+```
+
+
+
+## 任务的挂起（suspend）和恢复（resume）
+
+- 挂起`vTaskSuspend(pxTask1)`
+
+- 恢复`vTaskResume(pxTask1)`
+
+用法和`vTaskDelete`类似，可在外部通过句柄操作，也可在任务内部传参NULL操作。
+
+可在任务中挂起，在外部恢复。但恢复后会在任务中重新挂起。
+
+可通过任务中挂起的方式实现在外部控制任务在需要的时候单次运行。
+
+- 挂起调度器`vTaskSuspendAll()`
+- 恢复调度器`xTaskResumeAll()`
+
+挂起后不能再调用freeRTOS的API，只能调用自己的函数。
+
+成对使用时可避免任务运行时被调度。
+
+例如：
+
+``` c
+void myTask1(void *pvParam)
+{
+    printf("task begin\n");
+    vTaskSuspendAll();
+    for (int i = 0; i < 9999; i++)
+    {
+        for (int j = 0; j < 4000; j++)
+        {
+            ;
+        }
+    }
+    xTaskResumeAll();
+    printf("task end\n");
+    
+    vTaskDelete(NULL);
+}
+```
+
+## vTaskList()
+
+打印系统内所有任务的状态、信息。
+
+使用该函数需要设置勾选menuconfig内
+
+`configUSE_TRACE_FACILITY`和`configUSE_STATS_FORMATTING_FUNCTIONS`
+
+``` c
+    static char pcWriteBuffer[512] = {0};
+    //函数会将Task信息格式化到数组
+    vTaskList(pcWriteBuffer);
+    printf("--------------------------------------------------\n");
+    printf("Name      State    Priority   Stack     Num   core\n");
+    printf("%s\n",pcWriteBuffer);
+
+```
+
+打印信息如下：
+
+``` bash
+--------------------------------------------------
+Name          State  Priority  Stack   Num    core
+myTask2         R       1       1748    8       0
+main            X       1       3452    4       0
+myTask1         R       1       1756    7       0
+IDLE            R       0       1236    6       1
+IDLE            R       0       1240    5       0
+esp_timer       S       22      3568    3       0
+ipc1            B       24      512     2       1
+ipc0            B       24      488     1       0
+
+```
+
+State状态：
+
+> R为ready就绪
+>
+> X为运行态
+>
+> D为被删除
+>
+> S为挂起
+>
+> B为阻塞
+
+Stack为剩余堆栈空间
+
+
+
+
+
+## 目前为止代码如下
+
+``` c
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
+#include "esp_system.h"
+#include "esp_spi_flash.h"
+
+// 输入参数定义为void类型指针，可强转其他任何类型参数传入，在函数内再转换回去
+void myTask1(void *pvParam)
+{
+    printf("task begin\n");
+    vTaskSuspendAll();
+    for (int i = 0; i < 9999; i++)
+    {
+        for (int j = 0; j < 4000; j++)
+        {
+            ;
+        }
+    }
+    xTaskResumeAll();
+    printf("task end\n");
+
+    vTaskDelete(NULL);
+}
+
+void myTask2(void *pvParam)
+{
+
+    while (1)
+    {
+        printf("task2-2222\n");
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
+    }
+}
+
+// 字符串
+static const char *pcTxt = "I am 字符串";
+void app_main(void)
+{
+    UBaseType_t iPriority1;
+    UBaseType_t iPriority2;
+    TaskHandle_t pxTask1 = NULL;
+    TaskHandle_t pxTask2 = NULL;
+
+    // 传入时需取参数地址，并转成void指针,数组名本身为地址，无需取地址
+    xTaskCreatePinnedToCore(myTask1, "myTask1", 2048, (void *)pcTxt, 1, &pxTask1, 0);
+    xTaskCreatePinnedToCore(myTask2, "myTask2", 2048, (void *)pcTxt, 1, &pxTask2, 0);
+
+    static char pcWriteBuffer[512] = {0};
+    // 函数会将Task信息格式化到数组,可放入while持续输出
+    vTaskList(pcWriteBuffer);
+    printf("--------------------------------------------------\n");
+    printf("Name      State    Priority   Stack     Num   core\n");
+    printf("%s\n", pcWriteBuffer);
+
+    // vTaskDelay(3000 / portTICK_PERIOD_MS);
+
+    // // 通过handle在外部挂起任务
+    // vTaskSuspend(pxTask1);
+
+    // vTaskDelay(3000 / portTICK_PERIOD_MS);
+
+    // vTaskResume(pxTask1);
+
+    // vTaskDelay(3000 / portTICK_PERIOD_MS);
+
+    // iPriority1 = uxTaskPriorityGet(pxTask1);
+    // iPriority2 = uxTaskPriorityGet(pxTask2);
+    // printf("iPriority1 = %d\niPriority2 = %d\n", iPriority1,iPriority2);
+
+    // //设置优先级
+    // vTaskPrioritySet(pxTask1,3);
+
+    // //获取优先级并输出
+    // iPriority1 = uxTaskPriorityGet(pxTask1);
+    // iPriority2 = uxTaskPriorityGet(pxTask2);
+    // printf("iPriority1 = %d\niPriority2 = %d\n", iPriority1,iPriority2);
+}
+
+```
+
+
+
