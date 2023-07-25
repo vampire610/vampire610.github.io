@@ -172,7 +172,7 @@
             
             <span class="tag">
                 
-                <a href="/tags/freeRTOS/" style="color: #00bcd4">
+                <a href="/tags/freeRTOS/" style="color: #00a596">
                     freeRTOS
                 </a>
             </span>
@@ -182,7 +182,7 @@
     </div>
     
     <div class="content" v-pre>
-        <h1 id="ESP-IDF与freeRTOS"><a href="#ESP-IDF与freeRTOS" class="headerlink" title="ESP-IDF与freeRTOS"></a>ESP-IDF与freeRTOS</h1><p>ESP-IDF是乐鑫官方推出的ESP32开发环境，个人不太喜欢arduino，所以选择学习使用IDF编程，上手发现很多地方十分陌生，在B站发现宝藏up <a target="_blank" rel="noopener" href="https://space.bilibili.com/1338335828">Michael_ee(点击跳转up主页)</a>讲的很详细，于是跟着学习并简单记录。</p>
+        <h1 id="ESP-IDF与freeRTOS-一"><a href="#ESP-IDF与freeRTOS-一" class="headerlink" title="ESP-IDF与freeRTOS(一)"></a>ESP-IDF与freeRTOS(一)</h1><p>ESP-IDF是乐鑫官方推出的ESP32开发环境，个人不太喜欢arduino，所以选择学习使用IDF编程，上手发现很多地方十分陌生，在B站发现宝藏up <a target="_blank" rel="noopener" href="https://space.bilibili.com/1338335828">Michael_ee(点击跳转up主页)</a>讲的很详细，于是跟着学习并简单记录。</p>
 <h2 id="预备工作，安装vscode和IDF插件，并配置"><a href="#预备工作，安装vscode和IDF插件，并配置" class="headerlink" title="预备工作，安装vscode和IDF插件，并配置"></a>预备工作，安装vscode和IDF插件，并配置</h2><p>安装过程很多教程，也不复杂，就不再写了。</p>
 <p>安装之后需要选择开发板，随后在界面左下点击齿轮图标进入menucofig设置，在其中设置芯片flash大小，算法，主频，flash结束是否自动运行等内容。</p>
 <h2 id="Task创建与删除"><a href="#Task创建与删除" class="headerlink" title="Task创建与删除"></a>Task创建与删除</h2><p>首先需要写一个任务（就是一个函数）,任务如果需要持续执行，需要在任务中设置无尽循环，否则顺序执行完任务就直接退出了。</p>
@@ -444,83 +444,50 @@ ipc0            B       24      488     1       0
 <p>B为阻塞</p>
 </blockquote>
 <p>Stack为剩余堆栈空间</p>
-<h2 id="目前为止代码如下"><a href="#目前为止代码如下" class="headerlink" title="目前为止代码如下"></a>目前为止代码如下</h2><pre><code class="c">#include &quot;freertos/FreeRTOS.h&quot;
-#include &quot;freertos/task.h&quot;
-#include &quot;esp_system.h&quot;
-#include &quot;esp_spi_flash.h&quot;
-
-// 输入参数定义为void类型指针，可强转其他任何类型参数传入，在函数内再转换回去
-void myTask1(void *pvParam)
+<h2 id="Task堆栈设置和调试"><a href="#Task堆栈设置和调试" class="headerlink" title="Task堆栈设置和调试"></a>Task堆栈设置和调试</h2><p><code>UBaseType_t uxTaskGetStackHighWaterMark( TaskHandle_t xTask );</code></p>
+<p>获取任务剩余堆栈的值，以此作为参考估算应该设置的任务堆栈大小，节省系统资源。</p>
+<p>示例：</p>
+<pre><code class="c">void myTask1(void *pvParam)
 &#123;
-    printf(&quot;task begin\n&quot;);
-    vTaskSuspendAll();
-    for (int i = 0; i &lt; 9999; i++)
-    &#123;
-        for (int j = 0; j &lt; 4000; j++)
-        &#123;
-            ;
-        &#125;
-    &#125;
-    xTaskResumeAll();
-    printf(&quot;task end\n&quot;);
-
-    vTaskDelete(NULL);
-&#125;
-
-void myTask2(void *pvParam)
-&#123;
-
     while (1)
     &#123;
-        printf(&quot;task2-2222\n&quot;);
+        printf(&quot;task1\n&quot;);
         vTaskDelay(1000 / portTICK_PERIOD_MS);
     &#125;
 &#125;
 
-// 字符串
-static const char *pcTxt = &quot;I am 字符串&quot;;
 void app_main(void)
 &#123;
-    UBaseType_t iPriority1;
-    UBaseType_t iPriority2;
     TaskHandle_t pxTask1 = NULL;
-    TaskHandle_t pxTask2 = NULL;
 
     // 传入时需取参数地址，并转成void指针,数组名本身为地址，无需取地址
-    xTaskCreatePinnedToCore(myTask1, &quot;myTask1&quot;, 2048, (void *)pcTxt, 1, &amp;pxTask1, 0);
-    xTaskCreatePinnedToCore(myTask2, &quot;myTask2&quot;, 2048, (void *)pcTxt, 1, &amp;pxTask2, 0);
+    xTaskCreatePinnedToCore(myTask1, &quot;myTask1&quot;, 1024, NULL, 1, &amp;pxTask1, 0);
 
-    static char pcWriteBuffer[512] = &#123;0&#125;;
-    // 函数会将Task信息格式化到数组,可放入while持续输出
-    vTaskList(pcWriteBuffer);
-    printf(&quot;--------------------------------------------------\n&quot;);
-    printf(&quot;Name      State    Priority   Stack     Num   core\n&quot;);
-    printf(&quot;%s\n&quot;, pcWriteBuffer);
+    UBaseType_t iStack;
 
-    // vTaskDelay(3000 / portTICK_PERIOD_MS);
-
-    // // 通过handle在外部挂起任务
-    // vTaskSuspend(pxTask1);
-
-    // vTaskDelay(3000 / portTICK_PERIOD_MS);
-
-    // vTaskResume(pxTask1);
-
-    // vTaskDelay(3000 / portTICK_PERIOD_MS);
-
-    // iPriority1 = uxTaskPriorityGet(pxTask1);
-    // iPriority2 = uxTaskPriorityGet(pxTask2);
-    // printf(&quot;iPriority1 = %d\niPriority2 = %d\n&quot;, iPriority1,iPriority2);
-
-    // //设置优先级
-    // vTaskPrioritySet(pxTask1,3);
-
-    // //获取优先级并输出
-    // iPriority1 = uxTaskPriorityGet(pxTask1);
-    // iPriority2 = uxTaskPriorityGet(pxTask2);
-    // printf(&quot;iPriority1 = %d\niPriority2 = %d\n&quot;, iPriority1,iPriority2);
+    while (1)
+    &#123;
+        iStack = uxTaskGetStackHighWaterMark(pxTask1);
+        printf(&quot;task1 iStack = %d\n&quot;, iStack);
+        vTaskDelay(3000 / portTICK_PERIOD_MS);
+    &#125;
 &#125;
 </code></pre>
+<p>串口输出：</p>
+<pre><code class="bash">......
+I (0) cpu_start: Starting scheduler on APP CPU.
+task1 iStack = 732
+task1
+task1
+task1
+task1 iStack = 204
+task1
+task1
+task1
+task1 iStack = 204
+task1
+</code></pre>
+<p>由此可见，当前我的开发板运行task1设置堆栈为1024时剩余空间为204。</p>
 
     </div>
     

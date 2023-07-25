@@ -1,3 +1,4 @@
+https://vampire610.cn/2023/07/25/ESP-IDF-freeRTOS2/
 https://vampire610.cn/2023/07/23/ESP-IDF-freeRTOS/
 https://vampire610.cn/2023/07/10/stackoverflow/
 https://vampire610.cn/2023/07/06/platformio/
