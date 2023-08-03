@@ -1,3 +1,4 @@
+https://vampire610.cn/2023/08/03/ESP-IDF-freeRTOS3/
 https://vampire610.cn/2023/07/25/ESP-IDF-freeRTOS2/
 https://vampire610.cn/2023/07/23/ESP-IDF-freeRTOS/
 https://vampire610.cn/2023/07/10/stackoverflow/
@@ -7,4 +8,3 @@ https://vampire610.cn/2023/06/17/pyserial/
 https://vampire610.cn/2023/03/15/stm32dh11/
 https://vampire610.cn/2023/02/17/windows-update/
 https://vampire610.cn/2023/02/15/picgo-core/
-https://vampire610.cn/2023/02/15/NewKeilProject/

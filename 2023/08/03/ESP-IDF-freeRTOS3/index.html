@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0">
-        <title>ESP-IDF与freeRTOS(二) | Vampire&#39;Blog</title>
+        <title>ESP-IDF与freeRTOS(三) | Vampire&#39;Blog</title>
         <meta name="author" content="小P孩儿">
         <meta name="description" content="">
         <meta name="keywords" content="">
@@ -138,14 +138,14 @@
                     <div id="main">
                         <div class="article">
     <div>
-        <h1>ESP-IDF与freeRTOS(二) </h1>
+        <h1>ESP-IDF与freeRTOS(三) </h1>
     </div>
     <div class="info">
         <span class="date">
             <span class="icon">
                 <i class="fa-solid fa-calendar fa-fw"></i>
             </span>
-            2023/7/25
+            2023/8/3
         </span>
         
         <span class="category">
@@ -165,14 +165,14 @@
             
             <span class="tag">
                 
-                <a href="/tags/ESP-IDF/" style="color: #03a9f4">
+                <a href="/tags/ESP-IDF/" style="color: #00a596">
                     ESP-IDF
                 </a>
             </span>
             
             <span class="tag">
                 
-                <a href="/tags/freeRTOS/" style="color: #00bcd4">
+                <a href="/tags/freeRTOS/" style="color: #ff7d73">
                     freeRTOS
                 </a>
             </span>
@@ -182,286 +182,13 @@
     </div>
     
     <div class="content" v-pre>
-        <h1 id="ESP-IDF与freeRTOS-二"><a href="#ESP-IDF与freeRTOS-二" class="headerlink" title="ESP-IDF与freeRTOS(二)"></a>ESP-IDF与freeRTOS(二)</h1><p>书接上回</p>
-<h2 id="队列传递数据"><a href="#队列传递数据" class="headerlink" title="队列传递数据"></a>队列传递数据</h2><p>RTOS队列需要添加头文件<code>freertos/queue.h</code></p>
-<p>常用函数：</p>
-<pre><code class="c">//Creates a new queue and returns a handle by which the queue can be referenced.
-//创建队列
-QueueHandle_t xQueueCreate( UBaseType_t uxQueueLength,UBaseType_t uxItemSize );
-
-//创建队列集合
-QueueSetHandle_t xQueueCreateSet( const UBaseType_t uxEventQueueLength );
-
-//创建静态队列
-QueueHandle_t xQueueCreateStatic(UBaseType_t uxQueueLength,
-                                 UBaseType_t uxItemSize,
-                                 uint8_t *pucQueueStorageBuffer,
-                                 StaticQueue_t *pxQueueBuffer);
-
-//删除队列
-void vQueueDelete( TaskHandle_t pxQueueToDelete );
+        <h1 id="ESP-IDF与freeRTOS-三"><a href="#ESP-IDF与freeRTOS-三" class="headerlink" title="ESP-IDF与freeRTOS(三)"></a>ESP-IDF与freeRTOS(三)</h1><p>书接上回</p>
+<h2 id="队列多进单出模型"><a href="#队列多进单出模型" class="headerlink" title="队列多进单出模型"></a>队列多进单出模型</h2><p>与单进单出基本没区别，主要注意任务优先级分配，读取时可以设置如下</p>
+<pre><code class="c">xStatus = xQueueReceive(QHandle, &amp;x, portMAX_DELAY);
 </code></pre>
-<p>更多请查阅FreeRTOS参考手册。</p>
-<h3 id="整型队列示例"><a href="#整型队列示例" class="headerlink" title="整型队列示例"></a>整型队列示例</h3><pre><code class="c">#include &quot;freertos/FreeRTOS.h&quot;
-#include &quot;freertos/task.h&quot;
-#include &quot;esp_system.h&quot;
-#include &quot;esp_spi_flash.h&quot;
-
-#include &quot;freertos/queue.h&quot;
-
-// 输入参数定义为void类型指针，可强转其他任何类型参数传入，在函数内再转换回去
-void sendTask1(void *pvParam)
-&#123;
-    //创建队列句柄，将传入void类型队列指针转为队列句柄类型指针
-    QueueHandle_t QHandle;
-    QHandle = (QueueHandle_t)pvParam;
-
-    BaseType_t xStatus;
-
-    int i = 0;
-    while (1)
-    &#123;
-        //发送i的值到队列QHandle，超时等待设置为0
-        xStatus = xQueueSend(QHandle, &amp;i, 0);
-        if (xStatus != pdPASS)
-        &#123;
-            // 发送失败
-            printf(&quot;send fail!\n&quot;);
-        &#125;
-        else
-        &#123;
-            printf(&quot;send done!\n&quot;);
-        &#125;
-        i++;
-        if (i == 8)
-        &#123;
-            i = 0;
-        &#125;
-        //设置延时1s发送一次
-        vTaskDelay(1000 / portTICK_PERIOD_MS);
-    &#125;
-&#125;
-
-void recTask(void *pvParam)
-&#123;
-    QueueHandle_t QHandle;
-    QHandle = (QueueHandle_t)pvParam;
-
-    BaseType_t xStatus;
-    int x = 0;
-    while (1)
-    &#123;
-        //判断队列是否为空
-        if (uxQueueMessagesWaiting(QHandle) != 0)
-        &#123;
-            // 队列非空
-            //从QHandle接收数据到x，超时等待为0
-            xStatus = xQueueReceive(QHandle, &amp;x, 0);
-            if (xStatus != pdPASS)
-            &#123;
-                // 发送失败
-                printf(&quot;rec fail!\n&quot;);
-            &#125;
-            else
-            &#123;
-                printf(&quot;rec x = %d!\n&quot;, x);
-            &#125;
-        &#125;
-        else
-        &#123;
-            printf(&quot;No data!\n&quot;);
-        &#125;
-        //设置延时200ms读取一次
-        vTaskDelay(200 / portTICK_PERIOD_MS);
-    &#125;
-&#125;
-
-void app_main(void)
-&#123;
-
-    TaskHandle_t pxTask1 = NULL;
-    TaskHandle_t pxTask2 = NULL;
-
-    // 创建队列句柄
-    QueueHandle_t QHandle;
-    // 创建队列，参数为队列长度、Item大小
-    // 此处设置队列存储int型变量，用sizeof取得大小
-    QHandle = xQueueCreate(5, sizeof(int));
-    // 判断是否创建成功
-    if (QHandle != NULL)
-    &#123;
-        printf(&quot;Creat queue successfully!\n&quot;);
-        xTaskCreatePinnedToCore(sendTask1, &quot;sendTask1&quot;, 1024 * 5, (void *)QHandle, 1, NULL, 0);
-        xTaskCreatePinnedToCore(recTask, &quot;recTask&quot;, 1024 * 5, (void *)QHandle, 1, NULL, 0);
-    &#125;
-    else
-    &#123;
-        printf(&quot;Can&#39;t creat queue successfully!\n&quot;);
-    &#125;
-&#125;
-</code></pre>
-<p>示例输出</p>
-<pre><code class="bash">...
-No data!
-No data!
-No data!
-No data!
-send done!
-rec x = 0!
-No data!
-No data!
-No data!
-No data!
-send done!
-rec x = 1!
-No data!
-No data!
-No data!
-No data!
-send done!
-rec x = 2!
-No data!
-No data!
-No data!
-No data!
-send done!
-rec x = 3!
-No data!
-No data!
-No data!
-No data!
-send done!
-rec x = 4!
-No data!
-No data!
-No data!
-...
-</code></pre>
-<h3 id="结构体队列"><a href="#结构体队列" class="headerlink" title="结构体队列"></a>结构体队列</h3><p>示例：</p>
-<pre><code class="c">#include &quot;freertos/FreeRTOS.h&quot;
-#include &quot;freertos/task.h&quot;
-#include &quot;esp_system.h&quot;
-#include &quot;esp_spi_flash.h&quot;
-
-#include &quot;freertos/queue.h&quot;
-
-typedef struct A_STRUCT
-&#123;
-    char id;
-    char data;
-&#125;xStruct;
-
-// 输入参数定义为void类型指针，可强转其他任何类型参数传入，在函数内再转换回去
-void sendTask1(void *pvParam)
-&#123;
-    QueueHandle_t QHandle;
-    QHandle = (QueueHandle_t)pvParam;
-
-    BaseType_t xStatus;
-
-    //定义结构体并赋初值
-    xStruct xUSB = &#123;1,55&#125;;
-    while (1)
-    &#123;
-        xStatus = xQueueSend(QHandle, &amp;xUSB, 0);
-        if (xStatus != pdPASS)
-        &#123;
-            // 发送失败
-            printf(&quot;send fail!\n&quot;);
-        &#125;
-        else
-        &#123;
-            printf(&quot;send done!\n&quot;);
-        &#125;
-        xUSB.id++;
-        if (xUSB.id == 8)
-        &#123;
-            xUSB.id = 0;
-        &#125;
-        vTaskDelay(1000 / portTICK_PERIOD_MS);
-    &#125;
-&#125;
-
-void recTask(void *pvParam)
-&#123;
-    QueueHandle_t QHandle;
-    QHandle = (QueueHandle_t)pvParam;
-
-    BaseType_t xStatus;
-    
-    xStruct xUSB;
-    while (1)
-    &#123;
-        // 判断队列是否为空
-        if (uxQueueMessagesWaiting(QHandle) != 0)
-        &#123;
-            // 队列非空
-            xStatus = xQueueReceive(QHandle, &amp;xUSB, 0);
-            if (xStatus != pdPASS)
-            &#123;
-                // 发送失败
-                printf(&quot;rec fail!\n&quot;);
-            &#125;
-            else
-            &#123;
-                printf(&quot;rec id = %d, data = %d!\n&quot;, xUSB.id,xUSB.data);
-            &#125;
-        &#125;
-        else
-        &#123;
-            printf(&quot;No data!\n&quot;);
-        &#125;
-
-        vTaskDelay(500 / portTICK_PERIOD_MS);
-    &#125;
-&#125;
-
-void app_main(void)
-&#123;
-    xTaskCreatePinnedToCore(ledTask, &quot;ledTask&quot;, 1024, NULL, 1, NULL, 1);
-    // 创建队列句柄
-    QueueHandle_t QHandle;
-    // 创建队列，参数为队列长度、Item大小
-    // 此处设置队列存储结构体变量，用sizeof取得大小
-    QHandle = xQueueCreate(5, sizeof(xStruct));
-    // 判断是否创建成功
-    if (QHandle != NULL)
-    &#123;
-        printf(&quot;Creat queue successfully!\n&quot;);
-        xTaskCreatePinnedToCore(sendTask1, &quot;sendTask1&quot;, 1024 * 5, (void *)QHandle, 1, NULL, 0);
-        xTaskCreatePinnedToCore(recTask, &quot;recTask&quot;, 1024 * 5, (void *)QHandle, 1, NULL, 0);
-    &#125;
-    else
-    &#123;
-        printf(&quot;Can&#39;t creat queue successfully!\n&quot;);
-    &#125;
-&#125;
-</code></pre>
-<p>运行结果：</p>
-<pre><code class="bash">...
-No data!
-send done!
-rec id = 0, data = 55!
-No data!
-send done!
-rec id = 1, data = 55!
-No data!
-send done!
-rec id = 2, data = 55!
-No data!
-send done!
-rec id = 3, data = 55!
-No data!
-send done!
-rec id = 4, data = 55!
-No data!
-send done!
-rec id = 5, data = 55!
-...
-</code></pre>
-<h3 id="指针传递（需要特别小心）"><a href="#指针传递（需要特别小心）" class="headerlink" title="指针传递（需要特别小心）"></a>指针传递（需要特别小心）</h3><p>注意创建与释放，指针越界</p>
-<p>需要注意，示例中队列传递为指针类型，代码中创建了指针来储存字符串，即为字符串数组，在传递时对数组名取地址，即为字符串的指针。</p>
-<p>示例</p>
+<p>其中最后一个参数会使任务阻塞，等待队列中数据到来</p>
+<h2 id="队列集合"><a href="#队列集合" class="headerlink" title="队列集合"></a>队列集合</h2><p><code>QueueSetHandle_t xQueueCreateSet( const UBaseType_t uxEventQueueLength );</code></p>
+<p>代码示例</p>
 <pre><code class="c">#include &quot;freertos/FreeRTOS.h&quot;
 #include &quot;freertos/task.h&quot;
 #include &quot;esp_system.h&quot;
@@ -480,10 +207,7 @@ typedef struct A_STRUCT
 // 输入参数定义为void类型指针，可强转其他任何类型参数传入，在函数内再转换回去
 void sendTask1(void *pvParam)
 &#123;
-    char *pStrToSend;
-    // char型可不用sizeof，直接填50，此处保持好习惯，避免写其他类型时分配错误
-    pStrToSend = (char *)malloc(sizeof(char) * 50);
-    int i = 0;
+    int i = 111;
 
     QueueHandle_t QHandle;
     QHandle = (QueueHandle_t)pvParam;
@@ -492,16 +216,32 @@ void sendTask1(void *pvParam)
 
     while (1)
     &#123;
-        //循环里分配内存，每一个数一个内存空间，需要在使用完后及时释放
-        // char型可不用sizeof，直接填50，此处保持好习惯，避免写其他类型时分配错误
-        pStrToSend = (char *)malloc(sizeof(char) * 50);
-        // sprintf不会限制长度，可能会导致越界
-        // snprintf格式化输出到buf，并限制长度
-        // 如此处限制长度50，则最多输出49个，最后一个会置为&#39;\0&#39;
-        snprintf(pStrToSend, 50, &quot;Today is a good %d day!\r\n&quot;, i);
-        i++;
-        // 此处传递为字符串名的地址，字符串指针的地址
-        xStatus = xQueueSend(QHandle, &amp;pStrToSend, 0);
+        xStatus = xQueueSend(QHandle, &amp;i, 0);
+        if (xStatus != pdPASS)
+        &#123;
+            // 发送失败
+            printf(&quot;send fail!\n&quot;);
+        &#125;
+        else
+        &#123;
+            printf(&quot;send done!\n&quot;);
+        &#125;
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
+    &#125;
+&#125;
+
+void sendTask2(void *pvParam)
+&#123;
+    int i = 222;
+
+    QueueHandle_t QHandle;
+    QHandle = (QueueHandle_t)pvParam;
+
+    BaseType_t xStatus;
+
+    while (1)
+    &#123;
+        xStatus = xQueueSend(QHandle, &amp;i, 0);
         if (xStatus != pdPASS)
         &#123;
             // 发送失败
@@ -517,43 +257,28 @@ void sendTask1(void *pvParam)
 
 void recTask(void *pvParam)
 &#123;
-    QueueHandle_t QHandle;
-    QHandle = (QueueHandle_t)pvParam;
+    // 创建QueueSet句柄，将入口参数转为此类型
+    QueueSetHandle_t QueueSet;
+    QueueSet = (QueueSetHandle_t)pvParam;
 
-    char *pStrToRec;
-    // pStrToRec = (char *)malloc(sizeof(char)*50);
-
+    QueueSetMemberHandle_t QueueData;
     BaseType_t xStatus;
-
+    int x = 0;
     while (1)
     &#123;
-        // 判断队列是否为空
-        if (uxQueueMessagesWaiting(QHandle) != 0)
+        // 取出有数据的队列
+        QueueData = xQueueSelectFromSet(QueueSet, portMAX_DELAY);
+        // 从有数据的队列取出值
+        xStatus = xQueueReceive(QueueData, &amp;x, portMAX_DELAY);
+        if (xStatus != pdPASS)
         &#123;
-            // 队列非空
-            // 此处传递为字符串名的地址，字符串指针的地址
-            xStatus = xQueueReceive(QHandle, &amp;pStrToRec, 0);
-            if (xStatus != pdPASS)
-            &#123;
-                // 发送失败
-                printf(&quot;rec fail!\n&quot;);
-            &#125;
-            else
-            &#123;
-                printf(&quot;rec: %s\r\n&quot;, pStrToRec);
-            &#125;
-            //使用完传递的数据，将内存及时释放
-            //由于传递数据为指针
-            //实际上发送函数和接收函数指针指向为同一个内存空间
-            //释放接收函数指向内存即可
-            free(pStrToRec);
+            // 发送失败
+            printf(&quot;rec fail!\n&quot;);
         &#125;
         else
         &#123;
-            printf(&quot;No data!\n&quot;);
+            printf(&quot;rec: %d\r\n&quot;, x);
         &#125;
-
-        vTaskDelay(500 / portTICK_PERIOD_MS);
     &#125;
 &#125;
 
@@ -564,16 +289,30 @@ void app_main(void)
     xTaskCreatePinnedToCore(ledTask, &quot;ledTask&quot;, 1024, NULL, 1, NULL, 1);
 
     // 创建队列句柄
-    QueueHandle_t QHandle;
+    QueueHandle_t QHandle1;
+    QueueHandle_t QHandle2;
     // 创建队列，参数为队列长度、Item大小
-    // 此处设置队列存储指针类型变量，用sizeof取得指针宽度大小
-    QHandle = xQueueCreate(5, sizeof(char *));
+    QHandle1 = xQueueCreate(5, sizeof(int));
+    QHandle2 = xQueueCreate(5, sizeof(int));
+
+    QueueSetHandle_t QueueSet;
+
+    // 创建QueueSet，长度为要接入集合的队列的长度和
+    QueueSet = xQueueCreateSet(10);
+
+    // 将队列加入集合
+    xQueueAddToSet(QHandle1, QueueSet);
+    xQueueAddToSet(QHandle2, QueueSet);
+
     // 判断是否创建成功
-    if (QHandle != NULL)
+    if ((QHandle1 != NULL) &amp;&amp; (QHandle2 != NULL) &amp;&amp; (QueueSet != NULL))
     &#123;
+
+        // 接收任务优先级更高时，一旦有数据就会被接收
         printf(&quot;Creat queue successfully!\n&quot;);
-        xTaskCreatePinnedToCore(sendTask1, &quot;sendTask1&quot;, 1024 * 5, (void *)QHandle, 1, NULL, 0);
-        xTaskCreatePinnedToCore(recTask, &quot;recTask&quot;, 1024 * 5, (void *)QHandle, 1, NULL, 0);
+        xTaskCreatePinnedToCore(sendTask1, &quot;sendTask1&quot;, 1024 * 5, (void *)QHandle1, 1, NULL, 0);
+        xTaskCreatePinnedToCore(sendTask2, &quot;sendTask2&quot;, 1024 * 5, (void *)QHandle2, 1, NULL, 0);
+        xTaskCreatePinnedToCore(recTask, &quot;recTask&quot;, 1024 * 5, (void *)QueueSet, 2, NULL, 0);
     &#125;
     else
     &#123;
@@ -581,32 +320,108 @@ void app_main(void)
     &#125;
 &#125;
 </code></pre>
-<p>运行结果</p>
-<pre><code class="bash">...
-Creat queue successfully!
-send done!
-rec: Today is a good 0 day!
+<h2 id="队列邮箱-单发多收"><a href="#队列邮箱-单发多收" class="headerlink" title="队列邮箱(单发多收)"></a>队列邮箱(单发多收)</h2><p>队列和邮箱都用于任务、中断等传递数据，但队列传递时取出即删除数据，数据将不会保持。邮箱传递数据时数据会被保持，取出数据不会删除数据，直到数据被覆盖。（以下文本来自FreeRTOS官方文档）</p>
+<blockquote>
+<ul>
+<li>A queue is used to send data from one task to another task, or from an interrupt<br>service routine to a task. The sender places an item in the queue, and the receiver<br>removes the item from the queue. The data passes through the queue from the sender<br>to the receiver.</li>
+<li>A mailbox is used to hold data that can be read by any task, or any interrupt service<br>routine. The data does not pass through the mailbox, but instead remains in the<br>mailbox until it is overwritten. The sender overwrites the value in the mailbox. The<br>receiver reads the value from the mailbox, but does not remove the value from the<br>mailbox.</li>
+</ul>
+</blockquote>
+<p>示例代码:</p>
+<pre><code class="c">#include &quot;freertos/FreeRTOS.h&quot;
+#include &quot;freertos/task.h&quot;
+#include &quot;esp_system.h&quot;
+#include &quot;esp_spi_flash.h&quot;
 
-No data!
-send done!
-rec: Today is a good 1 day!
+#include &quot;freertos/queue.h&quot;
 
-No data!
-send done!
-rec: Today is a good 2 day!
+#include &quot;myled.h&quot;
 
-No data!
-send done!
-rec: Today is a good 3 day!
+typedef struct A_STRUCT
+&#123;
+    char id;
+    char data;
+&#125; xStruct;
 
-No data!
-send done!
-rec: Today is a good 4 day!
+// 输入参数定义为void类型指针，可强转其他任何类型参数传入，在函数内再转换回去
+void writeTask1(void *pvParam)
+&#123;
+    int i = 0;
 
-No data!
-send done!
-rec: Today is a good 5 day!
-...
+    QueueHandle_t Mailbox;
+    Mailbox = (QueueHandle_t)pvParam;
+
+    BaseType_t xStatus;
+
+    while (1)
+    &#123;
+        // mailbox写入使用overwrite
+        xStatus = xQueueOverwrite(Mailbox, &amp;i);
+        if (xStatus != pdPASS)
+        &#123;
+            // 发送失败
+            printf(&quot;send fail!\n&quot;);
+        &#125;
+        else
+        &#123;
+            printf(&quot;send done!\n&quot;);
+        &#125;
+        i++;
+        vTaskDelay(6000 / portTICK_PERIOD_MS);
+    &#125;
+&#125;
+
+void readTask(void *pvParam)
+&#123;
+    QueueHandle_t Mailbox;
+    Mailbox = (QueueHandle_t)pvParam;
+
+    BaseType_t xStatus;
+    int i = 0;
+    while (1)
+    &#123;
+        // 从队列读出值，但不删除，无数据则等待
+        // 但Peek读数不会删除队列数据，会导致读进程一直运行不会停止
+        xStatus = xQueuePeek(Mailbox, &amp;i, portMAX_DELAY);
+        if (xStatus != pdPASS)
+        &#123;
+            // 发送失败
+            printf(&quot;read fail!\n&quot;);
+        &#125;
+        else
+        &#123;
+            printf(&quot;read i = %d done!\n&quot;, i);
+        &#125;
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
+    &#125;
+&#125;
+
+void app_main(void)
+&#123;
+    led_init();
+
+    xTaskCreatePinnedToCore(ledTask, &quot;ledTask&quot;, 1024, NULL, 1, NULL, 1);
+
+    // 创建队列句柄
+    QueueHandle_t Mailbox;
+    Mailbox = xQueueCreate(1, sizeof(int));
+
+    // 判断是否创建成功
+    if (Mailbox != NULL)
+    &#123;
+        // 接收任务优先级更高时，一旦有数据就会被接收
+        printf(&quot;Creat queue successfully!\n&quot;);
+        // 此处可用一个主体函数创建3个readTask
+        xTaskCreatePinnedToCore(writeTask1, &quot;writeTask1&quot;, 1024 * 5, (void *)Mailbox, 1, NULL, 0);
+        xTaskCreatePinnedToCore(readTask, &quot;readTask1&quot;, 1024 * 5, (void *)Mailbox, 2, NULL, 0);
+        xTaskCreatePinnedToCore(readTask, &quot;readTask2&quot;, 1024 * 5, (void *)Mailbox, 2, NULL, 0);
+        xTaskCreatePinnedToCore(readTask, &quot;readTask3&quot;, 1024 * 5, (void *)Mailbox, 2, NULL, 0);
+    &#125;
+    else
+    &#123;
+        printf(&quot;Can&#39;t creat queue successfully!\n&quot;);
+    &#125;
+&#125;
 </code></pre>
 
     </div>

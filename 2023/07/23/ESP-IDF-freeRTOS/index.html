@@ -488,6 +488,51 @@ task1 iStack = 204
 task1
 </code></pre>
 <p>由此可见，当前我的开发板运行task1设置堆栈为1024时剩余空间为204。</p>
+<h2 id="Task-看门狗"><a href="#Task-看门狗" class="headerlink" title="Task 看门狗"></a>Task 看门狗</h2><p>ESP32中，看门狗分为中断看门狗和Task看门狗，可参考乐鑫官网<a target="_blank" rel="noopener" href="https://docs.espressif.com/projects/esp-idf/zh_CN/latest/esp32/api-reference/system/wdts.html">Watchdogs - ESP32 - — ESP-IDF 编程指南 latest 文档 (espressif.com)</a>。</p>
+<p>看门狗相关设置可在menuconfig中修改。</p>
+<p>测试代码如下：</p>
+<pre><code class="c">void myTask1(void *pvParam)
+&#123;
+    while (1)
+    &#123;
+        // printf(&quot;task1\n&quot;);
+        // vTaskDelay(1000 / portTICK_PERIOD_MS);
+        ;
+    &#125;
+&#125;
+</code></pre>
+<p>串口输出信息：</p>
+<pre><code class="bash">E (10291) task_wdt: Task watchdog got triggered. The following tasks/users did not reset the watchdog in time:
+E (10291) task_wdt:  - IDLE (CPU 0) //看门狗监控IDLE(CPU0)
+E (10291) task_wdt: Tasks currently running:
+E (10291) task_wdt: CPU 0: myTask1
+E (10291) task_wdt: CPU 1: IDLE
+E (10291) task_wdt: Print CPU 0 (current core) backtrace
+</code></pre>
+<p>由以上信息可见，Task看门狗被触发，触发时CPU0在运行myTask1，CPU1在运行IDLE，看门狗监控IDLE（CPU0）。</p>
+<p>myTask1中没有阻塞函数，类似<code>vTaskDelay</code>等，会导致任务一直占用CPU0运行，且优先级高于CPU0的IDLE任务，导致IDLE饥饿，触发看门狗。</p>
+<p>解决办法：</p>
+<blockquote>
+<p> task1中加入阻塞操作函数，让低优先级任务得以运行；</p>
+<p>将task1优先级降值0，与IDLE相同，此时同优先级任务将都被分配时间片运行。</p>
+</blockquote>
+<h3 id="使用看门狗监控自己的任务"><a href="#使用看门狗监控自己的任务" class="headerlink" title="使用看门狗监控自己的任务"></a>使用看门狗监控自己的任务</h3><ul>
+<li>添加头文件 <code>esp_task_wdt.h</code></li>
+</ul>
+<pre><code class="c">void myTask2(void * pvParam)
+&#123;
+    //添加任务到看门狗监控
+    esp_task_wdt_add(NULL);
+    while(1)
+    &#123;
+        printf(&quot;task2 running\n&quot;);
+        //喂狗，在menuconfig中设置任务看门狗时间
+        esp_task_wdt_reset();
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
+    &#125;
+&#125;
+</code></pre>
+<p>如果不在规定时间内喂狗，将触发看门狗。</p>
 
     </div>
     
