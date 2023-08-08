@@ -165,7 +165,7 @@
             
             <span class="tag">
                 
-                <a href="/tags/ESP-IDF/" style="color: #00bcd4">
+                <a href="/tags/ESP-IDF/" style="color: #00a596">
                     ESP-IDF
                 </a>
             </span>
@@ -182,8 +182,11 @@
     </div>
     
     <div class="content" v-pre>
-        <h1 id="ESP-IDF与freeRTOS-五"><a href="#ESP-IDF与freeRTOS-五" class="headerlink" title="ESP-IDF与freeRTOS(五)"></a>ESP-IDF与freeRTOS(五)</h1><h2 id="二值信号量"><a href="#二值信号量" class="headerlink" title="二值信号量"></a>二值信号量</h2><p>信号量是操作系统中用于进程同步和临界区互斥访问的关键，二值信号量多用于临界区的互斥访问。</p>
+        <h1 id="ESP-IDF与freeRTOS-五"><a href="#ESP-IDF与freeRTOS-五" class="headerlink" title="ESP-IDF与freeRTOS(五)"></a>ESP-IDF与freeRTOS(五)</h1><h2 id="二值信号量"><a href="#二值信号量" class="headerlink" title="二值信号量"></a>二值信号量</h2><blockquote>
+<p>2023年8月8日 更正：二值信号量与互斥信号量mutex不同，mutex专门用于互斥访问，而二值信号量不是，具体区别请看第七个教程。</p>
+<p>信号量是操作系统中用于进程同步和临界区互斥访问的关键，二值信号量多用于临界区的互斥访问。</p>
 <p>在下面的示例代码中，在两个任务的for循环中对<code>iCont</code>变量进行访问，这个for循环即相当于临界区，如果两个进程同时访问临界区，则可能导致临界区数据混乱。于是在task1临界区前Take信号量（给临界区上锁），则其他进程无法再进行Take，等到task1释放give信号量（临界区解锁）后，其他任务才能访问临界区。</p>
+</blockquote>
 <p>示例代码：</p>
 <pre><code class="c">#include &quot;freertos/FreeRTOS.h&quot;
 #include &quot;freertos/task.h&quot;
