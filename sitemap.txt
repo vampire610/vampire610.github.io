@@ -1,3 +1,5 @@
+https://vampire610.cn/2023/08/08/ESP-IDF-freeRTOS6/
+https://vampire610.cn/2023/08/06/ESP-IDF-freeRTOS5/
 https://vampire610.cn/2023/08/04/keilComplierV5/
 https://vampire610.cn/2023/08/04/ESP-IDF-freeRTOS4/
 https://vampire610.cn/2023/08/03/ESP-IDF-freeRTOS3/
