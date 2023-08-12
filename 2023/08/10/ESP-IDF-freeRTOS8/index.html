@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0">
-        <title>Vscode-Keil | Vampire&#39;Blog</title>
+        <title>ESP-IDF与freeRTOS(八) | Vampire&#39;Blog</title>
         <meta name="author" content="小P孩儿">
         <meta name="description" content="">
         <meta name="keywords" content="">
@@ -138,22 +138,22 @@
                     <div id="main">
                         <div class="article">
     <div>
-        <h1>Vscode-Keil </h1>
+        <h1>ESP-IDF与freeRTOS(八) </h1>
     </div>
     <div class="info">
         <span class="date">
             <span class="icon">
                 <i class="fa-solid fa-calendar fa-fw"></i>
             </span>
-            2023/1/14
+            2023/8/10
         </span>
         
         <span class="category">
-            <a href="/categories/%E6%95%99%E7%A8%8B/">
+            <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
                 <span class="icon">
                     <i class="fa-solid fa-bookmark fa-fw"></i>
                 </span>
-                教程
+                学习笔记
             </a>
         </span>
         
@@ -165,22 +165,15 @@
             
             <span class="tag">
                 
-                <a href="/tags/keil/" style="color: #03a9f4">
-                    keil
+                <a href="/tags/ESP-IDF/" style="color: #03a9f4">
+                    ESP-IDF
                 </a>
             </span>
             
             <span class="tag">
                 
-                <a href="/tags/%E5%8D%95%E7%89%87%E6%9C%BA/" style="color: #00a596">
-                    单片机
-                </a>
-            </span>
-            
-            <span class="tag">
-                
-                <a href="/tags/vscode/" style="color: #00a596">
-                    vscode
+                <a href="/tags/freeRTOS/" style="color: #03a9f4">
+                    freeRTOS
                 </a>
             </span>
             
@@ -189,54 +182,224 @@
     </div>
     
     <div class="content" v-pre>
-        <h3 id="安装keil-MDK"><a href="#安装keil-MDK" class="headerlink" title="安装keil-MDK"></a>安装keil-MDK</h3><ul>
-<li><p>官网下载安装，破解方法自行百度</p>
-</li>
-<li><p>新版keil编译器版本为6，旧版本工程可能在新版keil无法编译通过，故需要安装ARMCompiler 5</p>
-<ul>
-<li><p>ARMCompiler 5官网<a target="_blank" rel="noopener" href="https://developer.arm.com/downloads/view/ACOMP5">下载地址</a>，网盘 <a target="_blank" rel="noopener" href="https://pan.baidu.com/s/1i1VNFKQ_CJm__A18kUTgVA">下载地址</a>提取码：vbv3</p>
-</li>
-<li><p>注意需要安装到keil的ARM文件夹下，我的电脑路径为<code>C:\Keil_v5\ARM</code>，否则仍会报错，显示license问题。</p>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="配置vscode"><a href="#配置vscode" class="headerlink" title="配置vscode"></a>配置vscode</h3><ul>
-<li><p>必备插件</p>
-<ul>
-<li><a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools">C&#x2F;C++</a></li>
-<li><a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=CL.keil-assistant">Keil Assistant</a>（已停止更新，截至2023-1-14还能正常使用）</li>
-</ul>
-</li>
-<li><p>一些推荐</p>
-<ul>
-<li>编程字体<a target="_blank" rel="noopener" href="https://sourcefoundry.org/hack/">Hack</a></li>
-<li>VScode主题<a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=zhuangtongfa.Material-theme">One Dark Pro</a></li>
-</ul>
-</li>
-</ul>
-<h3 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h3><ul>
-<li><p><strong>注意</strong>：该插件仅通过读取keil配置文件获取工程内容、文件路径等，故在使用前需要保证工程在keil已经配置完成并且能够编译通过，且之后添加文件、头文件路径也需在keil完成</p>
-</li>
-<li><p>使用vscode打开工程</p>
-<ul>
-<li><p>若上述步骤已完成，则在vscode的资源管理器最下方能看到<code>KEIL UVISION PROJECT</code></p>
-</li>
-<li><p>点击该行后方按钮打开keil工程文件</p>
-<p><img src="https://fastly.jsdelivr.net/gh/vampire610/PicGo/Blog-PIC/20230114204618.png" alt="屏幕截图 2023-01-14 204432"></p>
-</li>
-<li><p>打开工程后右下角会提示切换工作空间，点击OK即可，不要试图自己打开文件夹，否则会无法识别头文件，无法自动补全等。猜测解决办法，调整keil工程结构目录。</p>
-<p><img src="https://fastly.jsdelivr.net/gh/vampire610/PicGo/Blog-PIC/20230114205341.png" alt="image-20230114205315916"></p>
-</li>
-<li><p>之后即可在下方打开文件愉快的用vscode写keil代码了，自动补全等功能都正常</p>
-<p><img src="https://fastly.jsdelivr.net/gh/vampire610/PicGo/Blog-PIC/20230114205646.png" alt="image-20230114205641535"></p>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="一些注意事项"><a href="#一些注意事项" class="headerlink" title="一些注意事项"></a>一些注意事项</h3><ul>
-<li>如果点击编译、下载后出现终端界面，但没有其他反应，可将VScode默认终端换成powershell等windows自带终端。</li>
-</ul>
+        <h1 id="ESP-IDF与freeRTOS-八"><a href="#ESP-IDF与freeRTOS-八" class="headerlink" title="ESP-IDF与freeRTOS(八)"></a>ESP-IDF与freeRTOS(八)</h1><h2 id="事件组"><a href="#事件组" class="headerlink" title="事件组"></a>事件组</h2><p>所需头文件<code>event_groups.h</code></p>
+<p>通过宏定义<code>configUSE_16_BIT_TICKS</code>来查看事件组是几位，若宏定义为0是24位。宏定义可通过vscode搜索，我的路径在<code>components\freertos\esp_additions\include\freertos\FreeRTOSConfig.h</code></p>
+<p>这次主要学习<code>xEventGroupWaitBits()</code>函数，该函数不可在中断中调用</p>
+<pre><code class="c">// 返回值
+EventBits_t xEventGroupWaitBits(const EventGroupHandle_t xEventGroup,//事件组句柄
+                                    const EventBits_t uxBitsToWaitFor,//设置需要检查哪些二进制位，此处输入十六进制
+                                    const BaseType_t xClearOnExit,//如果设为pdTRUE，退出时清零对应位
+                                    const BaseType_t xWaitForAllBits,//设置等待事件组中的位同时(AND)满足或任意一位(OR)满足
+                                    TickType_t xTicksToWait);//设置阻塞等待时间
+</code></pre>
+<h3 id="运行结果"><a href="#运行结果" class="headerlink" title="运行结果"></a>运行结果</h3><p>可以看到运行时当task2将0或者4置为1时，任务1才会解除阻塞</p>
+<pre><code class="bash">-------------
+task1 begin to wait
+-------------
+task2 begin set bit0
+-------------
+In task1, BIT_0 or BIT_4 is set
+-------------
+task1 begin to wait
+-------------
+task2 begin set bit0
+-------------
+In task1, BIT_0 or BIT_4 is set
+-------------
+task1 begin to wait
+-------------
+task2 begin set bit0
+-------------
+</code></pre>
+<h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><pre><code class="c">#include &quot;freertos/FreeRTOS.h&quot;
+#include &quot;freertos/task.h&quot;
+#include &quot;esp_system.h&quot;
+#include &quot;esp_spi_flash.h&quot;
+
+#include &quot;freertos/event_groups.h&quot;
+
+EventGroupHandle_t EventGroupHandle;
+
+// 定义位,利用左移运算
+#define BIT_0 (1 &lt;&lt; 0)
+#define BIT_4 (1 &lt;&lt; 4)
+
+void Task1(void *pvParam)
+&#123;
+    while (1)
+    &#123;
+        printf(&quot;-------------\n&quot;);
+        printf(&quot;task1 begin to wait\n&quot;);
+        /* Wait a maximum time for either bit 0 or bit 4 to be set within
+            the event group. Clear the bits before exiting. */
+        xEventGroupWaitBits(
+            EventGroupHandle, /* The event group being tested. */
+            // 0，4只要有一位满足
+            // 此处可用16进制直接设置，如此处0，4位可设置0x11
+            BIT_0 | BIT_4, /* The bits within the event group to wait for. */
+            pdTRUE,        /* BIT_0 and BIT_4 should be cleared before returning. */
+            // 此处设置为TRUE则0，4位同时置位才会接触阻塞
+            pdFALSE,        /* Don&#39;t wait for both bits, either bit will do. */
+            portMAX_DELAY); /* Wait a maximum time for either bit to be set. */
+
+        printf(&quot;-------------\n&quot;);
+        printf(&quot;In task1, BIT_0 or BIT_4 is set\n&quot;);
+
+        vTaskDelay(pdMS_TO_TICKS(1000));
+    &#125;
+&#125;
+
+void Task2(void *pvParam)
+&#123;
+    vTaskDelay(pdMS_TO_TICKS(1000));
+    while (1)
+    &#123;
+        printf(&quot;-------------\n&quot;);
+        printf(&quot;task2 begin set bit0\n&quot;);
+
+        xEventGroupSetBits(EventGroupHandle, BIT_0);
+
+        vTaskDelay(pdMS_TO_TICKS(5000));
+
+        printf(&quot;-------------\n&quot;);
+        printf(&quot;task2 begin set bit4\n&quot;);
+
+        xEventGroupSetBits(EventGroupHandle, BIT_4);
+
+        vTaskDelay(pdMS_TO_TICKS(5000));
+    &#125;
+&#125;
+
+void app_main(void)
+&#123;
+    /* Attempt to create the event group. */
+    EventGroupHandle = xEventGroupCreate();
+    /* Was the event group created successfully? */
+    if (EventGroupHandle == NULL)
+    &#123;
+        /* The event group was not created because there was insufficient
+        FreeRTOS heap available. */
+        printf(&quot;Event group creat faill!\n&quot;);
+    &#125;
+    else
+    &#123;
+        /* The event group was created. */
+        // 创建任务前挂起任务调度器
+        vTaskSuspendAll();
+
+        xTaskCreatePinnedToCore(Task1, &quot;Task1&quot;, 1024 * 5, NULL, 1, NULL, 0);
+        xTaskCreatePinnedToCore(Task2, &quot;Task2&quot;, 1024 * 5, NULL, 1, NULL, 0);
+
+        // 任务创建结束恢复任务调度器
+        xTaskResumeAll();
+    &#125;
+&#125;
+</code></pre>
+<h2 id="事件组同步"><a href="#事件组同步" class="headerlink" title="事件组同步"></a>事件组同步</h2><p><code>xEventGroupWaitBits()</code>与<code>xEventGroupSync()</code>很相似，可参考如下场景</p>
+<p><img src="https://fastly.jsdelivr.net/gh/vampire610/PicGo/Blog-PIC/20230810160017.png" alt="使用xEventGroupWaitBits()"></p>
+<p>而使用事件组同步的时候，需要同步的任务会阻塞直到最后一个需要同步的事件组置位，然后同时运行，实现同步。</p>
+<pre><code class="c">EventBits_t xEventGroupSync(EventGroupHandle_t xEventGroup,//事件组句柄
+                            const EventBits_t uxBitsToSet,//当前任务要设置的位
+                            const EventBits_t uxBitsToWaitFor,//当前任务等待的位
+                            TickType_t xTicksToWait);//等待时间
+</code></pre>
+<h3 id="运行结果-1"><a href="#运行结果-1" class="headerlink" title="运行结果"></a>运行结果</h3><p>可以看到当3个任务都运行置位之后三个任务才一起执行后面的任务。</p>
+<pre><code class="bash">-------------
+task0 begin
+-------------
+task1 begin
+-------------
+task2 begin
+task2 sync
+task0 sync
+task1 sync
+</code></pre>
+<h3 id="代码-1"><a href="#代码-1" class="headerlink" title="代码"></a>代码</h3><pre><code class="c">#include &quot;freertos/FreeRTOS.h&quot;
+#include &quot;freertos/task.h&quot;
+#include &quot;esp_system.h&quot;
+#include &quot;esp_spi_flash.h&quot;
+
+#include &quot;freertos/event_groups.h&quot;
+
+EventGroupHandle_t EventGroupHandle;
+
+/* Bits used by the three tasks. */
+#define TASK_0_BIT (1 &lt;&lt; 0)
+#define TASK_1_BIT (1 &lt;&lt; 1)
+#define TASK_2_BIT (1 &lt;&lt; 2)
+#define ALL_SYNC_BITS (TASK_0_BIT | TASK_1_BIT | TASK_2_BIT)
+
+void Task0(void *pvParam)
+&#123;
+    while (1)
+    &#123;
+        printf(&quot;-------------\n&quot;);
+        printf(&quot;task0 begin\n&quot;);
+
+        vTaskDelay(pdMS_TO_TICKS(1000));
+
+        xEventGroupSync(EventGroupHandle, TASK_0_BIT, ALL_SYNC_BITS, portMAX_DELAY);
+        printf(&quot;task0 sync\n&quot;);
+        vTaskDelay(pdMS_TO_TICKS(10000));
+    &#125;
+&#125;
+
+void Task1(void *pvParam)
+&#123;
+    while (1)
+    &#123;
+        printf(&quot;-------------\n&quot;);
+        printf(&quot;task1 begin\n&quot;);
+
+        vTaskDelay(pdMS_TO_TICKS(3000));
+
+        xEventGroupSync(EventGroupHandle, TASK_1_BIT, ALL_SYNC_BITS, portMAX_DELAY);
+        printf(&quot;task1 sync\n&quot;);
+        vTaskDelay(pdMS_TO_TICKS(10000));
+    &#125;
+&#125;
+
+void Task2(void *pvParam)
+&#123;
+    while (1)
+    &#123;
+        printf(&quot;-------------\n&quot;);
+        printf(&quot;task2 begin\n&quot;);
+
+        vTaskDelay(pdMS_TO_TICKS(5000));
+
+        xEventGroupSync(EventGroupHandle, TASK_2_BIT, ALL_SYNC_BITS, portMAX_DELAY);
+        printf(&quot;task2 sync\n&quot;);
+        vTaskDelay(pdMS_TO_TICKS(10000));
+    &#125;
+&#125;
+
+void app_main(void)
+&#123;
+    /* Attempt to create the event group. */
+    EventGroupHandle = xEventGroupCreate();
+    /* Was the event group created successfully? */
+    if (EventGroupHandle == NULL)
+    &#123;
+        /* The event group was not created because there was insufficient
+        FreeRTOS heap available. */
+        printf(&quot;Event group creat faill!\n&quot;);
+    &#125;
+    else
+    &#123;
+        /* The event group was created. */
+        // 创建任务前挂起任务调度器
+        vTaskSuspendAll();
+
+        xTaskCreatePinnedToCore(Task0, &quot;Task0&quot;, 1024 * 5, NULL, 1, NULL, 0);
+        xTaskCreatePinnedToCore(Task1, &quot;Task1&quot;, 1024 * 5, NULL, 1, NULL, 0);
+        xTaskCreatePinnedToCore(Task2, &quot;Task2&quot;, 1024 * 5, NULL, 1, NULL, 0);
+
+        // 任务创建结束恢复任务调度器
+        xTaskResumeAll();
+    &#125;
+&#125;
+</code></pre>
 
     </div>
     

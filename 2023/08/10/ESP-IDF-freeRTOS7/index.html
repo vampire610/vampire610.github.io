@@ -1,0 +1,643 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0">
+        <title>ESP-IDF与freeRTOS(七) | Vampire&#39;Blog</title>
+        <meta name="author" content="小P孩儿">
+        <meta name="description" content="">
+        <meta name="keywords" content="">
+        <link rel="icon" href="https://fastly.jsdelivr.net/gh/vampire610/cdn@latest/img/me.jpg">
+        <script src="https://cdn.staticfile.org/vue/3.2.45/vue.global.prod.min.js"></script>
+        <script src="https://cdn.staticfile.org/highlight.js/11.7.0/highlight.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/11.7.0/styles/github.min.css">
+        <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/6.2.1/css/all.min.css">
+        
+        <script src="https://polyfill.io/v3/polyfill.min.js?features="></script>
+        
+        
+        <script src="https://cdn.staticfile.org/KaTeX/0.16.4/katex.min.js"></script>
+        <script src="https://cdn.staticfile.org/KaTeX/0.16.4/contrib/auto-render.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.staticfile.org/KaTeX/0.16.4/katex.min.css">
+        
+        <link rel="stylesheet" href="/css/fonts.min.css">
+        <link rel="stylesheet" href="/css/particlex.css">
+    <meta name="generator" content="Hexo 6.3.0"></head>
+    <body>
+        <div id="loading" style="height: 100vh; width: 100vw; position: fixed; display: flex; z-index: 2147483647; justify-content: space-between; background: #fff; transition: all 0.3s ease-out; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none">
+    <div style="position: fixed; height: 100vh; width: 100vw; display: flex; justify-content: center; align-items: center">
+        <div id="loadcontent" style="width: 50vmin; height: 50vmin; padding: 50px; border-radius: 50%; display: flex; justify-content: center; align-items: center; border: solid 10px #a3ddfb; text-align: center">
+            <div>
+                <h2>LOADING...</h2>
+                <p style="word-break: keep-all">加载过慢请开启缓存（浏览器默认开启）</p>
+                <div>
+                    <img alt="loading" src="/loading.gif" style="width: 60px">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+        <div id="layout">
+            <transition name="into">
+                <div v-show="showpage" style="display: -not-none">
+                    <div id="menushow">
+                        <nav id="menu">
+    <div class="desktop-menu">
+        <a href="/">
+            <span class="title">Vampire'Blog</span>
+        </a>
+        
+        <a href="/">
+            <i class="fa-solid fa-house fa-fw"></i>
+            <span>&ensp;home</span>
+        </a>
+        
+        <a href="/about">
+            <i class="fa-solid fa-id-card fa-fw"></i>
+            <span>&ensp;about</span>
+        </a>
+        
+        <a href="/archives">
+            <i class="fa-solid fa-box-archive fa-fw"></i>
+            <span>&ensp;archives</span>
+        </a>
+        
+        <a href="/categories">
+            <i class="fa-solid fa-bookmark fa-fw"></i>
+            <span>&ensp;categories</span>
+        </a>
+        
+        <a href="/tags">
+            <i class="fa-solid fa-tags fa-fw"></i>
+            <span>&ensp;tags</span>
+        </a>
+        
+    </div>
+    <div :class="'phone-menu ' + menushow" id="phone-menu">
+        <div class="curtain" @click="menushow = !menushow" v-show="menushow"></div>
+        <div class="title" @click="menushow = !menushow">
+            <i class="fa-solid fa-bars fa-fw"></i>
+            <span>&emsp;Vampire'Blog</span>
+        </div>
+        <transition name="slide">
+        <div class="items" v-show="menushow">
+            
+            <a href="/">
+                <div class="item">
+                    <div style="min-width: 20px; max-width: 50px; width: 10%">
+                        <i class="fa-solid fa-house fa-fw"></i>
+                    </div>
+                    <div style="min-width: 100px; max-width: 150%; width: 20%">home</div>
+                </div>
+            </a>
+            
+            <a href="/about">
+                <div class="item">
+                    <div style="min-width: 20px; max-width: 50px; width: 10%">
+                        <i class="fa-solid fa-id-card fa-fw"></i>
+                    </div>
+                    <div style="min-width: 100px; max-width: 150%; width: 20%">about</div>
+                </div>
+            </a>
+            
+            <a href="/archives">
+                <div class="item">
+                    <div style="min-width: 20px; max-width: 50px; width: 10%">
+                        <i class="fa-solid fa-box-archive fa-fw"></i>
+                    </div>
+                    <div style="min-width: 100px; max-width: 150%; width: 20%">archives</div>
+                </div>
+            </a>
+            
+            <a href="/categories">
+                <div class="item">
+                    <div style="min-width: 20px; max-width: 50px; width: 10%">
+                        <i class="fa-solid fa-bookmark fa-fw"></i>
+                    </div>
+                    <div style="min-width: 100px; max-width: 150%; width: 20%">categories</div>
+                </div>
+            </a>
+            
+            <a href="/tags">
+                <div class="item">
+                    <div style="min-width: 20px; max-width: 50px; width: 10%">
+                        <i class="fa-solid fa-tags fa-fw"></i>
+                    </div>
+                    <div style="min-width: 100px; max-width: 150%; width: 20%">tags</div>
+                </div>
+            </a>
+            
+        </div>
+        </transition>
+    </div>
+</nav>
+
+                    </div>
+                    <div id="main">
+                        <div class="article">
+    <div>
+        <h1>ESP-IDF与freeRTOS(七) </h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2023/8/10
+        </span>
+        
+        <span class="category">
+            <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+                <span class="icon">
+                    <i class="fa-solid fa-bookmark fa-fw"></i>
+                </span>
+                学习笔记
+            </a>
+        </span>
+        
+        
+        <span class="tags">
+            <span class="icon">
+                <i class="fa-solid fa-tags fa-fw"></i>
+            </span>
+            
+            <span class="tag">
+                
+                <a href="/tags/ESP-IDF/" style="color: #00a596">
+                    ESP-IDF
+                </a>
+            </span>
+            
+            <span class="tag">
+                
+                <a href="/tags/freeRTOS/" style="color: #00bcd4">
+                    freeRTOS
+                </a>
+            </span>
+            
+        </span>
+        
+    </div>
+    
+    <div class="content" v-pre>
+        <h1 id="ESP-IDF与freeRTOS-七"><a href="#ESP-IDF与freeRTOS-七" class="headerlink" title="ESP-IDF与freeRTOS(七)"></a>ESP-IDF与freeRTOS(七)</h1><h2 id="mutex互斥量"><a href="#mutex互斥量" class="headerlink" title="mutex互斥量"></a>mutex互斥量</h2><p>与二值信号量十分相似，但mutex信号量包含优先级继承机制，详情可以看<code>FreeRTOS</code>官方文档，文章末尾我也会将原文放上。</p>
+<p>个人理解如下：</p>
+<p>如有信号量被任务1持有，此时有高优先级的任务2想获取该信号量，任务1的优先级就会提高到任务2的优先级，直到任务1归还信号量，归还后任务1的优先级自动恢复。</p>
+<p>互斥量测试代码通常创建3个任务。</p>
+<h3 id="分析一下任务："><a href="#分析一下任务：" class="headerlink" title="分析一下任务："></a>分析一下任务：</h3><ol>
+<li><p>若不使用mutex信号量，即没有优先级继承时：</p>
+<p>任务1取得信号量之后，任务1为信号量的所有者，当时间片到，调度器会进行任务切换，切换后先执行task3的时间片，task3执行完时间片，会切换到优先级较低的任务2，而任务2中没有阻塞自己，之后就只有高优先级的任务3能够剥夺任务2的执行，从而一直在运行任务2，3，导致任务1一直不能够执行，信号量也将一直得不到归还。任务3也将一直阻塞自己，得不到信号量。并且IDLE任务也会因为得不到执行而触发看门狗。</p>
+</li>
+<li><p>有优先级继承时：</p>
+</li>
+</ol>
+<h3 id="运行结果："><a href="#运行结果：" class="headerlink" title="运行结果："></a>运行结果：</h3><ol>
+<li><p>不使用mutex信号量,可以看到任务3获取不到信号量，而且任务2一直运行导致IDLE触发看门狗。</p>
+<pre><code class="bash">task3 begin!
+task2 begin!
+task1 begin!
+E (12271) task_wdt: Task watchdog got triggered. The following tasks/users did not reset the watchdog in time:
+E (12271) task_wdt:  - IDLE (CPU 0)
+E (12271) task_wdt: Tasks currently running:
+E (12271) task_wdt: CPU 0: Task2
+E (12271) task_wdt: CPU 1: IDLE
+E (12271) task_wdt: Print CPU 0 (current core) backtrace
+
+E (17271) task_wdt: Task watchdog got triggered. The following tasks/users did not reset the watchdog in time:
+E (17271) task_wdt:  - IDLE (CPU 0)
+E (17271) task_wdt: Tasks currently running:
+E (17271) task_wdt: CPU 0: Task2
+E (17271) task_wdt: CPU 1: IDLE
+E (17271) task_wdt: Print CPU 0 (current core) backtrace
+
+task3 didn&#39;t take!
+E (22271) task_wdt: Task watchdog got triggered. The following tasks/users did not reset the watchdog in time:
+E (22271) task_wdt:  - IDLE (CPU 0)
+E (22271) task_wdt: Tasks currently running:
+E (22271) task_wdt: CPU 0: Task2
+E (22271) task_wdt: CPU 1: IDLE
+E (22271) task_wdt: Print CPU 0 (current core) backtrace
+</code></pre>
+</li>
+<li><p>使用mutex信号量，可以看到任务1取得信号量后会保持信号量且一直有cpu使用权，期间任务3无法取得信号量，且任务2也在持续运行，导致看门狗触发。当任务1执行结束归还信号量后，任务3才取得信号量且执行任务，而任务1由于优先级低，将和IDLE一样由于任务2不阻塞自身而得不到执行。</p>
+<pre><code class="bash">I (0) cpu_start: Starting scheduler on APP CPU.        
+task3 begin!
+task2 begin!
+task1 begin!
+task1 take!
+task1 i=0
+task1 i=1
+task1 i=2
+task1 i=3
+task1 i=4
+task1 i=5
+E (12271) task_wdt: Task watchdog got triggered. The following tasks/users did not reset the watchdog in time:
+E (12271) task_wdt:  - IDLE (CPU 0)
+E (12271) task_wdt: Tasks currently running:
+E (12271) task_wdt: CPU 0: Task2
+E (12271) task_wdt: CPU 1: IDLE
+E (12271) task_wdt: Print CPU 0 (current core) backtrace
+
+task1 i=6
+task1 i=7
+task1 i=8
+task1 i=9
+task1 i=10
+E (17271) task_wdt: Task watchdog got triggered. The following tasks/users did not reset the watchdog in time:
+E (17271) task_wdt:  - IDLE (CPU 0)
+E (17271) task_wdt: Tasks currently running:
+E (17271) task_wdt: CPU 0: Task2
+E (17271) task_wdt: CPU 1: IDLE
+E (17271) task_wdt: Print CPU 0 (current core) backtrace
+
+task3 didn&#39;t take!
+task1 i=11
+task1 i=12
+task1 i=13
+task1 i=14
+E (22271) task_wdt: Task watchdog got triggered. The following tasks/users did not reset the watchdog in time:
+E (22271) task_wdt:  - IDLE (CPU 0)
+E (22271) task_wdt: Tasks currently running:
+E (22271) task_wdt: CPU 0: Task2
+E (22271) task_wdt: CPU 1: IDLE
+E (22271) task_wdt: Print CPU 0 (current core) backtrace
+
+task1 i=15
+task1 i=16
+task1 i=17
+task1 i=18
+task1 i=19
+E (27271) task_wdt: Task watchdog got triggered. The following tasks/users did not reset the watchdog in time:
+E (27271) task_wdt:  - IDLE (CPU 0)
+E (27271) task_wdt: Tasks currently running:
+E (27271) task_wdt: CPU 0: Task2
+E (27271) task_wdt: CPU 1: IDLE
+E (27271) task_wdt: Print CPU 0 (current core) backtrace
+
+task3 take!
+task3 i = 0
+task3 i = 1
+task3 i = 2
+task3 i = 3
+task3 i = 4
+E (32271) task_wdt: Task watchdog got triggered. The following tasks/users did not reset the watchdog in time:
+E (32271) task_wdt:  - IDLE (CPU 0)
+E (32271) task_wdt: Tasks currently running:
+E (32271) task_wdt: CPU 0: Task2
+E (32271) task_wdt: CPU 1: IDLE
+E (32271) task_wdt: Print CPU 0 (current core) backtrace
+
+task3 i = 5
+task3 i = 6
+task3 i = 7
+task3 i = 8
+task3 i = 9
+E (37271) task_wdt: Task watchdog got triggered. The following tasks/users did not reset the watchdog in time:
+E (37271) task_wdt:  - IDLE (CPU 0)
+E (37271) task_wdt: Tasks currently running:
+E (37271) task_wdt: CPU 0: Task2
+E (37271) task_wdt: CPU 1: IDLE
+E (37271) task_wdt: Print CPU 0 (current core) backtrace
+
+task3 give!
+E (42271) task_wdt: Task watchdog got triggered. The following tasks/users did not reset the watchdog in time:
+E (42271) task_wdt:  - IDLE (CPU 0)
+E (42271) task_wdt: Tasks currently running:
+E (42271) task_wdt: CPU 0: Task2
+E (42271) task_wdt: CPU 1: IDLE
+E (42271) task_wdt: Print CPU 0 (current core) backtrace
+
+task3 take!
+task3 i = 0
+task3 i = 1
+task3 i = 2
+task3 i = 3
+task3 i = 4
+E (47271) task_wdt: Task watchdog got triggered. The following tasks/users did not reset the watchdog in time:
+E (47271) task_wdt:  - IDLE (CPU 0)
+E (47271) task_wdt: Tasks currently running:
+E (47271) task_wdt: CPU 0: Task2
+E (47271) task_wdt: CPU 1: IDLE
+E (47271) task_wdt: Print CPU 0 (current core) backtrace
+
+task3 i = 5
+task3 i = 6
+task3 i = 7
+task3 i = 8
+task3 i = 9
+E (52271) task_wdt: Task watchdog got triggered. The following tasks/users did not reset the watchdog in time:
+E (52271) task_wdt:  - IDLE (CPU 0)
+E (52271) task_wdt: Tasks currently running:
+E (52271) task_wdt: CPU 0: Task2
+E (52271) task_wdt: CPU 1: IDLE
+E (52271) task_wdt: Print CPU 0 (current core) backtrace
+
+...
+</code></pre>
+</li>
+</ol>
+<h3 id="代码："><a href="#代码：" class="headerlink" title="代码："></a>代码：</h3><pre><code class="c">#include &quot;freertos/FreeRTOS.h&quot;
+#include &quot;freertos/task.h&quot;
+#include &quot;esp_system.h&quot;
+#include &quot;esp_spi_flash.h&quot;
+
+#include &quot;freertos/semphr.h&quot;
+
+SemaphoreHandle_t mutexHandle;
+
+void Task3(void *pvParam)
+&#123;
+    BaseType_t iRet;
+    printf(&quot;task3 begin!\n&quot;);
+    vTaskDelay(pdMS_TO_TICKS(1000));
+
+    while (1)
+    &#123;
+        // 试图取得信号量
+        iRet = xSemaphoreTake(mutexHandle, 1000);
+        if (iRet == pdPASS)
+        &#123;
+            // 取得成功，打印信息
+            printf(&quot;task3 take!\n&quot;);
+            for (int i = 0; i &lt; 10; i++)
+            &#123;
+                printf(&quot;task3 i = %d\n&quot;, i);
+                vTaskDelay(pdMS_TO_TICKS(1000));
+            &#125;
+            // 执行完毕，归还信号量
+            xSemaphoreGive(mutexHandle);
+            printf(&quot;task3 give!\n&quot;);
+            vTaskDelay(pdMS_TO_TICKS(5000));
+        &#125;
+        else
+        &#123;
+            // 取得失败，输出信息，循环尝试取得信号量
+            printf(&quot;task3 didn&#39;t take!\n&quot;);
+            vTaskDelay(pdMS_TO_TICKS(1000));
+        &#125;
+    &#125;
+&#125;
+
+void Task2(void *pvParam)
+&#123;
+    printf(&quot;task2 begin!\n&quot;);
+    // 阻塞1秒让task1有机会执行
+    vTaskDelay(pdMS_TO_TICKS(1000));
+    while (1)
+    &#123;
+        // 进入task2之后，由于task2没有阻塞自身
+        // 只有task3可以剥夺task2的执行
+        // 而task1优先级更低，不能执行
+        ;
+    &#125;
+&#125;
+
+void Task1(void *pvParam)
+&#123;
+    BaseType_t iRet;
+    while (1)
+    &#123;
+        // 任务1取得信号量之后，任务1为mutex的所有者
+        printf(&quot;task1 begin!\n&quot;);
+        iRet = xSemaphoreTake(mutexHandle, 1000);
+        if (iRet == pdPASS)
+        &#123;
+            printf(&quot;task1 take!\n&quot;);
+            for (int i = 0; i &lt; 20; i++)
+            &#123;
+                printf(&quot;task1 i=%d\n&quot;, i);
+                vTaskDelay(pdMS_TO_TICKS(1000));
+            &#125;
+            // 执行完毕，归还信号量
+            xSemaphoreGive(mutexHandle);
+            printf(&quot;task1 give!\n&quot;);
+            vTaskDelay(pdMS_TO_TICKS(5000));
+        &#125;
+        else
+        &#123;
+            printf(&quot;task1 didn&#39;t take\n&quot;);
+            vTaskDelay(pdMS_TO_TICKS(1000));
+        &#125;
+    &#125;
+&#125;
+
+void app_main(void)
+&#123;
+    // 创建mutax
+    mutexHandle = xSemaphoreCreateMutex();
+    // 创建二进制信号量
+    // mutexHandle = xSemaphoreCreateBinary();
+
+    // 创建任务前挂起任务调度器
+    vTaskSuspendAll();
+    xTaskCreatePinnedToCore(Task1, &quot;Task1&quot;, 1024 * 5, NULL, 1, NULL, 0);
+    xTaskCreatePinnedToCore(Task2, &quot;Task2&quot;, 1024 * 5, NULL, 2, NULL, 0);
+    xTaskCreatePinnedToCore(Task3, &quot;Task3&quot;, 1024 * 5, NULL, 3, NULL, 0);
+    // 任务创建结束恢复任务调度器
+    xTaskResumeAll();
+
+&#125;
+</code></pre>
+<h2 id="递归互斥信号量"><a href="#递归互斥信号量" class="headerlink" title="递归互斥信号量"></a>递归互斥信号量</h2><p><img src="https://fastly.jsdelivr.net/gh/vampire610/PicGo/Blog-PIC/20230810134747.png" alt="图片来自B站Michael_ee老师的视频"></p>
+<p>如图中所示，任务1需要互斥访问资源A，在资源A中又要互斥访问资源B，若不用递归互斥，就需要手动给A上锁解锁，手动给B上锁解锁，每个互斥锁需要一个互斥信号量，若有更多这种关系，就需要更多的信号量来实现。</p>
+<p>而递归互斥量会递归的给后面的资源上锁。</p>
+<h3 id="运行结果"><a href="#运行结果" class="headerlink" title="运行结果"></a>运行结果</h3><pre><code class="bash">-------------------
+task1 begin!
+task1 take A!
+task1 i=0 for A
+-------------------
+task2 begin!
+task1 i=1 for A
+task1 i=2 for A
+task1 i=3 for A
+task1 i=4 for A
+task1 i=5 for A
+task1 i=6 for A
+task1 i=7 for A
+task1 i=8 for A
+task1 i=9 for A
+task1 take B!
+task1 i=0 for B
+task1 i=1 for B
+task1 i=2 for B
+task1 i=3 for B
+task1 i=4 for B
+task1 i=5 for B
+task1 i=6 for B
+task1 i=7 for B
+task1 i=8 for B
+task1 i=9 for B
+task1 give B   此处可以看到释放B的锁的时候，任务2还是不能获取信号量
+task1 give A   当任务1也释放A的锁之后，任务2可取得信号量
+task2 take
+task2 i=0
+task2 i=1
+task2 i=2
+</code></pre>
+<h3 id="示例代码："><a href="#示例代码：" class="headerlink" title="示例代码："></a>示例代码：</h3><pre><code class="c">#include &quot;freertos/FreeRTOS.h&quot;
+#include &quot;freertos/task.h&quot;
+#include &quot;esp_system.h&quot;
+#include &quot;esp_spi_flash.h&quot;
+
+#include &quot;freertos/semphr.h&quot;
+
+SemaphoreHandle_t mutexHandle;
+
+void Task1(void *pvParam)
+&#123;
+    while (1)
+    &#123;
+        printf(&quot;-------------------\n&quot;);
+        printf(&quot;task1 begin!\n&quot;);
+        // 取得A的锁
+        xSemaphoreTakeRecursive(mutexHandle, portMAX_DELAY);
+
+        printf(&quot;task1 take A!\n&quot;);
+
+        for (int i = 0; i &lt; 10; i++)
+        &#123;
+            printf(&quot;task1 i=%d for A\n&quot;, i);
+            vTaskDelay(pdMS_TO_TICKS(1000));
+        &#125;
+
+        // 取得资源B 再次加锁
+        xSemaphoreTakeRecursive(mutexHandle, portMAX_DELAY);
+
+        printf(&quot;task1 take B!\n&quot;);
+
+        for (int i = 0; i &lt; 10; i++)
+        &#123;
+            printf(&quot;task1 i=%d for B\n&quot;, i);
+            vTaskDelay(pdMS_TO_TICKS(1000));
+        &#125;
+
+        printf(&quot;task1 give B\n&quot;);
+        // 释放B的锁
+        xSemaphoreGiveRecursive(mutexHandle);
+        vTaskDelay(pdMS_TO_TICKS(3000));
+
+        printf(&quot;task1 give A\n&quot;);
+        // 释放A的锁
+        xSemaphoreGiveRecursive(mutexHandle);
+        vTaskDelay(pdMS_TO_TICKS(3000));
+    &#125;
+&#125;
+
+void Task2(void *pvParam)
+&#123;
+    // 尝试获得递归互斥量
+    vTaskDelay(pdMS_TO_TICKS(1000));
+
+    while (1)
+    &#123;
+        printf(&quot;-------------------\n&quot;);
+        printf(&quot;task2 begin!\n&quot;);
+        xSemaphoreTakeRecursive(mutexHandle, portMAX_DELAY);
+        printf(&quot;task2 take\n&quot;);
+        for (int i = 0; i &lt; 10; i++)
+        &#123;
+            printf(&quot;task2 i=%d\n&quot;, i);
+            vTaskDelay(pdMS_TO_TICKS(1000));
+        &#125;
+        printf(&quot;task2 give\n&quot;);
+        xSemaphoreGiveRecursive(mutexHandle);
+        vTaskDelay(pdMS_TO_TICKS(3000));
+    &#125;
+&#125;
+
+void app_main(void)
+&#123;
+    // 创建mutax
+    mutexHandle = xSemaphoreCreateRecursiveMutex();
+
+    // 创建任务前挂起任务调度器
+    vTaskSuspendAll();
+
+    xTaskCreatePinnedToCore(Task1, &quot;Task1&quot;, 1024 * 5, NULL, 1, NULL, 0);
+    xTaskCreatePinnedToCore(Task2, &quot;Task2&quot;, 1024 * 5, NULL, 1, NULL, 0);
+
+    // 任务创建结束恢复任务调度器
+    xTaskResumeAll();
+
+&#125;
+</code></pre>
+
+    </div>
+    
+    
+    
+    
+    <link rel="stylesheet" href="https://cdn.staticfile.org/waline/2.14.7/waline.min.css" />
+    <div id="comment">
+        <div id="waline-container"></div>
+    </div>
+    
+    
+</div>
+
+                        <footer id="footer">
+    <div class="footer-wrap">
+        <div>
+            © 2018 - 2023 Vampire&#39;Blog
+            <span class="footer-icon">
+                <i class="fa-solid fa-font-awesome fa-fw"></i>
+            </span>
+            @小P孩儿
+        </div>
+        <div></div>
+        <div>Based on the <a target="_blank" rel="noopener" href="https://hexo.io">Hexo Engine</a> & <a target="_blank" rel="noopener" href="https://github.com/argvchs/hexo-theme-particlex">ParticleX Theme</a></div>
+        
+    </div>
+</footer>
+
+                    </div>
+                </div>
+            </transition>
+            <div id="showimg">
+                <img id="showimg-content" alt="showimg">
+            </div>
+        </div>
+        <script src="/js/functions.js"></script>
+<script src="/js/particlex.js"></script>
+
+    
+    
+    
+    <script src="https://cdn.staticfile.org/waline/2.14.7/waline.min.js"></script>
+    <script>
+        Waline.init({
+            el: "#waline-container",
+            serverURL: "https://comment.vampire610.cn",
+            commentCount: true,
+            pageview: false,
+            emoji: "https://unpkg.com/@waline/emojis@1.0.1/weibo,https://unpkg.com/@waline/emojis@1.0.1/alus,https://unpkg.com/@waline/emojis@1.0.1/bilibili,https://unpkg.com/@waline/emojis@1.0.1/qq,https://unpkg.com/@waline/emojis@1.0.1/tieba,https://unpkg.com/@waline/emojis@1.0.1/tw-emoji".split(","),
+            meta: "nick,mail,link".split(","),
+            requiredMeta: "nick".split(","),
+            lang: "zh-CN",
+            wordLimit: 0,
+            pageSize: "10",
+            login: "enable",
+            locale: {"placeholder":"欢迎评论（填写邮箱可在评论被回复时收到邮件提醒）"}
+        });
+    </script>
+    
+    
+
+
+    </body>
+</html>
+
+<canvas
+    id="fireworks"
+    style="position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:32767"
+></canvas>
+<script src="https://cdn.staticfile.org/animejs/3.2.1/anime.min.js"></script>
+<script src="/js/fireworks.min.js"></script>
+
+<canvas
+    id="background"
+    style="position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:-1"
+></canvas>
+<script src="/js/background.min.js"></script>
