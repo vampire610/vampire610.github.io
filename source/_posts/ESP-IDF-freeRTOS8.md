@@ -180,6 +180,12 @@ task0 begin
 task1 begin
 -------------
 task2 begin
+--------------
+task0 set bit0
+--------------
+task1 set bit1
+--------------
+task2 set bit2
 task2 sync
 task0 sync
 task1 sync
@@ -212,6 +218,10 @@ void Task0(void *pvParam)
 
         vTaskDelay(pdMS_TO_TICKS(1000));
 
+        printf("--------------\n");
+        printf("task0 set bit0\n");
+
+
         xEventGroupSync(EventGroupHandle, TASK_0_BIT, ALL_SYNC_BITS, portMAX_DELAY);
         printf("task0 sync\n");
         vTaskDelay(pdMS_TO_TICKS(10000));
@@ -227,6 +237,9 @@ void Task1(void *pvParam)
 
         vTaskDelay(pdMS_TO_TICKS(3000));
 
+        printf("--------------\n");
+        printf("task1 set bit1\n");
+
         xEventGroupSync(EventGroupHandle, TASK_1_BIT, ALL_SYNC_BITS, portMAX_DELAY);
         printf("task1 sync\n");
         vTaskDelay(pdMS_TO_TICKS(10000));
@@ -241,6 +254,9 @@ void Task2(void *pvParam)
         printf("task2 begin\n");
 
         vTaskDelay(pdMS_TO_TICKS(5000));
+
+        printf("--------------\n");
+        printf("task2 set bit2\n");
 
         xEventGroupSync(EventGroupHandle, TASK_2_BIT, ALL_SYNC_BITS, portMAX_DELAY);
         printf("task2 sync\n");
@@ -272,6 +288,190 @@ void app_main(void)
         // 任务创建结束恢复任务调度器
         xTaskResumeAll();
     }
+}
+
+```
+
+## 消息通知
+
+FreeRTOS还可以通过消息通知来实现同步。
+
+任务可以发送给特定任务一个消息通知，实现对特定任务的唤醒或其他操作。
+
+### 运行结果
+
+``` bash
+-------------
+task1 begin
+-------------
+task2 notify task1
+--------------
+task1 got notification
+-------------
+```
+
+### 代码示例
+
+``` c
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
+#include "esp_system.h"
+#include "esp_spi_flash.h"
+
+#include "freertos/event_groups.h"
+
+static TaskHandle_t xTask1 = NULL;
+
+void Task1(void *pvParam)
+{
+    while (1)
+    {
+        printf("-------------\n");
+        printf("task1 begin\n");
+
+        // 阻塞等到消息到来
+        ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+
+        printf("--------------\n");
+        printf("task1 got notification\n");
+
+        vTaskDelay(pdMS_TO_TICKS(3000));
+    }
+}
+
+void Task2(void *pvParam)
+{
+    while (1)
+    {
+        // 首先阻塞自身让Task1进入阻塞状态
+        vTaskDelay(pdMS_TO_TICKS(5000));
+
+        printf("-------------\n");
+        printf("task2 notify task1\n");
+
+        // 发送通知给task1
+        xTaskNotifyGive(xTask1);
+    }
+}
+
+void app_main(void)
+{
+
+    vTaskSuspendAll();
+
+    // 创建Task1时需要传出Task1的句柄
+    xTaskCreatePinnedToCore(Task1, "Task1", 1024 * 5, NULL, 1, &xTask1, 0);
+    xTaskCreatePinnedToCore(Task2, "Task2", 1024 * 5, NULL, 1, NULL, 0);
+
+    // 任务创建结束恢复任务调度器
+    xTaskResumeAll();
+}
+
+```
+
+## 通知的值
+
+可以通知不同的值，并且根据不同的值来执行不同的代码。
+
+### 运行结果
+
+``` bash
+-------------
+task1 wait notification
+-------------
+task2 notify task1
+task1 process bit0 event
+--------------
+task1 got notification
+-------------
+task1 wait notification
+task1 process bit2 event
+--------------
+task1 got notification
+-------------
+```
+
+### 示例代码
+
+``` c
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
+#include "esp_system.h"
+#include "esp_spi_flash.h"
+
+#include "freertos/event_groups.h"
+
+static TaskHandle_t xTask1 = NULL;
+
+void Task1(void *pvParam)
+{
+    uint32_t ulNotifiedValue;
+    while (1)
+    {
+        printf("-------------\n");
+        printf("task1 wait notification\n");
+
+        xTaskNotifyWait(0x00,             /* Don't clear any notification bits on entry. */
+                        ULONG_MAX,        /* Reset the notification value to 0 on exit. */
+                        &ulNotifiedValue, /* Notified value pass out in ulNotifiedValue. */
+                        portMAX_DELAY);   /* Block indefinitely. */
+        /* Process any events that have been latched in the notified value. */
+        if ((ulNotifiedValue & 0x01) != 0)
+        {
+            /* Bit 0 was set - process whichever event is represented by bit 0. */
+            printf("task1 process bit0 event\n");
+        }
+        if ((ulNotifiedValue & 0x02) != 0)
+        {
+            /* Bit 1 was set - process whichever event is represented by bit 1. */
+            printf("task1 process bit1 event\n");
+        }
+        if ((ulNotifiedValue & 0x04) != 0)
+        {
+            /* Bit 2 was set - process whichever event is represented by bit 2. */
+            printf("task1 process bit2 event\n");
+        }
+
+        printf("--------------\n");
+        printf("task1 got notification\n");
+
+        vTaskDelay(pdMS_TO_TICKS(3000));
+    }
+}
+
+void Task2(void *pvParam)
+{
+    while (1)
+    {
+        // 首先阻塞自身让Task1进入阻塞状态
+        vTaskDelay(pdMS_TO_TICKS(5000));
+
+        printf("-------------\n");
+        printf("task2 notify task1\n");
+
+        // 发送通知给task1
+        xTaskNotify(xTask1, 0x01, eSetValueWithOverwrite);
+        vTaskDelay(pdMS_TO_TICKS(1000));
+
+        xTaskNotify(xTask1, 0x02, eSetValueWithOverwrite);
+        vTaskDelay(pdMS_TO_TICKS(1000));
+
+        xTaskNotify(xTask1, 0x04, eSetValueWithOverwrite);
+        vTaskDelay(pdMS_TO_TICKS(1000));
+    }
+}
+
+void app_main(void)
+{
+
+    vTaskSuspendAll();
+
+    // 创建Task1时需要传出Task1的句柄
+    xTaskCreatePinnedToCore(Task1, "Task1", 1024 * 5, NULL, 1, &xTask1, 0);
+    xTaskCreatePinnedToCore(Task2, "Task2", 1024 * 5, NULL, 1, NULL, 0);
+
+    // 任务创建结束恢复任务调度器
+    xTaskResumeAll();
 }
 
 ```
