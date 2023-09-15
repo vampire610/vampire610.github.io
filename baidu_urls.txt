@@ -1,3 +1,5 @@
+https://vampire610.cn/2023/09/15/pyside2/
+https://vampire610.cn/2023/08/16/ESP-IDF-freeRTOS9/
 https://vampire610.cn/2023/08/10/ESP-IDF-freeRTOS8/
 https://vampire610.cn/2023/08/10/ESP-IDF-freeRTOS7/
 https://vampire610.cn/2023/08/08/ESP-IDF-freeRTOS6/
@@ -6,5 +8,3 @@ https://vampire610.cn/2023/08/04/keilComplierV5/
 https://vampire610.cn/2023/08/04/ESP-IDF-freeRTOS4/
 https://vampire610.cn/2023/08/03/ESP-IDF-freeRTOS3/
 https://vampire610.cn/2023/07/25/ESP-IDF-freeRTOS2/
-https://vampire610.cn/2023/07/23/ESP-IDF-freeRTOS/
-https://vampire610.cn/2023/07/10/stackoverflow/

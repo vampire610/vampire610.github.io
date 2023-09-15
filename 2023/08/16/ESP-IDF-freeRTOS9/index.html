@@ -1,0 +1,544 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0">
+        <title>ESP-IDF与freeRTOS(九) | Vampire&#39;Blog</title>
+        <meta name="author" content="小P孩儿">
+        <meta name="description" content="">
+        <meta name="keywords" content="">
+        <link rel="icon" href="https://fastly.jsdelivr.net/gh/vampire610/cdn@latest/img/me.jpg">
+        <script src="https://cdn.staticfile.org/vue/3.2.45/vue.global.prod.min.js"></script>
+        <script src="https://cdn.staticfile.org/highlight.js/11.7.0/highlight.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/11.7.0/styles/github.min.css">
+        <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/6.2.1/css/all.min.css">
+        
+        <script src="https://polyfill.io/v3/polyfill.min.js?features="></script>
+        
+        
+        <script src="https://cdn.staticfile.org/KaTeX/0.16.4/katex.min.js"></script>
+        <script src="https://cdn.staticfile.org/KaTeX/0.16.4/contrib/auto-render.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.staticfile.org/KaTeX/0.16.4/katex.min.css">
+        
+        <link rel="stylesheet" href="/css/fonts.min.css">
+        <link rel="stylesheet" href="/css/particlex.css">
+    <meta name="generator" content="Hexo 6.3.0"></head>
+    <body>
+        <div id="loading" style="height: 100vh; width: 100vw; position: fixed; display: flex; z-index: 2147483647; justify-content: space-between; background: #fff; transition: all 0.3s ease-out; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none">
+    <div style="position: fixed; height: 100vh; width: 100vw; display: flex; justify-content: center; align-items: center">
+        <div id="loadcontent" style="width: 50vmin; height: 50vmin; padding: 50px; border-radius: 50%; display: flex; justify-content: center; align-items: center; border: solid 10px #a3ddfb; text-align: center">
+            <div>
+                <h2>LOADING...</h2>
+                <p style="word-break: keep-all">加载过慢请开启缓存（浏览器默认开启）</p>
+                <div>
+                    <img alt="loading" src="/loading.gif" style="width: 60px">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+        <div id="layout">
+            <transition name="into">
+                <div v-show="showpage" style="display: -not-none">
+                    <div id="menushow">
+                        <nav id="menu">
+    <div class="desktop-menu">
+        <a href="/">
+            <span class="title">Vampire'Blog</span>
+        </a>
+        
+        <a href="/">
+            <i class="fa-solid fa-house fa-fw"></i>
+            <span>&ensp;home</span>
+        </a>
+        
+        <a href="/about">
+            <i class="fa-solid fa-id-card fa-fw"></i>
+            <span>&ensp;about</span>
+        </a>
+        
+        <a href="/archives">
+            <i class="fa-solid fa-box-archive fa-fw"></i>
+            <span>&ensp;archives</span>
+        </a>
+        
+        <a href="/categories">
+            <i class="fa-solid fa-bookmark fa-fw"></i>
+            <span>&ensp;categories</span>
+        </a>
+        
+        <a href="/tags">
+            <i class="fa-solid fa-tags fa-fw"></i>
+            <span>&ensp;tags</span>
+        </a>
+        
+    </div>
+    <div :class="'phone-menu ' + menushow" id="phone-menu">
+        <div class="curtain" @click="menushow = !menushow" v-show="menushow"></div>
+        <div class="title" @click="menushow = !menushow">
+            <i class="fa-solid fa-bars fa-fw"></i>
+            <span>&emsp;Vampire'Blog</span>
+        </div>
+        <transition name="slide">
+        <div class="items" v-show="menushow">
+            
+            <a href="/">
+                <div class="item">
+                    <div style="min-width: 20px; max-width: 50px; width: 10%">
+                        <i class="fa-solid fa-house fa-fw"></i>
+                    </div>
+                    <div style="min-width: 100px; max-width: 150%; width: 20%">home</div>
+                </div>
+            </a>
+            
+            <a href="/about">
+                <div class="item">
+                    <div style="min-width: 20px; max-width: 50px; width: 10%">
+                        <i class="fa-solid fa-id-card fa-fw"></i>
+                    </div>
+                    <div style="min-width: 100px; max-width: 150%; width: 20%">about</div>
+                </div>
+            </a>
+            
+            <a href="/archives">
+                <div class="item">
+                    <div style="min-width: 20px; max-width: 50px; width: 10%">
+                        <i class="fa-solid fa-box-archive fa-fw"></i>
+                    </div>
+                    <div style="min-width: 100px; max-width: 150%; width: 20%">archives</div>
+                </div>
+            </a>
+            
+            <a href="/categories">
+                <div class="item">
+                    <div style="min-width: 20px; max-width: 50px; width: 10%">
+                        <i class="fa-solid fa-bookmark fa-fw"></i>
+                    </div>
+                    <div style="min-width: 100px; max-width: 150%; width: 20%">categories</div>
+                </div>
+            </a>
+            
+            <a href="/tags">
+                <div class="item">
+                    <div style="min-width: 20px; max-width: 50px; width: 10%">
+                        <i class="fa-solid fa-tags fa-fw"></i>
+                    </div>
+                    <div style="min-width: 100px; max-width: 150%; width: 20%">tags</div>
+                </div>
+            </a>
+            
+        </div>
+        </transition>
+    </div>
+</nav>
+
+                    </div>
+                    <div id="main">
+                        <div class="article">
+    <div>
+        <h1>ESP-IDF与freeRTOS(九) </h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2023/8/16
+        </span>
+        
+        <span class="category">
+            <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+                <span class="icon">
+                    <i class="fa-solid fa-bookmark fa-fw"></i>
+                </span>
+                学习笔记
+            </a>
+        </span>
+        
+        
+        <span class="tags">
+            <span class="icon">
+                <i class="fa-solid fa-tags fa-fw"></i>
+            </span>
+            
+            <span class="tag">
+                
+                <a href="/tags/ESP-IDF/" style="color: #00a596">
+                    ESP-IDF
+                </a>
+            </span>
+            
+            <span class="tag">
+                
+                <a href="/tags/freeRTOS/" style="color: #03a9f4">
+                    freeRTOS
+                </a>
+            </span>
+            
+        </span>
+        
+    </div>
+    
+    <div class="content" v-pre>
+        <h1 id="ESP-IDF与freeRTOS-九"><a href="#ESP-IDF与freeRTOS-九" class="headerlink" title="ESP-IDF与freeRTOS(九)"></a>ESP-IDF与freeRTOS(九)</h1><h2 id="流数据缓冲区"><a href="#流数据缓冲区" class="headerlink" title="流数据缓冲区"></a>流数据缓冲区</h2><h3 id="运行结果1"><a href="#运行结果1" class="headerlink" title="运行结果1"></a>运行结果1</h3><p>由于设置触发长度为10，而每次发送长度为25，所以每次发送都能触发接收</p>
+<pre><code class="bash">-----------------
+Send: str_len = 25, send_byte = 25
+-------------
+Receive: rec_bytes = 25, data = Hello, I am vampire610 1       
+
+-----------------
+Send: str_len = 25, send_byte = 25
+-------------
+Receive: rec_bytes = 25, data = Hello, I am vampire610 2       
+
+-----------------
+Send: str_len = 25, send_byte = 25
+-------------
+Receive: rec_bytes = 25, data = Hello, I am vampire610 3 
+</code></pre>
+<h3 id="运行结果2"><a href="#运行结果2" class="headerlink" title="运行结果2"></a>运行结果2</h3><p>此处可以看到第一次发送后接收成功了，而后续需要满100个数据才会触发接收。</p>
+<p>这是因为当buffer中不为空时，接收函数会先接收再进入阻塞，然后等待满100触发。</p>
+<p>可以将task1中的delay提到前面，保持buffer为空，让task2先因为不满100而阻塞，再让task1向buffer发送数据。</p>
+<pre><code class="bash">-----------------
+Send: str_len = 24, send_byte = 24
+-------------
+Receive: rec_bytes = 24, data = Hello, I am vampire610 1       
+-----------------
+Send: str_len = 24, send_byte = 24
+-----------------
+Send: str_len = 24, send_byte = 24
+-----------------
+Send: str_len = 24, send_byte = 24
+-----------------
+Send: str_len = 24, send_byte = 24
+-----------------
+Send: str_len = 24, send_byte = 24
+-------------
+Receive: rec_bytes = 50, data = Hello, I am vampire610 2Hello, I am vampire610 3He�?
+-------------
+Receive: rec_bytes = 50, data = llo, I am vampire610 4Hello, I am vampire610 5Hell�?
+-------------
+Receive: rec_bytes = 20, data = o, I am vampire610 6
+-----------------
+Send: str_len = 24, send_byte = 24
+-------------
+</code></pre>
+<h3 id="运行结果3"><a href="#运行结果3" class="headerlink" title="运行结果3"></a>运行结果3</h3><p>按上述方法修改delay位置后，可以看到第一次接收消失了，task2一开始就就进入阻塞，需要等待stream buffer满100个才能接收。</p>
+<pre><code class="bash">-----------------
+Send: str_len = 24, send_byte = 24
+-----------------
+Send: str_len = 24, send_byte = 24
+-----------------
+Send: str_len = 24, send_byte = 24
+-----------------
+Send: str_len = 24, send_byte = 24
+-----------------
+Send: str_len = 24, send_byte = 24
+-------------
+Receive: rec_bytes = 50, data = Hello, I am vampire610 1Hello, I am vampire610 2He�?
+-------------
+Receive: rec_bytes = 50, data = llo, I am vampire610 3Hello, I am vampire610 4Hell�?
+-------------
+Receive: rec_bytes = 20, data = o, I am vampire610 5
+-----------------
+</code></pre>
+<h3 id="示例代码"><a href="#示例代码" class="headerlink" title="示例代码"></a>示例代码</h3><pre><code class="c">#include &quot;freertos/FreeRTOS.h&quot;
+#include &quot;freertos/task.h&quot;
+#include &quot;esp_system.h&quot;
+#include &quot;esp_spi_flash.h&quot;
+
+#include &quot;freertos/stream_buffer.h&quot;
+#include &quot;string.h&quot;
+StreamBufferHandle_t StreamBufferHandle = NULL;
+
+void Task1(void *pvParam)
+&#123;
+    int i = 0;
+    int buf_len = 0;
+    int send_bytes = 0;
+    char tx_buf[50];
+    while (1)
+    &#123;
+        i++;
+        // 向tx_buf填值，并返回长度
+        buf_len = sprintf(tx_buf, &quot;Hello, I am vampire610 %d\n&quot;, i);
+        // 发送buf，并返回成功发送长度
+        send_bytes = xStreamBufferSend(StreamBufferHandle, // 句柄
+                                       (void *)tx_buf,     // 发送的buf，需要强转位void指针
+                                       buf_len,            // buf长度
+                                       portMAX_DELAY);     // 阻塞时间
+
+        printf(&quot;-----------------\n&quot;);
+        printf(&quot;Send: str_len = %d, send_byte = %d\n&quot;, buf_len, send_bytes);
+
+        vTaskDelay(pdMS_TO_TICKS(3000));
+    &#125;
+&#125;
+
+void Task2(void *pvParam)
+&#123;
+    char rx_buf[50];
+    int rec_bytes = 0;
+    while (1)
+    &#123;
+        // 清空接收数组
+        memset(rx_buf, 0, 50);
+        // 接收streambuffer
+        rec_bytes = xStreamBufferReceive(StreamBufferHandle, // 句柄
+                                         (void *)rx_buf,     // 接收缓冲区，强转void指针
+                                         sizeof(rx_buf),     // sizeof取得缓冲区大小
+                                         portMAX_DELAY);     // 阻塞时间
+
+        printf(&quot;-------------\n&quot;);
+        printf(&quot;Receive: rec_bytes = %d, data = %s\n&quot;, rec_bytes, rx_buf);
+
+        vTaskDelay(pdMS_TO_TICKS(1000));
+    &#125;
+&#125;
+
+void app_main(void)
+&#123;
+
+    // 创建streambuffer，两个参数，buffer大小，触发大小
+    StreamBufferHandle = xStreamBufferCreate(1000, 10);
+    if (StreamBufferHandle != NULL)
+    &#123;
+        vTaskSuspendAll();
+
+        // 创建Task1时需要传出Task1的句柄
+        xTaskCreatePinnedToCore(Task1, &quot;Task1&quot;, 1024 * 5, NULL, 1, NULL, 0);
+        xTaskCreatePinnedToCore(Task2, &quot;Task2&quot;, 1024 * 5, NULL, 1, NULL, 0);
+
+        // 任务创建结束恢复任务调度器
+        xTaskResumeAll();
+    &#125;
+    else
+    &#123;
+        printf(&quot;Fail to creat stream buffer\n&quot;);
+    &#125;
+&#125;
+</code></pre>
+<h2 id="如何确定流数据缓冲区大小"><a href="#如何确定流数据缓冲区大小" class="headerlink" title="如何确定流数据缓冲区大小"></a>如何确定流数据缓冲区大小</h2><p>太大浪费资源，太小不能正常工作。引入task3检测缓冲区空闲空间大小变化情况。</p>
+<p>初始设置为比较大的值，再通过检测情况进行调整，这与之前确定任务的堆栈大小思路一致。</p>
+<p>流数据实际使用场景一般产生数据的速率不固定，所以需要稍长的时间来检测空闲空间。</p>
+<h3 id="运行示例"><a href="#运行示例" class="headerlink" title="运行示例"></a>运行示例</h3><p>运行一段时间后，就可以看到当前缓冲区剩余空间大概是多少，最小剩余多少，即可根据该值修改缓冲区容量，来避免过分浪费。</p>
+<pre><code class="bash">-------------
+buf_space = 1000,min_space = 1000
+-------------
+buf_space = 1000,min_space = 1000
+-----------------
+Send: str_len = 24, send_byte = 24        
+-------------
+buf_space = 976,min_space = 976
+-----------------
+Send: str_len = 24, send_byte = 24        
+-------------
+buf_space = 952,min_space = 952
+-------------
+buf_space = 952,min_space = 952
+-----------------
+Send: str_len = 24, send_byte = 24        
+-------------
+buf_space = 928,min_space = 928
+-----------------
+Send: str_len = 24, send_byte = 24        
+-------------
+buf_space = 904,min_space = 904
+-------------
+buf_space = 904,min_space = 904
+-----------------
+Send: str_len = 24, send_byte = 24        
+-------------
+Receive: rec_bytes = 50, data = Hello, I am vampire610 1Hello, I am vampire610 2He�?
+-------------
+Receive: rec_bytes = 50, data = llo, I am vampire610 3Hello, I am vampire610 4Hell�?
+-------------
+buf_space = 980,min_space = 904
+-------------
+Receive: rec_bytes = 20, data = o, I am vampire610 5
+-----------------
+Send: str_len = 24, send_byte = 24        
+-------------
+Receive: rec_bytes = 24, data = Hello, I am vampire610 6
+-------------
+buf_space = 1000,min_space = 904
+-------------
+buf_space = 1000,min_space = 904
+-----------------
+</code></pre>
+<h3 id="示例代码-1"><a href="#示例代码-1" class="headerlink" title="示例代码"></a>示例代码</h3><pre><code class="c">#include &quot;freertos/FreeRTOS.h&quot;
+#include &quot;freertos/task.h&quot;
+#include &quot;esp_system.h&quot;
+#include &quot;esp_spi_flash.h&quot;
+
+#include &quot;freertos/stream_buffer.h&quot;
+#include &quot;string.h&quot;
+StreamBufferHandle_t StreamBufferHandle = NULL;
+
+void Task1(void *pvParam)
+&#123;
+    int i = 0;
+    int buf_len = 0;
+    int send_bytes = 0;
+    char tx_buf[50];
+    while (1)
+    &#123;
+        vTaskDelay(pdMS_TO_TICKS(3000));
+        i++;
+        // 向tx_buf填值，并返回长度
+        buf_len = sprintf(tx_buf, &quot;Hello, I am vampire610 %d&quot;, i);
+        // 发送buf，并返回成功发送长度
+        send_bytes = xStreamBufferSend(StreamBufferHandle, // 句柄
+                                       (void *)tx_buf,     // 发送的buf，需要强转位void指针
+                                       buf_len,            // buf长度
+                                       portMAX_DELAY);     // 阻塞时间
+
+        printf(&quot;-----------------\n&quot;);
+        printf(&quot;Send: str_len = %d, send_byte = %d\n&quot;, buf_len, send_bytes);
+    &#125;
+&#125;
+
+void Task2(void *pvParam)
+&#123;
+    char rx_buf[50];
+    int rec_bytes = 0;
+    while (1)
+    &#123;
+        // 清空接收数组
+        memset(rx_buf, 0, 50);
+        // 接收streambuffer
+        rec_bytes = xStreamBufferReceive(StreamBufferHandle, // 句柄
+                                         (void *)rx_buf,     // 接收缓冲区，强转void指针
+                                         sizeof(rx_buf),     // sizeof取得缓冲区大小
+                                         portMAX_DELAY);     // 阻塞时间
+
+        printf(&quot;-------------\n&quot;);
+        printf(&quot;Receive: rec_bytes = %d, data = %s\n&quot;, rec_bytes, rx_buf);
+
+        vTaskDelay(pdMS_TO_TICKS(1000));
+    &#125;
+&#125;
+
+void Task3(void *pvParam)
+&#123;
+    int buf_space = 0;
+    int min_space = 1000;
+    while (1)
+    &#123;
+        buf_space = xStreamBufferSpacesAvailable(StreamBufferHandle);
+        if(buf_space&lt;min_space)
+        &#123;
+            //取得最小值
+            min_space = buf_space;
+        &#125;
+        printf(&quot;-------------\n&quot;);
+        printf(&quot;buf_space = %d,min_space = %d\n&quot;, buf_space,min_space);
+        //探查最小剩余空间时，这段代码运行频率要高于数据放入buffer的频率
+        vTaskDelay(pdMS_TO_TICKS(2000));
+    &#125;
+&#125;
+
+void app_main(void)
+&#123;
+
+    // 创建streambuffer，两个参数，buffer大小，触发大小
+    StreamBufferHandle = xStreamBufferCreate(1000, 100);
+    if (StreamBufferHandle != NULL)
+    &#123;
+        vTaskSuspendAll();
+
+        // 创建Task1时需要传出Task1的句柄
+        xTaskCreatePinnedToCore(Task1, &quot;Task1&quot;, 1024 * 5, NULL, 1, NULL, 0);
+        xTaskCreatePinnedToCore(Task2, &quot;Task2&quot;, 1024 * 5, NULL, 1, NULL, 0);
+        xTaskCreatePinnedToCore(Task3, &quot;Task3&quot;, 1024 * 5, NULL, 1, NULL, 0);
+
+        // 任务创建结束恢复任务调度器
+        xTaskResumeAll();
+    &#125;
+    else
+    &#123;
+        printf(&quot;Fail to creat stream buffer\n&quot;);
+    &#125;
+&#125;
+</code></pre>
+<p>x</p>
+
+    </div>
+    
+    
+    
+    
+    <link rel="stylesheet" href="https://cdn.staticfile.org/waline/2.14.7/waline.min.css" />
+    <div id="comment">
+        <div id="waline-container"></div>
+    </div>
+    
+    
+</div>
+
+                        <footer id="footer">
+    <div class="footer-wrap">
+        <div>
+            © 2018 - 2023 Vampire&#39;Blog
+            <span class="footer-icon">
+                <i class="fa-solid fa-font-awesome fa-fw"></i>
+            </span>
+            @小P孩儿
+        </div>
+        <div></div>
+        <div>Based on the <a target="_blank" rel="noopener" href="https://hexo.io">Hexo Engine</a> & <a target="_blank" rel="noopener" href="https://github.com/argvchs/hexo-theme-particlex">ParticleX Theme</a></div>
+        
+    </div>
+</footer>
+
+                    </div>
+                </div>
+            </transition>
+            <div id="showimg">
+                <img id="showimg-content" alt="showimg">
+            </div>
+        </div>
+        <script src="/js/functions.js"></script>
+<script src="/js/particlex.js"></script>
+
+    
+    
+    
+    <script src="https://cdn.staticfile.org/waline/2.14.7/waline.min.js"></script>
+    <script>
+        Waline.init({
+            el: "#waline-container",
+            serverURL: "https://comment.vampire610.cn",
+            commentCount: true,
+            pageview: false,
+            emoji: "https://unpkg.com/@waline/emojis@1.0.1/weibo,https://unpkg.com/@waline/emojis@1.0.1/alus,https://unpkg.com/@waline/emojis@1.0.1/bilibili,https://unpkg.com/@waline/emojis@1.0.1/qq,https://unpkg.com/@waline/emojis@1.0.1/tieba,https://unpkg.com/@waline/emojis@1.0.1/tw-emoji".split(","),
+            meta: "nick,mail,link".split(","),
+            requiredMeta: "nick".split(","),
+            lang: "zh-CN",
+            wordLimit: 0,
+            pageSize: "10",
+            login: "enable",
+            locale: {"placeholder":"欢迎评论（填写邮箱可在评论被回复时收到邮件提醒）"}
+        });
+    </script>
+    
+    
+
+
+    </body>
+</html>
+
+<canvas
+    id="fireworks"
+    style="position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:32767"
+></canvas>
+<script src="https://cdn.staticfile.org/animejs/3.2.1/anime.min.js"></script>
+<script src="/js/fireworks.min.js"></script>
+
+<canvas
+    id="background"
+    style="position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:-1"
+></canvas>
+<script src="/js/background.min.js"></script>
