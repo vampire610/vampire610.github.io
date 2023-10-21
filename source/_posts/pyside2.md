@@ -99,6 +99,15 @@ conda remove package-name
 
 如果想要安装的包不在`conda`默认`channels`或者`conda-forge`，可能需要使用`pip`安装，或者到官方网站`[:: Anaconda.org](https://anaconda.org/)`搜索需要的包在哪个channels，添加channels后再进行安装。
 
+- 更新环境
+
+``` bash
+conda update conda  #更新自身
+conda update --all #更新所有包
+```
+
+
+
 ## IDE选择
 
 ### `VScode`
