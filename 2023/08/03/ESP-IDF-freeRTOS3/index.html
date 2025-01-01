@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0">
-        <title>ESP-IDF与freeRTOS(三) | Vampire&#39;Blog</title>
+        <title>ESP-IDF与freeRTOS(三) 队列扩展 | Vampire&#39;Blog</title>
         <meta name="author" content="小P孩儿">
         <meta name="description" content="">
         <meta name="keywords" content="">
@@ -138,7 +138,7 @@
                     <div id="main">
                         <div class="article">
     <div>
-        <h1>ESP-IDF与freeRTOS(三) </h1>
+        <h1>ESP-IDF与freeRTOS(三) 队列扩展 </h1>
     </div>
     <div class="info">
         <span class="date">
@@ -165,14 +165,14 @@
             
             <span class="tag">
                 
-                <a href="/tags/ESP-IDF/" style="color: #ff7d73">
+                <a href="/tags/ESP-IDF/" style="color: #ffa2c4">
                     ESP-IDF
                 </a>
             </span>
             
             <span class="tag">
                 
-                <a href="/tags/freeRTOS/" style="color: #ff7d73">
+                <a href="/tags/freeRTOS/" style="color: #00a596">
                     freeRTOS
                 </a>
             </span>
@@ -182,7 +182,7 @@
     </div>
     
     <div class="content" v-pre>
-        <h1 id="ESP-IDF与freeRTOS-三"><a href="#ESP-IDF与freeRTOS-三" class="headerlink" title="ESP-IDF与freeRTOS(三)"></a>ESP-IDF与freeRTOS(三)</h1><p>书接上回</p>
+        <h1 id="ESP-IDF与freeRTOS-三-队列扩展"><a href="#ESP-IDF与freeRTOS-三-队列扩展" class="headerlink" title="ESP-IDF与freeRTOS(三) 队列扩展"></a>ESP-IDF与freeRTOS(三) 队列扩展</h1><p>书接上回</p>
 <h2 id="队列多进单出模型"><a href="#队列多进单出模型" class="headerlink" title="队列多进单出模型"></a>队列多进单出模型</h2><p>与单进单出基本没区别，主要注意任务优先级分配，读取时可以设置如下</p>
 <pre><code class="c">xStatus = xQueueReceive(QHandle, &amp;x, portMAX_DELAY);
 </code></pre>
@@ -440,7 +440,7 @@ void app_main(void)
                         <footer id="footer">
     <div class="footer-wrap">
         <div>
-            © 2018 - 2023 Vampire&#39;Blog
+            © 2018 - 2025 Vampire&#39;Blog
             <span class="footer-icon">
                 <i class="fa-solid fa-font-awesome fa-fw"></i>
             </span>

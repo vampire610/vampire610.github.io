@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0">
-        <title>ESP-IDF与freeRTOS(五) | Vampire&#39;Blog</title>
+        <title>ESP-IDF与freeRTOS(五) 二值信号量 | Vampire&#39;Blog</title>
         <meta name="author" content="小P孩儿">
         <meta name="description" content="">
         <meta name="keywords" content="">
@@ -138,7 +138,7 @@
                     <div id="main">
                         <div class="article">
     <div>
-        <h1>ESP-IDF与freeRTOS(五) </h1>
+        <h1>ESP-IDF与freeRTOS(五) 二值信号量 </h1>
     </div>
     <div class="info">
         <span class="date">
@@ -172,7 +172,7 @@
             
             <span class="tag">
                 
-                <a href="/tags/freeRTOS/" style="color: #00a596">
+                <a href="/tags/freeRTOS/" style="color: #ff7d73">
                     freeRTOS
                 </a>
             </span>
@@ -182,7 +182,7 @@
     </div>
     
     <div class="content" v-pre>
-        <h1 id="ESP-IDF与freeRTOS-五"><a href="#ESP-IDF与freeRTOS-五" class="headerlink" title="ESP-IDF与freeRTOS(五)"></a>ESP-IDF与freeRTOS(五)</h1><h2 id="二值信号量"><a href="#二值信号量" class="headerlink" title="二值信号量"></a>二值信号量</h2><blockquote>
+        <h1 id="ESP-IDF与freeRTOS-五-二值信号量"><a href="#ESP-IDF与freeRTOS-五-二值信号量" class="headerlink" title="ESP-IDF与freeRTOS(五) 二值信号量"></a>ESP-IDF与freeRTOS(五) 二值信号量</h1><h2 id="二值信号量"><a href="#二值信号量" class="headerlink" title="二值信号量"></a>二值信号量</h2><blockquote>
 <p>2023年8月8日 更正：二值信号量与互斥信号量mutex不同，mutex专门用于互斥访问，而二值信号量不是，具体区别：(来自FreeRTOS官网)<br>二进制信号量和互斥锁极为相似，但存在一些细微差别：互斥锁包括优先继承机制，而二进制信号量则不然 。这使得二进制信号器成为实现同步（任务之间或任务与中断之间） 的更好选择，而互斥锁则是实现简单互斥的更好选择。 关于互斥锁如何被用作互斥机制的描述 同样适用于二进制信号量。</p>
 </blockquote>
 <p>信号量是操作系统中用于进程同步和临界区互斥访问的关键，二值信号量多用于临界区的互斥访问或者”任务通知”</p>
@@ -262,7 +262,7 @@ void app_main(void)
                         <footer id="footer">
     <div class="footer-wrap">
         <div>
-            © 2018 - 2023 Vampire&#39;Blog
+            © 2018 - 2025 Vampire&#39;Blog
             <span class="footer-icon">
                 <i class="fa-solid fa-font-awesome fa-fw"></i>
             </span>
