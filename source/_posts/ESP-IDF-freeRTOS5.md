@@ -1,5 +1,5 @@
 ---
-title: ESP-IDF与freeRTOS(五)
+title: ESP-IDF与freeRTOS(五) 二值信号量
 date: 2023-08-06 15:34:14
 tags:
   - ESP-IDF
@@ -8,7 +8,7 @@ categories:
   - 学习笔记
 ---
 
-# ESP-IDF与freeRTOS(五)
+# ESP-IDF与freeRTOS(五) 二值信号量
 
 ## 二值信号量
 

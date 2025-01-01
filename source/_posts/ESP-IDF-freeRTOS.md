@@ -1,5 +1,5 @@
 ---
-title: ESP-IDF与freeRTOS
+title: ESP-IDF与freeRTOS 任务，参数，堆栈
 date: 2023-07-23 00:45:58
 tags:
   - ESP-IDF
@@ -8,7 +8,7 @@ categories:
   - 学习笔记
 ---
 
-# ESP-IDF与freeRTOS(一)
+# ESP-IDF与freeRTOS(一) 任务，参数，堆栈
 
 ESP-IDF是乐鑫官方推出的ESP32开发环境，个人不太喜欢arduino，所以选择学习使用IDF编程，上手发现很多地方十分陌生，在B站发现宝藏up [Michael_ee(点击跳转up主页)](https://space.bilibili.com/1338335828)讲的很详细，于是跟着学习并简单记录。
 

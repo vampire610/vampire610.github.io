@@ -1,5 +1,5 @@
 ---
-title: ESP-IDF与freeRTOS(七)
+title: ESP-IDF与freeRTOS(七) 互斥信号量
 date: 2023-08-10 10:28:06
 tags:
   - ESP-IDF
@@ -8,7 +8,7 @@ categories:
   - 学习笔记
 ---
 
-# ESP-IDF与freeRTOS(七)
+# ESP-IDF与freeRTOS(七) 互斥信号量
 
 ## mutex互斥量
 

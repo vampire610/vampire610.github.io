@@ -1,5 +1,5 @@
 ---
-title: ESP-IDF与freeRTOS(六)
+title: ESP-IDF与freeRTOS(六) 计数信号量
 date: 2023-08-08 20:39:38
 tags:
   - ESP-IDF
@@ -8,7 +8,7 @@ categories:
   - 学习笔记
 ---
 
-# ESP-IDF与freeRTOS(六)
+# ESP-IDF与freeRTOS(六) 计数信号量
 
 ## 计数型信号量
 

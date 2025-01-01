@@ -1,5 +1,5 @@
 ---
-title: ESP-IDF与freeRTOS(四)
+title: ESP-IDF与freeRTOS(四) 软定时
 date: 2023-08-04 14:58:49
 tags:
   - ESP-IDF
@@ -8,7 +8,7 @@ categories:
   - 学习笔记
 ---
 
-# ESP-IDF与freeRTOS(四)
+# ESP-IDF与freeRTOS(四) 软定时
 
 ## 软件定时器
 

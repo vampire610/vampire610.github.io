@@ -1,5 +1,5 @@
 ---
-title: ESP-IDF与freeRTOS(九)
+title: ESP-IDF与freeRTOS(九) 数据流缓冲区
 date: 2023-08-16 10:53:39
 tags:
   - ESP-IDF
@@ -8,7 +8,7 @@ categories:
   - 学习笔记
 ---
 
-# ESP-IDF与freeRTOS(九)
+# ESP-IDF与freeRTOS(九) 数据流缓冲区
 
 ## 流数据缓冲区
 

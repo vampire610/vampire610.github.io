@@ -1,5 +1,5 @@
 ---
-title: ESP-IDF与freeRTOS(八)
+title: ESP-IDF与freeRTOS(八) 事件，通知
 date: 2023-08-10 13:36:04
 tags:
   - ESP-IDF
@@ -8,7 +8,7 @@ categories:
   - 学习笔记
 ---
 
-# ESP-IDF与freeRTOS(八)
+# ESP-IDF与freeRTOS(八) 事件，通知
 
 ## 事件组
 

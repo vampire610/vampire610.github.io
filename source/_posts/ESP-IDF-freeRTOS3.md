@@ -1,5 +1,5 @@
 ---
-title: ESP-IDF与freeRTOS(三)
+title: ESP-IDF与freeRTOS(三) 队列扩展
 date: 2023-08-03 09:14:41
 tags:
   - ESP-IDF
@@ -8,7 +8,7 @@ categories:
   - 学习笔记
 ---
 
-# ESP-IDF与freeRTOS(三)
+# ESP-IDF与freeRTOS(三) 队列扩展
 
 书接上回
 
