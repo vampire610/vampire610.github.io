@@ -1,0 +1,293 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0">
+        <title>Vscode-Eide | Vampire&#39;Blog</title>
+        <meta name="author" content="小P孩儿">
+        <meta name="description" content="">
+        <meta name="keywords" content="">
+        <link rel="icon" href="https://fastly.jsdelivr.net/gh/vampire610/cdn@latest/img/me.jpg">
+        <script src="https://cdn.staticfile.org/vue/3.2.45/vue.global.prod.min.js"></script>
+        <script src="https://cdn.staticfile.org/highlight.js/11.7.0/highlight.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/11.7.0/styles/github.min.css">
+        <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/6.2.1/css/all.min.css">
+        
+        <script src="https://polyfill.io/v3/polyfill.min.js?features="></script>
+        
+        
+        <script src="https://cdn.staticfile.org/KaTeX/0.16.4/katex.min.js"></script>
+        <script src="https://cdn.staticfile.org/KaTeX/0.16.4/contrib/auto-render.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.staticfile.org/KaTeX/0.16.4/katex.min.css">
+        
+        <link rel="stylesheet" href="/css/fonts.min.css">
+        <link rel="stylesheet" href="/css/particlex.css">
+    <meta name="generator" content="Hexo 6.3.0"></head>
+    <body>
+        <div id="loading" style="height: 100vh; width: 100vw; position: fixed; display: flex; z-index: 2147483647; justify-content: space-between; background: #fff; transition: all 0.3s ease-out; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none">
+    <div style="position: fixed; height: 100vh; width: 100vw; display: flex; justify-content: center; align-items: center">
+        <div id="loadcontent" style="width: 50vmin; height: 50vmin; padding: 50px; border-radius: 50%; display: flex; justify-content: center; align-items: center; border: solid 10px #a3ddfb; text-align: center">
+            <div>
+                <h2>LOADING...</h2>
+                <p style="word-break: keep-all">加载过慢请开启缓存（浏览器默认开启）</p>
+                <div>
+                    <img alt="loading" src="/loading.gif" style="width: 60px">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+        <div id="layout">
+            <transition name="into">
+                <div v-show="showpage" style="display: -not-none">
+                    <div id="menushow">
+                        <nav id="menu">
+    <div class="desktop-menu">
+        <a href="/">
+            <span class="title">Vampire'Blog</span>
+        </a>
+        
+        <a href="/">
+            <i class="fa-solid fa-house fa-fw"></i>
+            <span>&ensp;home</span>
+        </a>
+        
+        <a href="/about">
+            <i class="fa-solid fa-id-card fa-fw"></i>
+            <span>&ensp;about</span>
+        </a>
+        
+        <a href="/archives">
+            <i class="fa-solid fa-box-archive fa-fw"></i>
+            <span>&ensp;archives</span>
+        </a>
+        
+        <a href="/categories">
+            <i class="fa-solid fa-bookmark fa-fw"></i>
+            <span>&ensp;categories</span>
+        </a>
+        
+        <a href="/tags">
+            <i class="fa-solid fa-tags fa-fw"></i>
+            <span>&ensp;tags</span>
+        </a>
+        
+    </div>
+    <div :class="'phone-menu ' + menushow" id="phone-menu">
+        <div class="curtain" @click="menushow = !menushow" v-show="menushow"></div>
+        <div class="title" @click="menushow = !menushow">
+            <i class="fa-solid fa-bars fa-fw"></i>
+            <span>&emsp;Vampire'Blog</span>
+        </div>
+        <transition name="slide">
+        <div class="items" v-show="menushow">
+            
+            <a href="/">
+                <div class="item">
+                    <div style="min-width: 20px; max-width: 50px; width: 10%">
+                        <i class="fa-solid fa-house fa-fw"></i>
+                    </div>
+                    <div style="min-width: 100px; max-width: 150%; width: 20%">home</div>
+                </div>
+            </a>
+            
+            <a href="/about">
+                <div class="item">
+                    <div style="min-width: 20px; max-width: 50px; width: 10%">
+                        <i class="fa-solid fa-id-card fa-fw"></i>
+                    </div>
+                    <div style="min-width: 100px; max-width: 150%; width: 20%">about</div>
+                </div>
+            </a>
+            
+            <a href="/archives">
+                <div class="item">
+                    <div style="min-width: 20px; max-width: 50px; width: 10%">
+                        <i class="fa-solid fa-box-archive fa-fw"></i>
+                    </div>
+                    <div style="min-width: 100px; max-width: 150%; width: 20%">archives</div>
+                </div>
+            </a>
+            
+            <a href="/categories">
+                <div class="item">
+                    <div style="min-width: 20px; max-width: 50px; width: 10%">
+                        <i class="fa-solid fa-bookmark fa-fw"></i>
+                    </div>
+                    <div style="min-width: 100px; max-width: 150%; width: 20%">categories</div>
+                </div>
+            </a>
+            
+            <a href="/tags">
+                <div class="item">
+                    <div style="min-width: 20px; max-width: 50px; width: 10%">
+                        <i class="fa-solid fa-tags fa-fw"></i>
+                    </div>
+                    <div style="min-width: 100px; max-width: 150%; width: 20%">tags</div>
+                </div>
+            </a>
+            
+        </div>
+        </transition>
+    </div>
+</nav>
+
+                    </div>
+                    <div id="main">
+                        <div class="article">
+    <div>
+        <h1>Vscode-Eide </h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2025/1/3
+        </span>
+        
+        <span class="category">
+            <a href="/categories/%E6%95%99%E7%A8%8B/">
+                <span class="icon">
+                    <i class="fa-solid fa-bookmark fa-fw"></i>
+                </span>
+                教程
+            </a>
+        </span>
+        
+        
+        <span class="tags">
+            <span class="icon">
+                <i class="fa-solid fa-tags fa-fw"></i>
+            </span>
+            
+            <span class="tag">
+                
+                <a href="/tags/%E5%8D%95%E7%89%87%E6%9C%BA/" style="color: #00a596">
+                    单片机
+                </a>
+            </span>
+            
+            <span class="tag">
+                
+                <a href="/tags/vscode/" style="color: #ff7d73">
+                    vscode
+                </a>
+            </span>
+            
+            <span class="tag">
+                
+                <a href="/tags/eide/" style="color: #00bcd4">
+                    eide
+                </a>
+            </span>
+            
+        </span>
+        
+    </div>
+    
+    <div class="content" v-pre>
+        <h1 id="vscode-EIDE-cubemx配置stm32编程环境"><a href="#vscode-EIDE-cubemx配置stm32编程环境" class="headerlink" title="vscode+EIDE+cubemx配置stm32编程环境"></a>vscode+EIDE+cubemx配置stm32编程环境</h1><p>所有安装路径不建议有中文，避免出现奇怪的问题。</p>
+<h2 id="1-自行安装vscodeVisual-Studio-Code-Code-Editing-Redefined"><a href="#1-自行安装vscodeVisual-Studio-Code-Code-Editing-Redefined" class="headerlink" title="1. 自行安装vscodeVisual Studio Code - Code Editing. Redefined"></a>1. 自行安装vscode<a target="_blank" rel="noopener" href="https://code.visualstudio.com/">Visual Studio Code - Code Editing. Redefined</a></h2><h3 id="安装vscode插件"><a href="#安装vscode插件" class="headerlink" title="安装vscode插件"></a>安装vscode插件</h3><p>   必要插件：<br>   C语言支持：<br>   C&#x2F;C++<br>   C&#x2F;C++ Themes<br>   单片机IDE：<br>   Embedded IDE<br>   单片机调试插件：<br>   Cortex-Debug<br>   debug-tracker-vscode<br>   RTOS查看：<br>   RTOS Views<br>   内存查看：<br>   MemoryView<br>   外设寄存器查看：<br>   Peripheral Viewer     </p>
+<p>   推荐插件:<br>   Chinese (Simplified) (简体中文) Language Pack for Visual Studio Code<br>   CodeGeeX  （AI辅助）<br>   Hex Editor  （16进制文件查看）<br>   Todo Tree  （Todo插件）<br>   Serial Monitor （简易串口助手）<br>   Keil Assistant  （加载keil工程）    </p>
+<h2 id="2-安装arm编译工具链"><a href="#2-安装arm编译工具链" class="headerlink" title="2. 安装arm编译工具链"></a>2. 安装arm编译工具链</h2><p>   EIDE自带版本过旧，建议手动安装。</p>
+<p>   官方下载地址：<a target="_blank" rel="noopener" href="https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads">Arm GNU Toolchain Downloads – Arm Developer</a></p>
+<p>   下载<code>arm-gnu-toolchain-14.2.rel1-mingw-w64-i686-arm-none-eabi</code>的exe安装或者zip自行解压，记住安装路径备用。 </p>
+<h2 id="3-安装openocd"><a href="#3-安装openocd" class="headerlink" title="3. 安装openocd"></a>3. 安装openocd</h2><p>   可以使用EIDE直接安装，自行安装可自行下载<a target="_blank" rel="noopener" href="https://github.com/openocd-org/openocd/releases">官方版本</a>，解压即可。</p>
+<p>   <img src="https://fastly.jsdelivr.net/gh/vampire610/PicGo/Blog-PIC/image-20250102135528094.png" alt="EIDE安装openocd"></p>
+<h2 id="4-安装stm32cubemx"><a href="#4-安装stm32cubemx" class="headerlink" title="4. 安装stm32cubemx"></a>4. 安装stm32cubemx</h2><p>   自行去<a href="!%5Bimage-20250102140748713%5D(eide%E9%85%8D%E7%BD%AE.assets/image-20250102140748713.png)">ST官网</a>下载<code>STM32CubeMX-Win</code>安装。</p>
+<h2 id="5-配置EIDE"><a href="#5-配置EIDE" class="headerlink" title="5. 配置EIDE"></a>5. 配置EIDE</h2><p>   配置工具链：<br>   查看图中2的位置是否有<code>√</code>,如果没有则单击，选择本地安装位置，选择路径到刚才安装的编译工具链的<code>/bin</code>文件夹，示例如图。<br>   <img src="https://fastly.jsdelivr.net/gh/vampire610/PicGo/Blog-PIC/image-20250102135937468.png" alt="配置工具链"></p>
+<p>   配置openocd</p>
+<p>   如果使用EIDE安装则无需额外配置，如果手动安装则需要点击<code>打开插件设置</code>，找到openOCD路径设置，填入<code>openocd.exe</code>的绝对路径。</p>
+<p>   <img src="https://fastly.jsdelivr.net/gh/vampire610/PicGo/Blog-PIC/image-20250102140609988.png" alt="image-20250102140609988"></p>
+<h2 id="6-创建并导入配置工程"><a href="#6-创建并导入配置工程" class="headerlink" title="6. 创建并导入配置工程"></a>6. 创建并导入配置工程</h2><p>   使用cubeMX创建单片机工程，选择cubeIDE版本。</p>
+<p>   使用vscode打开工程文件夹(.ioc所在文件夹)</p>
+<p>   选择EIDE插件-&gt;点击导入-&gt;eclipse，选择.cproject文件。</p>
+<p>   打开后会提示切换工作区，一定要选择继续</p>
+<p>   <img src="https://fastly.jsdelivr.net/gh/vampire610/PicGo/Blog-PIC/image-20250102141355916.png" alt="image-20250102141355916"></p>
+<p>​	此时会有一个warning.txt，一般可以不管，或者删除。</p>
+<p>​	选择编译器和烧录配置</p>
+<p>​	一个例子：我使用GCC编译，单片机为<code>Cortex-M3</code>内核，使用openOCD调试程序，芯片配置为stm32f1，接口配置我使用daplink。</p>
+<p>​	<img src="https://fastly.jsdelivr.net/gh/vampire610/PicGo/Blog-PIC/image-20250102141613636.png" alt="image-20250102141613636"></p>
+<p>​	生成调试配置：以此点击，直接新建。</p>
+<p>​	<img src="https://fastly.jsdelivr.net/gh/vampire610/PicGo/Blog-PIC/image-20250102141937669.png" alt="image-20250102141937669"></p>
+<h2 id="7-基本配置到此结束，如果遇到问题可以带图留言讨论。"><a href="#7-基本配置到此结束，如果遇到问题可以带图留言讨论。" class="headerlink" title="7. 基本配置到此结束，如果遇到问题可以带图留言讨论。"></a>7. 基本配置到此结束，如果遇到问题可以带图留言讨论。</h2>
+    </div>
+    
+    
+    
+    
+    <link rel="stylesheet" href="https://cdn.staticfile.org/waline/2.14.7/waline.min.css" />
+    <div id="comment">
+        <div id="waline-container"></div>
+    </div>
+    
+    
+</div>
+
+                        <footer id="footer">
+    <div class="footer-wrap">
+        <div>
+            © 2018 - 2025 Vampire&#39;Blog
+            <span class="footer-icon">
+                <i class="fa-solid fa-font-awesome fa-fw"></i>
+            </span>
+            @小P孩儿
+        </div>
+        <div></div>
+        <div>Based on the <a target="_blank" rel="noopener" href="https://hexo.io">Hexo Engine</a> & <a target="_blank" rel="noopener" href="https://github.com/argvchs/hexo-theme-particlex">ParticleX Theme</a></div>
+        
+    </div>
+</footer>
+
+                    </div>
+                </div>
+            </transition>
+            <div id="showimg">
+                <img id="showimg-content" alt="showimg">
+            </div>
+        </div>
+        <script src="/js/functions.js"></script>
+<script src="/js/particlex.js"></script>
+
+    
+    
+    
+    <script src="https://cdn.staticfile.org/waline/2.14.7/waline.min.js"></script>
+    <script>
+        Waline.init({
+            el: "#waline-container",
+            serverURL: "https://comment.vampire610.cn",
+            commentCount: true,
+            pageview: false,
+            emoji: "https://unpkg.com/@waline/emojis@1.0.1/weibo,https://unpkg.com/@waline/emojis@1.0.1/alus,https://unpkg.com/@waline/emojis@1.0.1/bilibili,https://unpkg.com/@waline/emojis@1.0.1/qq,https://unpkg.com/@waline/emojis@1.0.1/tieba,https://unpkg.com/@waline/emojis@1.0.1/tw-emoji".split(","),
+            meta: "nick,mail,link".split(","),
+            requiredMeta: "nick".split(","),
+            lang: "zh-CN",
+            wordLimit: 0,
+            pageSize: "10",
+            login: "enable",
+            locale: {"placeholder":"欢迎评论（填写邮箱可在评论被回复时收到邮件提醒）"}
+        });
+    </script>
+    
+    
+
+
+    </body>
+</html>
+
+<canvas
+    id="fireworks"
+    style="position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:32767"
+></canvas>
+<script src="https://cdn.staticfile.org/animejs/3.2.1/anime.min.js"></script>
+<script src="/js/fireworks.min.js"></script>
+
+<canvas
+    id="background"
+    style="position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:-1"
+></canvas>
+<script src="/js/background.min.js"></script>

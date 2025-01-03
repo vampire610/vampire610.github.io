@@ -1,3 +1,5 @@
+https://vampire610.cn/2023/07/25/ESP-IDF-freeRTOS2/
+https://vampire610.cn/2025/01/03/vscode-eide/
 https://vampire610.cn/2023/08/08/ESP-IDF-freeRTOS6/
 https://vampire610.cn/2023/08/10/ESP-IDF-freeRTOS7/
 https://vampire610.cn/2023/08/10/ESP-IDF-freeRTOS8/
@@ -5,7 +7,6 @@ https://vampire610.cn/2023/08/16/ESP-IDF-freeRTOS9/
 https://vampire610.cn/2023/08/06/ESP-IDF-freeRTOS5/
 https://vampire610.cn/2023/08/04/ESP-IDF-freeRTOS4/
 https://vampire610.cn/2023/08/03/ESP-IDF-freeRTOS3/
-https://vampire610.cn/2023/07/25/ESP-IDF-freeRTOS2/
 https://vampire610.cn/2023/07/23/ESP-IDF-freeRTOS/
 https://vampire610.cn/2023/11/20/arm-linux-build/
 https://vampire610.cn/2023/09/15/pyside2/
@@ -55,6 +56,7 @@ https://vampire610.cn/tags/pyside2/
 https://vampire610.cn/tags/Qt/
 https://vampire610.cn/tags/linux/
 https://vampire610.cn/tags/arm/
+https://vampire610.cn/tags/eide/
 https://vampire610.cn/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/
 https://vampire610.cn/categories/%E6%95%99%E7%A8%8B/
 https://vampire610.cn/categories/%E7%AC%94%E8%AE%B0/
