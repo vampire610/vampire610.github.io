@@ -341,7 +341,7 @@ void sendTask1(void *pvParam)
 {
     char *pStrToSend;
     // char型可不用sizeof，直接填50，此处保持好习惯，避免写其他类型时分配错误
-    pStrToSend = (char *)malloc(sizeof(char) * 50);
+    // pStrToSend = (char *)malloc(sizeof(char) * 50);
     int i = 0;
 
     QueueHandle_t QHandle;
