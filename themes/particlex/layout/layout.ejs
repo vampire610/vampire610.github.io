@@ -1,0 +1,83 @@
+<%
+    let layout = "post";
+    if (is_home())
+        layout = "index";
+    else if (is_post())
+        layout = "post";
+    else if (is_category() || page.type == "categories")
+        layout = "categories";
+    else if (is_tag() || page.type == "tags")
+        layout = "tags";
+    else if (is_archive() || is_year() || is_month())
+        layout = "archives";
+    let title = "";
+    if (page.title)
+        title = page.title + " | ";
+    else if (is_category())
+        title = "Categories: " + page.category + " | ";
+    else if (is_tag())
+        title = "Tags: " + page.tag + " | ";
+    else if (is_archive() || is_year() || is_month())
+        title = "Archives | ";
+    title += config.title;
+    site.posts.data.sort((a, b) => b.date - a.date);
+%>
+<!DOCTYPE html>
+<html lang="<%- config.language %>">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0">
+        <title><%= titlecase(title) %></title>
+        <meta name="author" content="<%- config.author %>">
+        <meta name="description" content="<%- config.description %>">
+        <meta name="keywords" content="<%- config.keywords %>">
+        <link rel="icon" href="<%- theme.avatar %>">
+        <script src="https://cdn.staticfile.org/vue/3.2.45/vue.global.prod.min.js"></script>
+        <script src="https://cdn.staticfile.org/highlight.js/11.7.0/highlight.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/11.7.0/styles/<%- theme.highlightStyle %>.min.css">
+        <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/6.2.1/css/all.min.css">
+        <% if (theme.polyfill.enable) { %>
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=<% theme.polyfill.features.join(",") %>"></script>
+        <% } %>
+        <% if (theme.math.enable) { %>
+        <script src="https://cdn.staticfile.org/KaTeX/0.16.4/katex.min.js"></script>
+        <script src="https://cdn.staticfile.org/KaTeX/0.16.4/contrib/auto-render.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.staticfile.org/KaTeX/0.16.4/katex.min.css">
+        <% } %>
+        <link rel="stylesheet" href="<%- url_for("/css/fonts.min.css") %>">
+        <link rel="stylesheet" href="<%- url_for("/css/particlex.css") %>">
+    </head>
+    <body>
+        <%- include("loading") %>
+        <div id="layout">
+            <transition name="into">
+                <div v-show="showpage" style="display: -not-none">
+                    <div id="menushow">
+                        <%- include("menu") %>
+                    </div>
+                    <div id="main">
+                        <%- include(layout) %>
+                        <%- include("footer") %>
+                    </div>
+                </div>
+            </transition>
+            <div id="showimg">
+                <img id="showimg-content" alt="showimg">
+            </div>
+        </div>
+        <%- include("script") %>
+    </body>
+</html>
+
+<canvas
+    id="fireworks"
+    style="position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:32767"
+></canvas>
+<script src="https://cdn.staticfile.org/animejs/3.2.1/anime.min.js"></script>
+<script src="/js/fireworks.min.js"></script>
+
+<canvas
+    id="background"
+    style="position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:-1"
+></canvas>
+<script src="/js/background.min.js"></script>
