@@ -1,0 +1,503 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0">
+        <title>ESP-IDF与freeRTOS(三) 队列扩展 | Vampire&#39;Blog</title>
+        <meta name="author" content="小P孩儿">
+        <meta name="description" content="">
+        <meta name="keywords" content="">
+        <link rel="icon" href="https://fastly.jsdelivr.net/gh/vampire610/cdn@latest/img/me.jpg">
+        <script src="https://cdn.staticfile.org/vue/3.2.45/vue.global.prod.min.js"></script>
+        <script src="https://cdn.staticfile.org/highlight.js/11.7.0/highlight.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/11.7.0/styles/github.min.css">
+        <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/6.2.1/css/all.min.css">
+        
+        <script src="https://polyfill.io/v3/polyfill.min.js?features="></script>
+        
+        
+        <script src="https://cdn.staticfile.org/KaTeX/0.16.4/katex.min.js"></script>
+        <script src="https://cdn.staticfile.org/KaTeX/0.16.4/contrib/auto-render.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.staticfile.org/KaTeX/0.16.4/katex.min.css">
+        
+        <link rel="stylesheet" href="/css/fonts.min.css">
+        <link rel="stylesheet" href="/css/particlex.css">
+    <meta name="generator" content="Hexo 6.3.0"></head>
+    <body>
+        <div id="loading" style="height: 100vh; width: 100vw; position: fixed; display: flex; z-index: 2147483647; justify-content: space-between; background: #fff; transition: all 0.3s ease-out; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none">
+    <div style="position: fixed; height: 100vh; width: 100vw; display: flex; justify-content: center; align-items: center">
+        <div id="loadcontent" style="width: 50vmin; height: 50vmin; padding: 50px; border-radius: 50%; display: flex; justify-content: center; align-items: center; border: solid 10px #a3ddfb; text-align: center">
+            <div>
+                <h2>LOADING...</h2>
+                <p style="word-break: keep-all">加载过慢请开启缓存（浏览器默认开启）</p>
+                <div>
+                    <img alt="loading" src="/loading.gif" style="width: 60px">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+        <div id="layout">
+            <transition name="into">
+                <div v-show="showpage" style="display: -not-none">
+                    <div id="menushow">
+                        <nav id="menu">
+    <div class="desktop-menu">
+        <a href="/">
+            <span class="title">Vampire'Blog</span>
+        </a>
+        
+        <a href="/">
+            <i class="fa-solid fa-house fa-fw"></i>
+            <span>&ensp;home</span>
+        </a>
+        
+        <a href="/about">
+            <i class="fa-solid fa-id-card fa-fw"></i>
+            <span>&ensp;about</span>
+        </a>
+        
+        <a href="/archives">
+            <i class="fa-solid fa-box-archive fa-fw"></i>
+            <span>&ensp;archives</span>
+        </a>
+        
+        <a href="/categories">
+            <i class="fa-solid fa-bookmark fa-fw"></i>
+            <span>&ensp;categories</span>
+        </a>
+        
+        <a href="/tags">
+            <i class="fa-solid fa-tags fa-fw"></i>
+            <span>&ensp;tags</span>
+        </a>
+        
+    </div>
+    <div :class="'phone-menu ' + menushow" id="phone-menu">
+        <div class="curtain" @click="menushow = !menushow" v-show="menushow"></div>
+        <div class="title" @click="menushow = !menushow">
+            <i class="fa-solid fa-bars fa-fw"></i>
+            <span>&emsp;Vampire'Blog</span>
+        </div>
+        <transition name="slide">
+        <div class="items" v-show="menushow">
+            
+            <a href="/">
+                <div class="item">
+                    <div style="min-width: 20px; max-width: 50px; width: 10%">
+                        <i class="fa-solid fa-house fa-fw"></i>
+                    </div>
+                    <div style="min-width: 100px; max-width: 150%; width: 20%">home</div>
+                </div>
+            </a>
+            
+            <a href="/about">
+                <div class="item">
+                    <div style="min-width: 20px; max-width: 50px; width: 10%">
+                        <i class="fa-solid fa-id-card fa-fw"></i>
+                    </div>
+                    <div style="min-width: 100px; max-width: 150%; width: 20%">about</div>
+                </div>
+            </a>
+            
+            <a href="/archives">
+                <div class="item">
+                    <div style="min-width: 20px; max-width: 50px; width: 10%">
+                        <i class="fa-solid fa-box-archive fa-fw"></i>
+                    </div>
+                    <div style="min-width: 100px; max-width: 150%; width: 20%">archives</div>
+                </div>
+            </a>
+            
+            <a href="/categories">
+                <div class="item">
+                    <div style="min-width: 20px; max-width: 50px; width: 10%">
+                        <i class="fa-solid fa-bookmark fa-fw"></i>
+                    </div>
+                    <div style="min-width: 100px; max-width: 150%; width: 20%">categories</div>
+                </div>
+            </a>
+            
+            <a href="/tags">
+                <div class="item">
+                    <div style="min-width: 20px; max-width: 50px; width: 10%">
+                        <i class="fa-solid fa-tags fa-fw"></i>
+                    </div>
+                    <div style="min-width: 100px; max-width: 150%; width: 20%">tags</div>
+                </div>
+            </a>
+            
+        </div>
+        </transition>
+    </div>
+</nav>
+
+                    </div>
+                    <div id="main">
+                        <div class="article">
+    <div>
+        <h1>ESP-IDF与freeRTOS(三) 队列扩展 </h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2023/8/3
+        </span>
+        
+        <span class="category">
+            <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+                <span class="icon">
+                    <i class="fa-solid fa-bookmark fa-fw"></i>
+                </span>
+                学习笔记
+            </a>
+        </span>
+        
+        
+        <span class="tags">
+            <span class="icon">
+                <i class="fa-solid fa-tags fa-fw"></i>
+            </span>
+            
+            <span class="tag">
+                
+                <a href="/tags/ESP-IDF/" style="color: #00bcd4">
+                    ESP-IDF
+                </a>
+            </span>
+            
+            <span class="tag">
+                
+                <a href="/tags/freeRTOS/" style="color: #ffa2c4">
+                    freeRTOS
+                </a>
+            </span>
+            
+        </span>
+        
+    </div>
+    
+    <div class="content" v-pre>
+        <h1 id="ESP-IDF与freeRTOS-三-队列扩展"><a href="#ESP-IDF与freeRTOS-三-队列扩展" class="headerlink" title="ESP-IDF与freeRTOS(三) 队列扩展"></a>ESP-IDF与freeRTOS(三) 队列扩展</h1><p>书接上回</p>
+<h2 id="队列多进单出模型"><a href="#队列多进单出模型" class="headerlink" title="队列多进单出模型"></a>队列多进单出模型</h2><p>与单进单出基本没区别，主要注意任务优先级分配，读取时可以设置如下</p>
+<pre><code class="c">xStatus = xQueueReceive(QHandle, &amp;x, portMAX_DELAY);
+</code></pre>
+<p>其中最后一个参数会使任务阻塞，等待队列中数据到来</p>
+<h2 id="队列集合"><a href="#队列集合" class="headerlink" title="队列集合"></a>队列集合</h2><p><code>QueueSetHandle_t xQueueCreateSet( const UBaseType_t uxEventQueueLength );</code></p>
+<p>代码示例</p>
+<pre><code class="c">#include &quot;freertos/FreeRTOS.h&quot;
+#include &quot;freertos/task.h&quot;
+#include &quot;esp_system.h&quot;
+#include &quot;esp_spi_flash.h&quot;
+
+#include &quot;freertos/queue.h&quot;
+
+#include &quot;myled.h&quot;
+
+typedef struct A_STRUCT
+&#123;
+    char id;
+    char data;
+&#125; xStruct;
+
+// 输入参数定义为void类型指针，可强转其他任何类型参数传入，在函数内再转换回去
+void sendTask1(void *pvParam)
+&#123;
+    int i = 111;
+
+    QueueHandle_t QHandle;
+    QHandle = (QueueHandle_t)pvParam;
+
+    BaseType_t xStatus;
+
+    while (1)
+    &#123;
+        xStatus = xQueueSend(QHandle, &amp;i, 0);
+        if (xStatus != pdPASS)
+        &#123;
+            // 发送失败
+            printf(&quot;send fail!\n&quot;);
+        &#125;
+        else
+        &#123;
+            printf(&quot;send done!\n&quot;);
+        &#125;
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
+    &#125;
+&#125;
+
+void sendTask2(void *pvParam)
+&#123;
+    int i = 222;
+
+    QueueHandle_t QHandle;
+    QHandle = (QueueHandle_t)pvParam;
+
+    BaseType_t xStatus;
+
+    while (1)
+    &#123;
+        xStatus = xQueueSend(QHandle, &amp;i, 0);
+        if (xStatus != pdPASS)
+        &#123;
+            // 发送失败
+            printf(&quot;send fail!\n&quot;);
+        &#125;
+        else
+        &#123;
+            printf(&quot;send done!\n&quot;);
+        &#125;
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
+    &#125;
+&#125;
+
+void recTask(void *pvParam)
+&#123;
+    // 创建QueueSet句柄，将入口参数转为此类型
+    QueueSetHandle_t QueueSet;
+    QueueSet = (QueueSetHandle_t)pvParam;
+
+    QueueSetMemberHandle_t QueueData;
+    BaseType_t xStatus;
+    int x = 0;
+    while (1)
+    &#123;
+        // 取出有数据的队列
+        QueueData = xQueueSelectFromSet(QueueSet, portMAX_DELAY);
+        // 从有数据的队列取出值
+        xStatus = xQueueReceive(QueueData, &amp;x, portMAX_DELAY);
+        if (xStatus != pdPASS)
+        &#123;
+            // 发送失败
+            printf(&quot;rec fail!\n&quot;);
+        &#125;
+        else
+        &#123;
+            printf(&quot;rec: %d\r\n&quot;, x);
+        &#125;
+    &#125;
+&#125;
+
+void app_main(void)
+&#123;
+    led_init();
+
+    xTaskCreatePinnedToCore(ledTask, &quot;ledTask&quot;, 1024, NULL, 1, NULL, 1);
+
+    // 创建队列句柄
+    QueueHandle_t QHandle1;
+    QueueHandle_t QHandle2;
+    // 创建队列，参数为队列长度、Item大小
+    QHandle1 = xQueueCreate(5, sizeof(int));
+    QHandle2 = xQueueCreate(5, sizeof(int));
+
+    QueueSetHandle_t QueueSet;
+
+    // 创建QueueSet，长度为要接入集合的队列的长度和
+    QueueSet = xQueueCreateSet(10);
+
+    // 将队列加入集合
+    xQueueAddToSet(QHandle1, QueueSet);
+    xQueueAddToSet(QHandle2, QueueSet);
+
+    // 判断是否创建成功
+    if ((QHandle1 != NULL) &amp;&amp; (QHandle2 != NULL) &amp;&amp; (QueueSet != NULL))
+    &#123;
+
+        // 接收任务优先级更高时，一旦有数据就会被接收
+        printf(&quot;Creat queue successfully!\n&quot;);
+        xTaskCreatePinnedToCore(sendTask1, &quot;sendTask1&quot;, 1024 * 5, (void *)QHandle1, 1, NULL, 0);
+        xTaskCreatePinnedToCore(sendTask2, &quot;sendTask2&quot;, 1024 * 5, (void *)QHandle2, 1, NULL, 0);
+        xTaskCreatePinnedToCore(recTask, &quot;recTask&quot;, 1024 * 5, (void *)QueueSet, 2, NULL, 0);
+    &#125;
+    else
+    &#123;
+        printf(&quot;Can&#39;t creat queue successfully!\n&quot;);
+    &#125;
+&#125;
+</code></pre>
+<h2 id="队列邮箱-单发多收"><a href="#队列邮箱-单发多收" class="headerlink" title="队列邮箱(单发多收)"></a>队列邮箱(单发多收)</h2><p>队列和邮箱都用于任务、中断等传递数据，但队列传递时取出即删除数据，数据将不会保持。邮箱传递数据时数据会被保持，取出数据不会删除数据，直到数据被覆盖。（以下文本来自FreeRTOS官方文档）</p>
+<blockquote>
+<ul>
+<li>A queue is used to send data from one task to another task, or from an interrupt<br>service routine to a task. The sender places an item in the queue, and the receiver<br>removes the item from the queue. The data passes through the queue from the sender<br>to the receiver.</li>
+<li>A mailbox is used to hold data that can be read by any task, or any interrupt service<br>routine. The data does not pass through the mailbox, but instead remains in the<br>mailbox until it is overwritten. The sender overwrites the value in the mailbox. The<br>receiver reads the value from the mailbox, but does not remove the value from the<br>mailbox.</li>
+</ul>
+</blockquote>
+<p>示例代码:</p>
+<pre><code class="c">#include &quot;freertos/FreeRTOS.h&quot;
+#include &quot;freertos/task.h&quot;
+#include &quot;esp_system.h&quot;
+#include &quot;esp_spi_flash.h&quot;
+
+#include &quot;freertos/queue.h&quot;
+
+#include &quot;myled.h&quot;
+
+typedef struct A_STRUCT
+&#123;
+    char id;
+    char data;
+&#125; xStruct;
+
+// 输入参数定义为void类型指针，可强转其他任何类型参数传入，在函数内再转换回去
+void writeTask1(void *pvParam)
+&#123;
+    int i = 0;
+
+    QueueHandle_t Mailbox;
+    Mailbox = (QueueHandle_t)pvParam;
+
+    BaseType_t xStatus;
+
+    while (1)
+    &#123;
+        // mailbox写入使用overwrite
+        xStatus = xQueueOverwrite(Mailbox, &amp;i);
+        if (xStatus != pdPASS)
+        &#123;
+            // 发送失败
+            printf(&quot;send fail!\n&quot;);
+        &#125;
+        else
+        &#123;
+            printf(&quot;send done!\n&quot;);
+        &#125;
+        i++;
+        vTaskDelay(6000 / portTICK_PERIOD_MS);
+    &#125;
+&#125;
+
+void readTask(void *pvParam)
+&#123;
+    QueueHandle_t Mailbox;
+    Mailbox = (QueueHandle_t)pvParam;
+
+    BaseType_t xStatus;
+    int i = 0;
+    while (1)
+    &#123;
+        // 从队列读出值，但不删除，无数据则等待
+        // 但Peek读数不会删除队列数据，会导致读进程一直运行不会停止
+        xStatus = xQueuePeek(Mailbox, &amp;i, portMAX_DELAY);
+        if (xStatus != pdPASS)
+        &#123;
+            // 发送失败
+            printf(&quot;read fail!\n&quot;);
+        &#125;
+        else
+        &#123;
+            printf(&quot;read i = %d done!\n&quot;, i);
+        &#125;
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
+    &#125;
+&#125;
+
+void app_main(void)
+&#123;
+    led_init();
+
+    xTaskCreatePinnedToCore(ledTask, &quot;ledTask&quot;, 1024, NULL, 1, NULL, 1);
+
+    // 创建队列句柄
+    QueueHandle_t Mailbox;
+    Mailbox = xQueueCreate(1, sizeof(int));
+
+    // 判断是否创建成功
+    if (Mailbox != NULL)
+    &#123;
+        // 接收任务优先级更高时，一旦有数据就会被接收
+        printf(&quot;Creat queue successfully!\n&quot;);
+        // 此处可用一个主体函数创建3个readTask
+        xTaskCreatePinnedToCore(writeTask1, &quot;writeTask1&quot;, 1024 * 5, (void *)Mailbox, 1, NULL, 0);
+        xTaskCreatePinnedToCore(readTask, &quot;readTask1&quot;, 1024 * 5, (void *)Mailbox, 2, NULL, 0);
+        xTaskCreatePinnedToCore(readTask, &quot;readTask2&quot;, 1024 * 5, (void *)Mailbox, 2, NULL, 0);
+        xTaskCreatePinnedToCore(readTask, &quot;readTask3&quot;, 1024 * 5, (void *)Mailbox, 2, NULL, 0);
+    &#125;
+    else
+    &#123;
+        printf(&quot;Can&#39;t creat queue successfully!\n&quot;);
+    &#125;
+&#125;
+</code></pre>
+
+    </div>
+    
+    
+    
+    
+    <link rel="stylesheet" href="https://cdn.staticfile.org/waline/2.14.7/waline.min.css" />
+    <div id="comment">
+        <div id="waline-container"></div>
+    </div>
+    
+    
+</div>
+
+                        <footer id="footer">
+    <div class="footer-wrap">
+        <div>
+            © 2018 - 2025 Vampire&#39;Blog
+            <span class="footer-icon">
+                <i class="fa-solid fa-font-awesome fa-fw"></i>
+            </span>
+            @小P孩儿
+        </div>
+        <div></div>
+        <div>Based on the <a target="_blank" rel="noopener" href="https://hexo.io">Hexo Engine</a> & <a target="_blank" rel="noopener" href="https://github.com/argvchs/hexo-theme-particlex">ParticleX Theme</a></div>
+        
+    </div>
+</footer>
+
+                    </div>
+                </div>
+            </transition>
+            <div id="showimg">
+                <img id="showimg-content" alt="showimg">
+            </div>
+        </div>
+        <script src="/js/functions.js"></script>
+<script src="/js/particlex.js"></script>
+
+    
+    
+    
+    <script src="https://cdn.staticfile.org/waline/2.14.7/waline.min.js"></script>
+    <script>
+        Waline.init({
+            el: "#waline-container",
+            serverURL: "https://comment.vampire610.cn",
+            commentCount: true,
+            pageview: false,
+            emoji: "https://unpkg.com/@waline/emojis@1.0.1/weibo,https://unpkg.com/@waline/emojis@1.0.1/alus,https://unpkg.com/@waline/emojis@1.0.1/bilibili,https://unpkg.com/@waline/emojis@1.0.1/qq,https://unpkg.com/@waline/emojis@1.0.1/tieba,https://unpkg.com/@waline/emojis@1.0.1/tw-emoji".split(","),
+            meta: "nick,mail,link".split(","),
+            requiredMeta: "nick".split(","),
+            lang: "zh-CN",
+            wordLimit: 0,
+            pageSize: "10",
+            login: "enable",
+            locale: {"placeholder":"欢迎评论（填写邮箱可在评论被回复时收到邮件提醒）"}
+        });
+    </script>
+    
+    
+
+
+    </body>
+</html>
+
+<canvas
+    id="fireworks"
+    style="position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:32767"
+></canvas>
+<script src="https://cdn.staticfile.org/animejs/3.2.1/anime.min.js"></script>
+<script src="/js/fireworks.min.js"></script>
+
+<canvas
+    id="background"
+    style="position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:-1"
+></canvas>
+<script src="/js/background.min.js"></script>

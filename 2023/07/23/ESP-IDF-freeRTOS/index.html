@@ -1,0 +1,613 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0">
+        <title>ESP-IDF与freeRTOS 任务，参数，堆栈 | Vampire&#39;Blog</title>
+        <meta name="author" content="小P孩儿">
+        <meta name="description" content="">
+        <meta name="keywords" content="">
+        <link rel="icon" href="https://fastly.jsdelivr.net/gh/vampire610/cdn@latest/img/me.jpg">
+        <script src="https://cdn.staticfile.org/vue/3.2.45/vue.global.prod.min.js"></script>
+        <script src="https://cdn.staticfile.org/highlight.js/11.7.0/highlight.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/11.7.0/styles/github.min.css">
+        <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/6.2.1/css/all.min.css">
+        
+        <script src="https://polyfill.io/v3/polyfill.min.js?features="></script>
+        
+        
+        <script src="https://cdn.staticfile.org/KaTeX/0.16.4/katex.min.js"></script>
+        <script src="https://cdn.staticfile.org/KaTeX/0.16.4/contrib/auto-render.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.staticfile.org/KaTeX/0.16.4/katex.min.css">
+        
+        <link rel="stylesheet" href="/css/fonts.min.css">
+        <link rel="stylesheet" href="/css/particlex.css">
+    <meta name="generator" content="Hexo 6.3.0"></head>
+    <body>
+        <div id="loading" style="height: 100vh; width: 100vw; position: fixed; display: flex; z-index: 2147483647; justify-content: space-between; background: #fff; transition: all 0.3s ease-out; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none">
+    <div style="position: fixed; height: 100vh; width: 100vw; display: flex; justify-content: center; align-items: center">
+        <div id="loadcontent" style="width: 50vmin; height: 50vmin; padding: 50px; border-radius: 50%; display: flex; justify-content: center; align-items: center; border: solid 10px #a3ddfb; text-align: center">
+            <div>
+                <h2>LOADING...</h2>
+                <p style="word-break: keep-all">加载过慢请开启缓存（浏览器默认开启）</p>
+                <div>
+                    <img alt="loading" src="/loading.gif" style="width: 60px">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+        <div id="layout">
+            <transition name="into">
+                <div v-show="showpage" style="display: -not-none">
+                    <div id="menushow">
+                        <nav id="menu">
+    <div class="desktop-menu">
+        <a href="/">
+            <span class="title">Vampire'Blog</span>
+        </a>
+        
+        <a href="/">
+            <i class="fa-solid fa-house fa-fw"></i>
+            <span>&ensp;home</span>
+        </a>
+        
+        <a href="/about">
+            <i class="fa-solid fa-id-card fa-fw"></i>
+            <span>&ensp;about</span>
+        </a>
+        
+        <a href="/archives">
+            <i class="fa-solid fa-box-archive fa-fw"></i>
+            <span>&ensp;archives</span>
+        </a>
+        
+        <a href="/categories">
+            <i class="fa-solid fa-bookmark fa-fw"></i>
+            <span>&ensp;categories</span>
+        </a>
+        
+        <a href="/tags">
+            <i class="fa-solid fa-tags fa-fw"></i>
+            <span>&ensp;tags</span>
+        </a>
+        
+    </div>
+    <div :class="'phone-menu ' + menushow" id="phone-menu">
+        <div class="curtain" @click="menushow = !menushow" v-show="menushow"></div>
+        <div class="title" @click="menushow = !menushow">
+            <i class="fa-solid fa-bars fa-fw"></i>
+            <span>&emsp;Vampire'Blog</span>
+        </div>
+        <transition name="slide">
+        <div class="items" v-show="menushow">
+            
+            <a href="/">
+                <div class="item">
+                    <div style="min-width: 20px; max-width: 50px; width: 10%">
+                        <i class="fa-solid fa-house fa-fw"></i>
+                    </div>
+                    <div style="min-width: 100px; max-width: 150%; width: 20%">home</div>
+                </div>
+            </a>
+            
+            <a href="/about">
+                <div class="item">
+                    <div style="min-width: 20px; max-width: 50px; width: 10%">
+                        <i class="fa-solid fa-id-card fa-fw"></i>
+                    </div>
+                    <div style="min-width: 100px; max-width: 150%; width: 20%">about</div>
+                </div>
+            </a>
+            
+            <a href="/archives">
+                <div class="item">
+                    <div style="min-width: 20px; max-width: 50px; width: 10%">
+                        <i class="fa-solid fa-box-archive fa-fw"></i>
+                    </div>
+                    <div style="min-width: 100px; max-width: 150%; width: 20%">archives</div>
+                </div>
+            </a>
+            
+            <a href="/categories">
+                <div class="item">
+                    <div style="min-width: 20px; max-width: 50px; width: 10%">
+                        <i class="fa-solid fa-bookmark fa-fw"></i>
+                    </div>
+                    <div style="min-width: 100px; max-width: 150%; width: 20%">categories</div>
+                </div>
+            </a>
+            
+            <a href="/tags">
+                <div class="item">
+                    <div style="min-width: 20px; max-width: 50px; width: 10%">
+                        <i class="fa-solid fa-tags fa-fw"></i>
+                    </div>
+                    <div style="min-width: 100px; max-width: 150%; width: 20%">tags</div>
+                </div>
+            </a>
+            
+        </div>
+        </transition>
+    </div>
+</nav>
+
+                    </div>
+                    <div id="main">
+                        <div class="article">
+    <div>
+        <h1>ESP-IDF与freeRTOS 任务，参数，堆栈 </h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2023/7/23
+        </span>
+        
+        <span class="category">
+            <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+                <span class="icon">
+                    <i class="fa-solid fa-bookmark fa-fw"></i>
+                </span>
+                学习笔记
+            </a>
+        </span>
+        
+        
+        <span class="tags">
+            <span class="icon">
+                <i class="fa-solid fa-tags fa-fw"></i>
+            </span>
+            
+            <span class="tag">
+                
+                <a href="/tags/ESP-IDF/" style="color: #00a596">
+                    ESP-IDF
+                </a>
+            </span>
+            
+            <span class="tag">
+                
+                <a href="/tags/freeRTOS/" style="color: #00a596">
+                    freeRTOS
+                </a>
+            </span>
+            
+        </span>
+        
+    </div>
+    
+    <div class="content" v-pre>
+        <h1 id="ESP-IDF与freeRTOS-一-任务，参数，堆栈"><a href="#ESP-IDF与freeRTOS-一-任务，参数，堆栈" class="headerlink" title="ESP-IDF与freeRTOS(一) 任务，参数，堆栈"></a>ESP-IDF与freeRTOS(一) 任务，参数，堆栈</h1><p>ESP-IDF是乐鑫官方推出的ESP32开发环境，个人不太喜欢arduino，所以选择学习使用IDF编程，上手发现很多地方十分陌生，在B站发现宝藏up <a target="_blank" rel="noopener" href="https://space.bilibili.com/1338335828">Michael_ee(点击跳转up主页)</a>讲的很详细，于是跟着学习并简单记录。</p>
+<h2 id="预备工作，安装vscode和IDF插件，并配置"><a href="#预备工作，安装vscode和IDF插件，并配置" class="headerlink" title="预备工作，安装vscode和IDF插件，并配置"></a>预备工作，安装vscode和IDF插件，并配置</h2><p>安装过程很多教程，也不复杂，就不再写了。</p>
+<p>安装之后需要选择开发板，随后在界面左下点击齿轮图标进入menucofig设置，在其中设置芯片flash大小，算法，主频，flash结束是否自动运行等内容。</p>
+<h2 id="Task创建与删除"><a href="#Task创建与删除" class="headerlink" title="Task创建与删除"></a>Task创建与删除</h2><p>首先需要写一个任务（就是一个函数）,任务如果需要持续执行，需要在任务中设置无尽循环，否则顺序执行完任务就直接退出了。</p>
+<p>例如：</p>
+<pre><code class="c">// 输入参数定义为void类型指针，可强转其他任何类型参数传入，在函数内再转换回去
+void myTask(void* pvParam)
+&#123;
+    while (1)
+    &#123;
+        printf(&quot;Hello world! In the task!\n&quot;);
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
+    &#125;
+&#125;
+</code></pre>
+<h3 id="任务创建"><a href="#任务创建" class="headerlink" title="任务创建"></a>任务创建</h3><p>建立好任务函数之后，可以使用<code>xTaskCreate()</code>来在OS中创建任务。</p>
+<pre><code class="c">xTaskCreate(myTask, &quot;myTask1&quot;, 1024, NULL, 1, NULL);
+</code></pre>
+<p>函数参数具体描述可自己建立工程跳转查看，这里只做简介。</p>
+<ol>
+<li><p><em>pvTaskCode</em>：这里填入<em>myTask</em>，就是任务函数指针。</p>
+</li>
+<li><p><em>pcName</em>：这里填入<em>”myTask1“</em>，代表在RTOS中的任务名称，调试等时候用。</p>
+</li>
+<li><p><em>usStackDepth</em>：这里填入<em>1024</em>，任务栈大小，暂定1024，多任务时需要计算分配。</p>
+</li>
+<li><p><em>pvParameters</em>：传入任务的参数，这里填入内容将会传递给<em>myTask</em>函数的参数部分，此处没有参数，填写<em>NULL</em>即可。</p>
+</li>
+<li><p><em>uxPriority</em>：任务优先级，idle任务为0，最低，最高255。</p>
+</li>
+<li><p><em>pxCreatedTask</em>：任务句柄，一个结构体，可配置任务相关信息，此处不使用，填<em>NULL</em>。</p>
+</li>
+</ol>
+<p>这样一个任务<em>mytask1</em>就创建好了，运行代码即可看到效果。</p>
+<p>也可通过任务句柄来设置一些任务属性:</p>
+<pre><code class="c">TaskHandle_t myHandle = NULL;
+xTaskCreate(myTask, &quot;myTask1&quot;, 1024, NULL, 1, &amp;myHandle);
+</code></pre>
+<p>这样创建的任务就会使用句柄中定义的任务属性。</p>
+<p>此处<code>myHandle</code>定义时为NULL，则创建任务时会将参数放入。</p>
+<h3 id="任务删除"><a href="#任务删除" class="headerlink" title="任务删除"></a>任务删除</h3><p>如果使用了任务句柄，使用<code>*vTaskDelete(myHandle);*</code> 即可删除与<code>myHandle</code>相关的任务。</p>
+<pre><code class="c">//定义句柄
+TaskHandle_t myHandle = NULL;
+//创建任务
+xTaskCreate(myTask, &quot;myTask1&quot;, 1024, NULL, 1, NULL);
+//延时一段时间后删除任务
+vTaskDelay(5000 / portTICK_PERIOD_MS);
+//判断句柄是否为空，不为空则删除任务
+if (myHandle != NULL)
+&#123;
+    vTaskDelete(myHandle);
+&#125;
+</code></pre>
+<p>也可以不使用句柄，在任务函数中删除任务。</p>
+<pre><code class="c">void myTask(void* pvParam)
+&#123;   
+    printf(&quot;Hello world! In the task!\n&quot;);
+    vTaskDelay(1000 / portTICK_PERIOD_MS);
+    printf(&quot;Hello world! In the task!\n&quot;);
+    vTaskDelay(1000 / portTICK_PERIOD_MS);
+    printf(&quot;Hello world! In the task!\n&quot;);
+    vTaskDelay(1000 / portTICK_PERIOD_MS);
+    // vTaskDelete函数参数为空时删除当前任务
+    vTaskDelete(NULL);
+&#125;
+</code></pre>
+<h2 id="Task四种参数传入"><a href="#Task四种参数传入" class="headerlink" title="Task四种参数传入"></a>Task四种参数传入</h2><p>整体不难，基本c知识，简单记录</p>
+<h3 id="1-变量"><a href="#1-变量" class="headerlink" title="1.变量"></a>1.变量</h3><pre><code class="c">// 输入参数定义为void类型指针，可强转其他任何类型参数传入，在函数内再转换回去
+void myTask(void *pvParam)
+&#123;
+    //创建int指针，指向参数，同时将参数转为int型
+    int *pInt;
+    pInt = (int *)pvParam;
+
+    printf(&quot;I got Num = %d\n&quot;, *pInt);
+
+
+    vTaskDelay(1000 / portTICK_PERIOD_MS);
+
+    // delet函数为空时删除当前任务
+    vTaskDelete(NULL);
+&#125;
+
+//定义全局变量
+int testNum = 5;
+void app_main(void)
+&#123;   
+    //传入时需取参数地址，并转成void指针
+    xTaskCreate(myTask, &quot;myTask1&quot;, 2048, (void *)&amp;testNum, 1, NULL);
+&#125;
+</code></pre>
+<h3 id="2-数组"><a href="#2-数组" class="headerlink" title="2.数组"></a>2.数组</h3><pre><code class="c">void myTask(void *pvParam)
+&#123;
+    // 创建int指针，指向参数，同时将参数转为int型
+    int *pArrayAddr;
+    pArrayAddr = (int *)pvParam;
+
+    printf(&quot;I got Num1 = %d\n&quot;, *pArrayAddr);
+    printf(&quot;I got Num2 = %d\n&quot;, *pArrayAddr + 1);
+    printf(&quot;I got Num3 = %d\n&quot;, *pArrayAddr + 2);
+
+    vTaskDelay(1000 / portTICK_PERIOD_MS);
+
+    // delet函数为空时删除当前任务
+    vTaskDelete(NULL);
+&#125;
+
+// 定义全局变量
+int testNum = &#123;5, 6, 7&#125;;
+void app_main(void)
+&#123;
+    // 传入时需取参数地址，并转成void指针,数组名本身为地址，无需取地址
+    xTaskCreate(myTask, &quot;myTask1&quot;, 2048, (void *)testNum, 1, NULL);
+&#125;
+</code></pre>
+<h3 id="3-结构体"><a href="#3-结构体" class="headerlink" title="3.结构体"></a>3.结构体</h3><pre><code class="c">typedef struct A_STRUCT
+&#123;
+    int iMem1;
+    int iMem2;
+&#125; xStruct;
+
+xStruct xStrTest = &#123;6, 9&#125;;
+
+// 输入参数定义为void类型指针，可强转其他任何类型参数传入，在函数内再转换回去
+void myTask(void *pvParam)
+&#123;
+    // 定义结构体指针,转换类型
+    xStruct *pStrTest;
+    pStrTest = (xStruct *)pvParam;
+
+    printf(&quot;I got iMem1 = %d\n&quot;, pStrTest-&gt;iMem1);
+    printf(&quot;I got iMem2 = %d\n&quot;, pStrTest-&gt;iMem2);
+
+    vTaskDelay(1000 / portTICK_PERIOD_MS);
+
+    // delet函数为空时删除当前任务
+    vTaskDelete(NULL);
+&#125;
+
+// 定义全局变量
+int testNum = &#123;5, 6, 7&#125;;
+void app_main(void)
+&#123;
+    // 传入时需取参数地址，并转成void指针,数组名本身为地址，无需取地址
+    xTaskCreate(myTask, &quot;myTask1&quot;, 2048, (void *)&amp;xStrTest, 1, NULL);
+&#125;
+</code></pre>
+<h3 id="4-字符串"><a href="#4-字符串" class="headerlink" title="4.字符串"></a>4.字符串</h3><pre><code class="c">void myTask(void *pvParam)
+&#123;
+    char *pcTxtInTask;
+    pcTxtInTask = pvParam;
+
+    printf(&quot;I got message = %s\n&quot;, pcTxtInTask);
+
+
+    vTaskDelay(1000 / portTICK_PERIOD_MS);
+
+    // delet函数为空时删除当前任务
+    vTaskDelete(NULL);
+&#125;
+
+// 定义全局变量
+int testNum = &#123;5, 6, 7&#125;;
+//字符串
+static const char *pcTxt = &quot;I am 字符串&quot;;
+void app_main(void)
+&#123;
+    // 传入时需取参数地址，并转成void指针,数组名本身为地址，无需取地址
+    xTaskCreate(myTask, &quot;myTask1&quot;, 2048, (void *)pcTxt, 1, NULL);
+&#125;
+</code></pre>
+<h2 id="优先级"><a href="#优先级" class="headerlink" title="优先级"></a>优先级</h2><p>优先级定义在<code>FreeRTOSConfig.h</code></p>
+<pre><code class="c">#define configMAX_PRIORITIES                            ( 25 )  //This has impact on speed of search for highest priority
+</code></pre>
+<p>可以看到当前最大优先级为25，可设置范围为0-24。</p>
+<p>如果设置优先级超过最大值，自动更改为24。</p>
+<p><code>uxTaskPriorityGet()</code>:取得Handle对应优先级。</p>
+<p>同优先级时，先创建先运行，不同时，先运行优先级高的任务。</p>
+<pre><code class="c">void app_main(void)
+&#123;
+
+    TaskHandle_t pxTask1 = NULL;
+    TaskHandle_t pxTask2 = NULL;
+
+    // 传入时需取参数地址，并转成void指针,数组名本身为地址，无需取地址
+    //此处使用xTaskCreatePinnedToCore0()函数，应为我用的ESP32为双核芯片
+    //不指定内核可能会分配到不同内核，导致设置优先级效果不明显
+    xTaskCreatePinnedToCore(myTask1, &quot;myTask1&quot;, 2048, (void *)pcTxt, 1, &amp;pxTask1,0);
+    xTaskCreatePinnedToCore(myTask2, &quot;myTask2&quot;, 2048, (void *)pcTxt, 2, &amp;pxTask2,0);
+    
+    //获取优先级并输出
+    iPriority = uxTaskPriorityGet(pxTask1);
+    printf(&quot;iPriority = %d\n&quot;, iPriority);
+
+    //设置优先级
+    vTaskPrioritySet(pxTask1,3);
+&#125;
+</code></pre>
+<h2 id="任务的挂起（suspend）和恢复（resume）"><a href="#任务的挂起（suspend）和恢复（resume）" class="headerlink" title="任务的挂起（suspend）和恢复（resume）"></a>任务的挂起（suspend）和恢复（resume）</h2><ul>
+<li><p>挂起<code>vTaskSuspend(pxTask1)</code></p>
+</li>
+<li><p>恢复<code>vTaskResume(pxTask1)</code></p>
+</li>
+</ul>
+<p>用法和<code>vTaskDelete</code>类似，可在外部通过句柄操作，也可在任务内部传参NULL操作。</p>
+<p>可在任务中挂起，在外部恢复。但恢复后会在任务中重新挂起。</p>
+<p>可通过任务中挂起的方式实现在外部控制任务在需要的时候单次运行。</p>
+<ul>
+<li>挂起调度器<code>vTaskSuspendAll()</code></li>
+<li>恢复调度器<code>xTaskResumeAll()</code></li>
+</ul>
+<p>挂起后不能再调用freeRTOS的API，只能调用自己的函数。</p>
+<p>成对使用时可避免任务运行时被调度。</p>
+<p>例如：</p>
+<pre><code class="c">void myTask1(void *pvParam)
+&#123;
+    printf(&quot;task begin\n&quot;);
+    vTaskSuspendAll();
+    for (int i = 0; i &lt; 9999; i++)
+    &#123;
+        for (int j = 0; j &lt; 4000; j++)
+        &#123;
+            ;
+        &#125;
+    &#125;
+    xTaskResumeAll();
+    printf(&quot;task end\n&quot;);
+    
+    vTaskDelete(NULL);
+&#125;
+</code></pre>
+<h2 id="vTaskList"><a href="#vTaskList" class="headerlink" title="vTaskList()"></a>vTaskList()</h2><p>打印系统内所有任务的状态、信息。</p>
+<p>使用该函数需要设置勾选menuconfig内</p>
+<p><code>configUSE_TRACE_FACILITY</code>和<code>configUSE_STATS_FORMATTING_FUNCTIONS</code></p>
+<pre><code class="c">    static char pcWriteBuffer[512] = &#123;0&#125;;
+    //函数会将Task信息格式化到数组
+    vTaskList(pcWriteBuffer);
+    printf(&quot;--------------------------------------------------\n&quot;);
+    printf(&quot;Name      State    Priority   Stack     Num   core\n&quot;);
+    printf(&quot;%s\n&quot;,pcWriteBuffer);
+</code></pre>
+<p>打印信息如下：</p>
+<pre><code class="bash">--------------------------------------------------
+Name          State  Priority  Stack   Num    core
+myTask2         R       1       1748    8       0
+main            X       1       3452    4       0
+myTask1         R       1       1756    7       0
+IDLE            R       0       1236    6       1
+IDLE            R       0       1240    5       0
+esp_timer       S       22      3568    3       0
+ipc1            B       24      512     2       1
+ipc0            B       24      488     1       0
+</code></pre>
+<p>State状态：</p>
+<blockquote>
+<p>R为ready就绪</p>
+<p>X为运行态</p>
+<p>D为被删除</p>
+<p>S为挂起</p>
+<p>B为阻塞</p>
+</blockquote>
+<p>Stack为剩余堆栈空间</p>
+<h2 id="Task堆栈设置和调试"><a href="#Task堆栈设置和调试" class="headerlink" title="Task堆栈设置和调试"></a>Task堆栈设置和调试</h2><p><code>UBaseType_t uxTaskGetStackHighWaterMark( TaskHandle_t xTask );</code></p>
+<p>获取任务剩余堆栈的值，以此作为参考估算应该设置的任务堆栈大小，节省系统资源。</p>
+<p>示例：</p>
+<pre><code class="c">void myTask1(void *pvParam)
+&#123;
+    while (1)
+    &#123;
+        printf(&quot;task1\n&quot;);
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
+    &#125;
+&#125;
+
+void app_main(void)
+&#123;
+    TaskHandle_t pxTask1 = NULL;
+
+    // 传入时需取参数地址，并转成void指针,数组名本身为地址，无需取地址
+    xTaskCreatePinnedToCore(myTask1, &quot;myTask1&quot;, 1024, NULL, 1, &amp;pxTask1, 0);
+
+    UBaseType_t iStack;
+
+    while (1)
+    &#123;
+        iStack = uxTaskGetStackHighWaterMark(pxTask1);
+        printf(&quot;task1 iStack = %d\n&quot;, iStack);
+        vTaskDelay(3000 / portTICK_PERIOD_MS);
+    &#125;
+&#125;
+</code></pre>
+<p>串口输出：</p>
+<pre><code class="bash">......
+I (0) cpu_start: Starting scheduler on APP CPU.
+task1 iStack = 732
+task1
+task1
+task1
+task1 iStack = 204
+task1
+task1
+task1
+task1 iStack = 204
+task1
+</code></pre>
+<p>由此可见，当前我的开发板运行task1设置堆栈为1024时剩余空间为204。</p>
+<h2 id="Task-看门狗"><a href="#Task-看门狗" class="headerlink" title="Task 看门狗"></a>Task 看门狗</h2><p>ESP32中，看门狗分为中断看门狗和Task看门狗，可参考乐鑫官网<a target="_blank" rel="noopener" href="https://docs.espressif.com/projects/esp-idf/zh_CN/latest/esp32/api-reference/system/wdts.html">Watchdogs - ESP32 - — ESP-IDF 编程指南 latest 文档 (espressif.com)</a>。</p>
+<p>看门狗相关设置可在menuconfig中修改。</p>
+<p>测试代码如下：</p>
+<pre><code class="c">void myTask1(void *pvParam)
+&#123;
+    while (1)
+    &#123;
+        // printf(&quot;task1\n&quot;);
+        // vTaskDelay(1000 / portTICK_PERIOD_MS);
+        ;
+    &#125;
+&#125;
+</code></pre>
+<p>串口输出信息：</p>
+<pre><code class="bash">E (10291) task_wdt: Task watchdog got triggered. The following tasks/users did not reset the watchdog in time:
+E (10291) task_wdt:  - IDLE (CPU 0) //看门狗监控IDLE(CPU0)
+E (10291) task_wdt: Tasks currently running:
+E (10291) task_wdt: CPU 0: myTask1
+E (10291) task_wdt: CPU 1: IDLE
+E (10291) task_wdt: Print CPU 0 (current core) backtrace
+</code></pre>
+<p>由以上信息可见，Task看门狗被触发，触发时CPU0在运行myTask1，CPU1在运行IDLE，看门狗监控IDLE（CPU0）。</p>
+<p>myTask1中没有阻塞函数，类似<code>vTaskDelay</code>等，会导致任务一直占用CPU0运行，且优先级高于CPU0的IDLE任务，导致IDLE饥饿，触发看门狗。</p>
+<p>解决办法：</p>
+<blockquote>
+<p> task1中加入阻塞操作函数，让低优先级任务得以运行；</p>
+<p>将task1优先级降值0，与IDLE相同，此时同优先级任务将都被分配时间片运行。</p>
+</blockquote>
+<h3 id="使用看门狗监控自己的任务"><a href="#使用看门狗监控自己的任务" class="headerlink" title="使用看门狗监控自己的任务"></a>使用看门狗监控自己的任务</h3><ul>
+<li>添加头文件 <code>esp_task_wdt.h</code></li>
+</ul>
+<pre><code class="c">void myTask2(void * pvParam)
+&#123;
+    //添加任务到看门狗监控
+    esp_task_wdt_add(NULL);
+    while(1)
+    &#123;
+        printf(&quot;task2 running\n&quot;);
+        //喂狗，在menuconfig中设置任务看门狗时间
+        esp_task_wdt_reset();
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
+    &#125;
+&#125;
+</code></pre>
+<p>如果不在规定时间内喂狗，将触发看门狗。</p>
+
+    </div>
+    
+    
+    
+    
+    <link rel="stylesheet" href="https://cdn.staticfile.org/waline/2.14.7/waline.min.css" />
+    <div id="comment">
+        <div id="waline-container"></div>
+    </div>
+    
+    
+</div>
+
+                        <footer id="footer">
+    <div class="footer-wrap">
+        <div>
+            © 2018 - 2025 Vampire&#39;Blog
+            <span class="footer-icon">
+                <i class="fa-solid fa-font-awesome fa-fw"></i>
+            </span>
+            @小P孩儿
+        </div>
+        <div></div>
+        <div>Based on the <a target="_blank" rel="noopener" href="https://hexo.io">Hexo Engine</a> & <a target="_blank" rel="noopener" href="https://github.com/argvchs/hexo-theme-particlex">ParticleX Theme</a></div>
+        
+    </div>
+</footer>
+
+                    </div>
+                </div>
+            </transition>
+            <div id="showimg">
+                <img id="showimg-content" alt="showimg">
+            </div>
+        </div>
+        <script src="/js/functions.js"></script>
+<script src="/js/particlex.js"></script>
+
+    
+    
+    
+    <script src="https://cdn.staticfile.org/waline/2.14.7/waline.min.js"></script>
+    <script>
+        Waline.init({
+            el: "#waline-container",
+            serverURL: "https://comment.vampire610.cn",
+            commentCount: true,
+            pageview: false,
+            emoji: "https://unpkg.com/@waline/emojis@1.0.1/weibo,https://unpkg.com/@waline/emojis@1.0.1/alus,https://unpkg.com/@waline/emojis@1.0.1/bilibili,https://unpkg.com/@waline/emojis@1.0.1/qq,https://unpkg.com/@waline/emojis@1.0.1/tieba,https://unpkg.com/@waline/emojis@1.0.1/tw-emoji".split(","),
+            meta: "nick,mail,link".split(","),
+            requiredMeta: "nick".split(","),
+            lang: "zh-CN",
+            wordLimit: 0,
+            pageSize: "10",
+            login: "enable",
+            locale: {"placeholder":"欢迎评论（填写邮箱可在评论被回复时收到邮件提醒）"}
+        });
+    </script>
+    
+    
+
+
+    </body>
+</html>
+
+<canvas
+    id="fireworks"
+    style="position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:32767"
+></canvas>
+<script src="https://cdn.staticfile.org/animejs/3.2.1/anime.min.js"></script>
+<script src="/js/fireworks.min.js"></script>
+
+<canvas
+    id="background"
+    style="position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:-1"
+></canvas>
+<script src="/js/background.min.js"></script>

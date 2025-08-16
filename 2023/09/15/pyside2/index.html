@@ -1,0 +1,368 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0">
+        <title>Pyside2的一点使用记录 | Vampire&#39;Blog</title>
+        <meta name="author" content="小P孩儿">
+        <meta name="description" content="">
+        <meta name="keywords" content="">
+        <link rel="icon" href="https://fastly.jsdelivr.net/gh/vampire610/cdn@latest/img/me.jpg">
+        <script src="https://cdn.staticfile.org/vue/3.2.45/vue.global.prod.min.js"></script>
+        <script src="https://cdn.staticfile.org/highlight.js/11.7.0/highlight.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/11.7.0/styles/github.min.css">
+        <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/6.2.1/css/all.min.css">
+        
+        <script src="https://polyfill.io/v3/polyfill.min.js?features="></script>
+        
+        
+        <script src="https://cdn.staticfile.org/KaTeX/0.16.4/katex.min.js"></script>
+        <script src="https://cdn.staticfile.org/KaTeX/0.16.4/contrib/auto-render.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.staticfile.org/KaTeX/0.16.4/katex.min.css">
+        
+        <link rel="stylesheet" href="/css/fonts.min.css">
+        <link rel="stylesheet" href="/css/particlex.css">
+    <meta name="generator" content="Hexo 6.3.0"></head>
+    <body>
+        <div id="loading" style="height: 100vh; width: 100vw; position: fixed; display: flex; z-index: 2147483647; justify-content: space-between; background: #fff; transition: all 0.3s ease-out; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none">
+    <div style="position: fixed; height: 100vh; width: 100vw; display: flex; justify-content: center; align-items: center">
+        <div id="loadcontent" style="width: 50vmin; height: 50vmin; padding: 50px; border-radius: 50%; display: flex; justify-content: center; align-items: center; border: solid 10px #a3ddfb; text-align: center">
+            <div>
+                <h2>LOADING...</h2>
+                <p style="word-break: keep-all">加载过慢请开启缓存（浏览器默认开启）</p>
+                <div>
+                    <img alt="loading" src="/loading.gif" style="width: 60px">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+        <div id="layout">
+            <transition name="into">
+                <div v-show="showpage" style="display: -not-none">
+                    <div id="menushow">
+                        <nav id="menu">
+    <div class="desktop-menu">
+        <a href="/">
+            <span class="title">Vampire'Blog</span>
+        </a>
+        
+        <a href="/">
+            <i class="fa-solid fa-house fa-fw"></i>
+            <span>&ensp;home</span>
+        </a>
+        
+        <a href="/about">
+            <i class="fa-solid fa-id-card fa-fw"></i>
+            <span>&ensp;about</span>
+        </a>
+        
+        <a href="/archives">
+            <i class="fa-solid fa-box-archive fa-fw"></i>
+            <span>&ensp;archives</span>
+        </a>
+        
+        <a href="/categories">
+            <i class="fa-solid fa-bookmark fa-fw"></i>
+            <span>&ensp;categories</span>
+        </a>
+        
+        <a href="/tags">
+            <i class="fa-solid fa-tags fa-fw"></i>
+            <span>&ensp;tags</span>
+        </a>
+        
+    </div>
+    <div :class="'phone-menu ' + menushow" id="phone-menu">
+        <div class="curtain" @click="menushow = !menushow" v-show="menushow"></div>
+        <div class="title" @click="menushow = !menushow">
+            <i class="fa-solid fa-bars fa-fw"></i>
+            <span>&emsp;Vampire'Blog</span>
+        </div>
+        <transition name="slide">
+        <div class="items" v-show="menushow">
+            
+            <a href="/">
+                <div class="item">
+                    <div style="min-width: 20px; max-width: 50px; width: 10%">
+                        <i class="fa-solid fa-house fa-fw"></i>
+                    </div>
+                    <div style="min-width: 100px; max-width: 150%; width: 20%">home</div>
+                </div>
+            </a>
+            
+            <a href="/about">
+                <div class="item">
+                    <div style="min-width: 20px; max-width: 50px; width: 10%">
+                        <i class="fa-solid fa-id-card fa-fw"></i>
+                    </div>
+                    <div style="min-width: 100px; max-width: 150%; width: 20%">about</div>
+                </div>
+            </a>
+            
+            <a href="/archives">
+                <div class="item">
+                    <div style="min-width: 20px; max-width: 50px; width: 10%">
+                        <i class="fa-solid fa-box-archive fa-fw"></i>
+                    </div>
+                    <div style="min-width: 100px; max-width: 150%; width: 20%">archives</div>
+                </div>
+            </a>
+            
+            <a href="/categories">
+                <div class="item">
+                    <div style="min-width: 20px; max-width: 50px; width: 10%">
+                        <i class="fa-solid fa-bookmark fa-fw"></i>
+                    </div>
+                    <div style="min-width: 100px; max-width: 150%; width: 20%">categories</div>
+                </div>
+            </a>
+            
+            <a href="/tags">
+                <div class="item">
+                    <div style="min-width: 20px; max-width: 50px; width: 10%">
+                        <i class="fa-solid fa-tags fa-fw"></i>
+                    </div>
+                    <div style="min-width: 100px; max-width: 150%; width: 20%">tags</div>
+                </div>
+            </a>
+            
+        </div>
+        </transition>
+    </div>
+</nav>
+
+                    </div>
+                    <div id="main">
+                        <div class="article">
+    <div>
+        <h1>Pyside2的一点使用记录 </h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2023/9/15
+        </span>
+        
+        <span class="category">
+            <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+                <span class="icon">
+                    <i class="fa-solid fa-bookmark fa-fw"></i>
+                </span>
+                学习笔记
+            </a>
+        </span>
+        
+        
+        <span class="tags">
+            <span class="icon">
+                <i class="fa-solid fa-tags fa-fw"></i>
+            </span>
+            
+            <span class="tag">
+                
+                <a href="/tags/python/" style="color: #ffa2c4">
+                    python
+                </a>
+            </span>
+            
+            <span class="tag">
+                
+                <a href="/tags/pyside2/" style="color: #ffa2c4">
+                    pyside2
+                </a>
+            </span>
+            
+            <span class="tag">
+                
+                <a href="/tags/Qt/" style="color: #ffa2c4">
+                    Qt
+                </a>
+            </span>
+            
+        </span>
+        
+    </div>
+    
+    <div class="content" v-pre>
+        <p>最近折腾pyside2，写了一个简单的串口上位机，遇到了一些奇怪的问题，记录一下。</p>
+<h2 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h2><p>python环境我习惯了用anaconda来进行管理，安装各种包都很方便，也不用担心包的版本和python版本不匹配。不过anaconda体积庞大，也可以使用<code>miniconda</code>，使用<code>conda</code>命令来管理python环境。</p>
+<p>pyside2和pyqt5一样基于qt5，搭配python3.8还能支持win7，所以我选择了安装python3.8和pyside2，再加上上位机需要打包，所以还需要安装<code>pyinstaller</code>。</p>
+<p>anaconda使用十分简单，都是图形化操作，网上教程很多，选择需要的python版本建立环境，再安装需要的python包就可以。</p>
+<p>这里整理一下使用<code>miniconda</code>的常用命令。</p>
+<p>使用<code>miniconda</code>建议使用安装后菜单里的<code>Anaconda Powershell Prompt</code>或者<code>Anaconda Prompt</code>，安装conda后会自动配置这两个终端的环境，其他终端可能需要自己配置，这里就不提了。</p>
+<ul>
+<li>创建环境(<code>myenv</code>为创建的环境名称)</li>
+</ul>
+<pre><code class="bash">conda create --name myenv
+</code></pre>
+<ul>
+<li>创建指定python版本的环境，如需要3.7.9</li>
+</ul>
+<pre><code class="bash">conda create --name myenv python=3.7.9
+</code></pre>
+<ul>
+<li>删除环境</li>
+</ul>
+<pre><code class="bash">conda env remove --name myenv
+</code></pre>
+<ul>
+<li>切换到conda环境</li>
+</ul>
+<pre><code class="bash">conda activate myenv
+</code></pre>
+<ul>
+<li>查询环境的python版本号</li>
+</ul>
+<pre><code class="bash">python --version
+</code></pre>
+<ul>
+<li>退出当前conda环境</li>
+</ul>
+<pre><code class="bash">conda deactivate
+</code></pre>
+<ul>
+<li>查询电脑中现存的conda环境</li>
+</ul>
+<pre><code class="bash">conda info --envs
+</code></pre>
+<ul>
+<li>添加渠道（如conda-forge）</li>
+</ul>
+<pre><code class="bash">conda config --env --add channels conda-forge
+</code></pre>
+<ul>
+<li>查看当前环境配置的渠道</li>
+</ul>
+<pre><code class="bash">conda config --show channels
+</code></pre>
+<ul>
+<li>删除渠道</li>
+</ul>
+<pre><code class="bash">conda config --remove channels channel-name
+</code></pre>
+<ul>
+<li>安装<code>python</code>包（需要使用<code>conda activate</code>切换到需要的环境再安装，下面的命令是安装<code>pyside2</code>）</li>
+</ul>
+<pre><code class="bash">conda install pyside2
+</code></pre>
+<ul>
+<li>卸载python包</li>
+</ul>
+<pre><code class="bash">conda remove package-name
+</code></pre>
+<p>如果想要安装的包不在<code>conda</code>默认<code>channels</code>或者<code>conda-forge</code>，可能需要使用<code>pip</code>安装，或者到官方网站<code>[:: Anaconda.org](https://anaconda.org/)</code>搜索需要的包在哪个channels，添加channels后再进行安装。</p>
+<ul>
+<li>更新环境</li>
+</ul>
+<pre><code class="bash">conda update conda  #更新自身
+conda update --all #更新所有包
+</code></pre>
+<h2 id="IDE选择"><a href="#IDE选择" class="headerlink" title="IDE选择"></a>IDE选择</h2><h3 id="VScode"><a href="#VScode" class="headerlink" title="VScode"></a><code>VScode</code></h3><p>简单谢谢可以直接用<code>vscode</code>，安装python插件，<code>PySide2-VSC</code>插件，就可以简单的写qt界面了。</p>
+<ul>
+<li><p>对<code>PySide2-VSC</code>插件进行配置</p>
+<blockquote>
+<p>设置designer路径(不带引号)，designer在<code>anaconda3</code>的安装路径下，可以参照我的路径<code>&quot;XXXX\anaconda3\envs\gui\Scripts\pyside2-designer.exe&quot;</code></p>
+<p>设置uic路径(不带引号)</p>
+<p><code>&quot;XXXX\anaconda3\envs\gui\Scripts\pyside2-uic.exe&quot;</code></p>
+</blockquote>
+</li>
+<li><p>正常来说设置完这两项就够用了，接下来就可以在<code>vscode</code>的资源管理器中右键，点击<code>PySide2: New Form in Designer/Creator</code>打开<code>QtDesigner</code>设计你的<code>ui</code>，保存后在<code>xxx.ui</code>文件上点右键，点击<code>PySide2: Compile Form to Python</code>即可生成界面的<code>python</code>代码。</p>
+</li>
+<li><p>注意，有时会有使用<code>pyside2-uic</code>转换后文件内为<code>C++</code>代码的情况，此时可以在插件设置中配置<code>uic</code>命令<code>-g python</code>这样再生成就是<code>python</code>代码了。</p>
+</li>
+</ul>
+<h3 id="pycharm"><a href="#pycharm" class="headerlink" title="pycharm"></a><code>pycharm</code></h3><p>如果习惯了<code>pycharm</code>或者<code>pycharm community</code>，也可以配置<code>pycharm</code>。</p>
+<p>创建项目后右下角点击进入解释器设置，点击<code>Python</code>解释器，显示全部，即可管理<code>pycharm</code>中的解释器。如果没有<code>conda</code>创建的python环境，可以点击左上角+号，选择<code>Conda</code>环境，选择<code>Conda</code>可执行文件，例如<code>XXXX\Anaconda3\condabin\conda.bat</code>，然后加载环境，选择使用现有环境，就可以选择<code>conda</code>创建的python环境了。</p>
+<p>配置<code>pycharm</code>外部工具</p>
+<p>在设置中打开外部工具配置界面，添加一项<code>designer</code>，参数如下</p>
+<p>程序：<code>XXXX\anaconda3\envs\gui\Scripts\pyside2-designer.exe</code></p>
+<p>工作目录：<code>$FileDir$</code></p>
+<p>添加一项<code>uic</code>，参数如下</p>
+<p>程序：<code>XXXX\anaconda3\envs\gui\Scripts\pyside2-uic.exe</code></p>
+<p>实参：<code>$FileName$ -o $FileNameWithoutExtension$_ui.py</code></p>
+<p>工作目录：<code>$FileDir$</code></p>
+<p>如果生成代码为C++，将实参改为：<code>-g python $FileName$ -o $FileNameWithoutExtension$_ui.py</code></p>
+<p>设置好外部工具，就可以像<code>vscode</code>一样通过右键打开<code>designer</code>或者将<code>ui</code>文件转换成<code>py</code>文件。</p>
+
+    </div>
+    
+    
+    
+    
+    <link rel="stylesheet" href="https://cdn.staticfile.org/waline/2.14.7/waline.min.css" />
+    <div id="comment">
+        <div id="waline-container"></div>
+    </div>
+    
+    
+</div>
+
+                        <footer id="footer">
+    <div class="footer-wrap">
+        <div>
+            © 2018 - 2025 Vampire&#39;Blog
+            <span class="footer-icon">
+                <i class="fa-solid fa-font-awesome fa-fw"></i>
+            </span>
+            @小P孩儿
+        </div>
+        <div></div>
+        <div>Based on the <a target="_blank" rel="noopener" href="https://hexo.io">Hexo Engine</a> & <a target="_blank" rel="noopener" href="https://github.com/argvchs/hexo-theme-particlex">ParticleX Theme</a></div>
+        
+    </div>
+</footer>
+
+                    </div>
+                </div>
+            </transition>
+            <div id="showimg">
+                <img id="showimg-content" alt="showimg">
+            </div>
+        </div>
+        <script src="/js/functions.js"></script>
+<script src="/js/particlex.js"></script>
+
+    
+    
+    
+    <script src="https://cdn.staticfile.org/waline/2.14.7/waline.min.js"></script>
+    <script>
+        Waline.init({
+            el: "#waline-container",
+            serverURL: "https://comment.vampire610.cn",
+            commentCount: true,
+            pageview: false,
+            emoji: "https://unpkg.com/@waline/emojis@1.0.1/weibo,https://unpkg.com/@waline/emojis@1.0.1/alus,https://unpkg.com/@waline/emojis@1.0.1/bilibili,https://unpkg.com/@waline/emojis@1.0.1/qq,https://unpkg.com/@waline/emojis@1.0.1/tieba,https://unpkg.com/@waline/emojis@1.0.1/tw-emoji".split(","),
+            meta: "nick,mail,link".split(","),
+            requiredMeta: "nick".split(","),
+            lang: "zh-CN",
+            wordLimit: 0,
+            pageSize: "10",
+            login: "enable",
+            locale: {"placeholder":"欢迎评论（填写邮箱可在评论被回复时收到邮件提醒）"}
+        });
+    </script>
+    
+    
+
+
+    </body>
+</html>
+
+<canvas
+    id="fireworks"
+    style="position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:32767"
+></canvas>
+<script src="https://cdn.staticfile.org/animejs/3.2.1/anime.min.js"></script>
+<script src="/js/fireworks.min.js"></script>
+
+<canvas
+    id="background"
+    style="position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:-1"
+></canvas>
+<script src="/js/background.min.js"></script>
